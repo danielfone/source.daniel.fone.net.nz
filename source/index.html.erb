@@ -1,24 +1,14 @@
----
-pageable: true
-per_page: 10
----
-<% if paginate && num_pages > 1 %>
-  <p>Page <%= page_number %> of <%= num_pages %></p>
+<p>
+  I&#8217;m a freelance Ruby on Rails engineer,
+  who loves working with <strong>great people</strong>
+  to make <strong>interesting things</strong>.
+</p>
+<p>
+  If you’re creating something interesting,
+  get in touch! You can probably
+  <a href="/hire">hire me</a>.
+</p>
 
-  <% if prev_page %>
-    <p><%= link_to 'Previous page', prev_page %></p>
-  <% end %>
-<% end %>
+<p>As my 2 year old son says to me:</p>
 
-<% page_articles.each_with_index do |article, i| %>
-  <h2><%= link_to article.title, article %> <span><%= article.date.strftime('%b %e') %></span></h2>
-  <!-- use article.summary(250) if you have Nokogiri available to show just
-       the first 250 characters -->
-  <%= article.body %>
-<% end %>
-
-<% if paginate %>
-  <% if next_page %>
-    <p><%= link_to 'Next page', next_page %></p>
-  <% end %>
-<% end %>
+<blockquote>Let&#8217;s go build all the things!</blockquote>
