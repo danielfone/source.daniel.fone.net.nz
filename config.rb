@@ -67,6 +67,11 @@ helpers do
   def format_date(date)
     date.strftime('%e %b, %Y')
   end
+
+  def comments_enabled?
+    current_article.metadata[:page]['comments']
+  end
+
 end
 
 set :css_dir, 'stylesheets'

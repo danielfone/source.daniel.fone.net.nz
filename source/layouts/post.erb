@@ -8,4 +8,6 @@
     </p>
     <%= yield %>
   </article>
+
+  <%= partial 'blog/disqus' if comments_enabled? %>
 <% end %>
