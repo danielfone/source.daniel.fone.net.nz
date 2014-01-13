@@ -50,7 +50,7 @@ page "/feed.xml", layout: false
 # page "/path/to/file.html", layout: false
 #
 # With alternative layout
-# page "/path/to/file.html", layout: :otherlayout
+page "*", layout: :page
 #
 # A path which all have the same layout
 # with_layout :admin do
@@ -66,12 +66,6 @@ page "/feed.xml", layout: false
 ###
 
 activate :directory_indexes
-
-# Automatic image dimensions on image_tag helper
-# activate :automatic_image_sizes
-
-# Reload the browser automatically whenever files change
-activate :livereload
 
 # Methods defined in the helpers block are available in templates
 # helpers do

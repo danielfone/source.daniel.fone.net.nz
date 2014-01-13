@@ -1,55 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
-    <title><%= current_article.title + ' - ' unless current_article.nil? %>Daniel Fone</title>
-    <%= feed_tag :atom, "#{blog.options.prefix.to_s}/feed.xml", title: "Atom Feed" %>
-    <%= stylesheet_link_tag 'scaffold' %>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <%= stylesheet_link_tag 'application' %>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
   </head>
   <body>
-
-    <header role="banner">
-      <%= image_tag 'blue-dot.png', width: 100 %>
-      <h1>
-        <a href="/">Daniel Fone</a>
-      </h1>
-      <h2>Ruby on Rails Engineer</h2>
-    </header>
-
-    <ul class="main-navigation">
-      <li><a href="/">About</a></li>
-      <li><a href="/blog/archives">Blog</a></li>
-      <li><a href="/hire">Hire Me</a></li>
-    </ul>
-
-    <div id="main" role="main">
-      <%= yield %>
-    </div>
-    
-    <aside>
-      <section>
-        <p>
-          <a href="/hire" class="button">Hire me</a>
-        </p>
-      </section>
-      <section>
-        <%= image_tag '//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300', width: 150 %>
-        <h1>About Me</h1>
-        <p>
-          I'm a freelance Ruby on Rails engineer,
-          based in Christchurch, New Zealand.<br>
-        </p>
-        <p>
-          <%= link_to 'Github Profile', 'https://github.com/danielfone' %>
-        </p>
-        <p>
-          <%= link_to '@danielfone on Twitter', 'https://twitter.com/danielfone' %>
-        </p>
-      </section>
-    </aside>
-    <footer role="contentinfo">
-      <p>&copy; 2014 - Daniel Fone</p>
-    </footer>
+    <%= yield %>
   </body>
 </html>
