@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <header>
+    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby on Rails Engineer</p>
+  </header>
+
+  <div class="row">
+    <div class="col-md-9">
+        <article>
+    <h2>
+      Persist Invalid Records with ActiveRecord
+    </h2>
+    <p>
+      <small class="text-muted">24 May, 2013</small>
+    </p>
+    <p>Some time ago, I had an unusual design brief for a Rails app:</p>
+
+<blockquote>
+  <p>Even if a user submits an invalid record, we need to
+  (a) save a copy to the database, along with the validation errors, and
+  (b) re-render the form with the error messages as per the default Rails behavior.</p>
+</blockquote>
+
+<p>The idea behind this design was that administrators could see the unsuccessful submissions and intervene to assist the users if necessary.</p>
+
+<p>If anyone ever finds themselves in a similar situation, here's what I ended up doing:</p>
+
+<p>I'm going to use a model called Subscription by way of example. This same pattern will work on any ActiveRecord model.</p>
+
+<h3 id="add-a-recorderrors-text-column">Add a <code>record_errors</code> text column</h3>
+
+<p>We'll serialize the validation errors and store them in a field called <code>record_errors</code>.</p>
+
+<p>{% codeblock /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb %}
+class AddRecordErrorsToSubscriptions &lt; ActiveRecord::Migration
+  def change
+    add_column :subscriptions, :record_errors, :text
+  end
+end
+{% endcodeblock %}</p>
+
+<h3 id="add-an-activerecord-extension-to-handle-persistence">Add an ActiveRecord extension to handle persistence</h3>
+
+<p>This module will catch validation failures and persist the record anyway. It's completely independent of the domain/business logic of the application so I like to store it in /lib. This is the main logic for achieving our required behaviour.</p>
+
+<p>{% codeblock /lib/save_with_errors.rb %}
+require 'active_record'
+require 'active_support'</p>
+
+<p>module SaveWithErrors</p>
+
+<p>def save_with_errors!(*args)
+    save_without_errors! *args
+  rescue ActiveRecord::RecordInvalid
+    save_anyway
+    raise # this re-raises the exception we just rescued
+  end</p>
+
+<p>def save_with_errors(*args)
+    save_without_errors *args or save_anyway
+  end</p>
+
+<p>def self.included(receiver)
+    receiver.serialize :record_errors, Hash
+    receiver.alias_method_chain :save, :errors
+    receiver.alias_method_chain :save!, :errors
+  end</p>
+
+<p>private</p>
+
+<p>def save_anyway
+    dup.tap { |s| s.record_errors = errors.messages }.save(validate: false)
+    false
+  end</p>
+
+<p>end
+{% endcodeblock %}</p>
+
+<h3 id="include-our-activerecord-extension-on-our-model">Include our ActiveRecord extension on our model</h3>
+
+<p>All we need to do is <code>include</code> the <code>SaveWithErrors</code> module into our ActiveRecord model. We could also require 'save_with_errors' in <code>config/application.rb</code>.</p>
+
+<p>{% codeblock /app/models/subscription.rb %}
+require 'save_with_errors'</p>
+
+<p>class Subscription &lt; ActiveRecord::Base
+  include SaveWithErrors</p>
+
+<p>attr_accessible :email, :name, :token</p>
+
+<p>validate :valid_token</p>
+
+<p>private</p>
+
+<p>def valid_token
+    # something meaningful
+    errors.add :token, 'is invalid' unless token == '12345'
+  end</p>
+
+<p>end
+{% endcodeblock %}</p>
+
+<h3 id="the-result">The Result</h3>
+
+<pre><code>Loading development environment (Rails 3.2.13)
+
+&gt; Subscription.create! name: 'My Name', email: 'test@example.com'
+  SQL (3.6ms)  INSERT INTO "subscriptions" ("created_at", "email", "name", "record_errors", "token", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["created_at", Fri, 24 May 2013 01:55:07 UTC +00:00], ["email", "test@example.com"], ["name", "My Name"], ["record_errors", "--- !omap\n- :token:\n  - is invalid\n"], ["token", nil], ["updated_at", Fri, 24 May 2013 01:55:07 UTC +00:00]]
+
+ActiveRecord::RecordInvalid: Validation failed: Token is invalid
+  [... backtrace ...]
+</code></pre>
+
+<p>Notice that a record has been inserted, but the exception that we'd expect from <code>create!</code> has still been raised. We can verify this by inspecting the last Subscription record:</p>
+
+<pre><code>&gt; y Subscription.last
+  Subscription Load (0.3ms)  SELECT "subscriptions".* FROM "subscriptions" ORDER BY "subscriptions"."id" DESC LIMIT 1
+--- !ruby/object:Subscription
+attributes:
+  id: 19
+  name: My Name
+  email: test@example.com
+  token: 
+  created_at: 2013-05-24 01:55:07.747035000 Z
+  updated_at: 2013-05-24 01:55:07.747035000 Z
+  record_errors: !omap
+  - :token:
+    - is invalid
+</code></pre>
+
+<p>Exactly what we want!</p>
+
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <h4>About Me</h4>
+        <p>
+          I'm a freelance Ruby&nbsp;on&nbsp;Rails engineer,
+          based in Christchurch, New&nbsp;Zealand.<br>
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+        <p>
+          <a href="/blog/archives" class="button">Posts</a>
+        </p>
+        <p>
+          <a class="button" href="https://github.com/danielfone">Github</a>
+        </p>
+        <p>
+          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+    </div>
+  </body>
+</html>

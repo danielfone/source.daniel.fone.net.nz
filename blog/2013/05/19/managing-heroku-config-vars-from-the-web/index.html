@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <header>
+    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby on Rails Engineer</p>
+  </header>
+
+  <div class="row">
+    <div class="col-md-9">
+        <article>
+    <h2>
+      Managing Heroku Config Vars from the Web
+    </h2>
+    <p>
+      <small class="text-muted">19 May, 2013</small>
+    </p>
+    <p><strong>tl;dr</strong> The <a href="https://github.com/danielfone/heroku_config_vars">heroku_config_vars</a> Rails engine provides a secure web interface for managing an application's Heroku configuration.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<p><a href="http://heroku.com">Heroku</a> don't provide a way to manage an application's <a href="https://devcenter.heroku.com/articles/config-vars">configuration variables</a> through a web interface. Although an application's ENV shouldn't really be used for domain-specific configuration or settings that change frequently, sometimes it's a hassle to drop into a console when doing something as trivial as updating SMTP settings or cycling OAuth tokens.</p>
+
+<p>What I really want to achieve is turning this:</p>
+
+<pre><code>$ heroku config:set GITHUB_USERNAME=joesmith
+Adding config vars and restarting myapp... done, v12
+GITHUB_USERNAME: joesmith
+</code></pre>
+
+<p>into this:</p>
+
+<p>{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/heroku-config-update.png %}</p>
+
+<h2 id="the-solution">The Solution</h2>
+
+<p>The <a href="https://github.com/danielfone/heroku_config_vars">heroku_config_vars</a> Rails engine provides a web interface for managing an application's Heroku configuration. This makes it possible for administrators without CLI access to manage their Heroku configuration.</p>
+
+<p>{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/screenshot-1.png %}
+{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/screenshot-2.png %}
+{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/screenshot-3.png %}</p>
+
+<p>Installation and usage instructions can be found on <a href="https://github.com/danielfone/heroku_config_vars">github</a>. Feedback, questions, bugs, PRs are welcome!</p>
+
+<p>Enjoy.</p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <h4>About Me</h4>
+        <p>
+          I'm a freelance Ruby&nbsp;on&nbsp;Rails engineer,
+          based in Christchurch, New&nbsp;Zealand.<br>
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+        <p>
+          <a href="/blog/archives" class="button">Posts</a>
+        </p>
+        <p>
+          <a class="button" href="https://github.com/danielfone">Github</a>
+        </p>
+        <p>
+          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <header>
+    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby on Rails Engineer</p>
+  </header>
+
+  <div class="row">
+    <div class="col-md-9">
+        <article>
+    <h2>
+      Why You Should Never Rescue Exception in Ruby
+    </h2>
+    <p>
+      <small class="text-muted">28 May, 2013</small>
+    </p>
+    <p><strong>tl;dr</strong> <strong><code>rescue Exception =&gt; e</code> will turn your code into a brain eating zombie.</strong></p>
+
+<p>The equivalent of <code>rescue</code> with an argument is <code>rescue =&gt; e</code> or <code>rescue StandardError =&gt; e</code>. Use these, or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError =&gt; e</code></p>
+
+<h2 id="whats-the-deal">What's the deal?</h2>
+
+<p>A common pattern for rescuing exceptions in Ruby is:</p>
+
+<p><code>ruby
+def do_some_job!
+  # ... do something ...
+  job_succeeded
+rescue
+  job_failed
+end
+</code></p>
+
+<p>This is <em>okay</em>, but when developers need to know the exception details, a horrible, <em>nasty</em>, <strong>brain-devouring</strong> pattern tends to emerge:</p>
+
+<p><code>ruby
+def do_some_job!
+  # ... do something ...
+  job_succeeded
+rescue Exception =&gt; e
+  job_failed e
+end
+</code></p>
+
+<p>I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.</p>
+
+<p><em>(Just to confirm this is a actually bad practice, here's <a href="https://github.com/search?l=ruby&amp;amp;o=asc&amp;amp;p=1&amp;amp;q=%22rescue+Exception+=%3E+%22&amp;amp;ref=searchresults&amp;amp;type=Code">~200k results</a> for <code>rescue Exception =&gt; </code> on Github)</em></p>
+
+<h2 id="what-is-this-i-dont-even">What is this I don't even…</h2>
+
+<p><code>Exception</code> is the root of the exception class hierarchy in Ruby. Everything from signal handling to memory errors will raise a subclass of Exception. Here's the full list of exceptions from ruby-core that we'll inadvertently rescue when rescuing Exception.</p>
+
+<p><code>ruby
+SystemStackError
+NoMemoryError
+SecurityError
+ScriptError
+  NotImplementedError
+  LoadError
+    Gem::LoadError
+  SyntaxError
+SignalException
+  Interrupt
+SystemExit
+  Gem::SystemExitException
+</code></p>
+
+<p>Do you really want to rescue a <code>NoMemoryError</code> and send an email saying the job failed?!? Good luck with that.</p>
+
+<h2 id="better-rescue-standarderror">Better: Rescue StandardError</h2>
+
+<p><code>rescue =&gt; e</code> is shorthand for <code>rescue StandardError =&gt; e</code> and is almost certainly the broadest type of Exception that we want to rescue. In almost every circumstance, we can replace <code>rescue Exception =&gt; e</code> with <code>rescue =&gt; e</code> and be better off for it. The only time when that's <em>not</em> a good idea is for code that's doing some kind of exception logging/reporting/management. In those rare cases, it's possible we'll want to rescue non-StandardErrors — but we still need to think pretty hard about what happens after we've rescued them.</p>
+
+<p>Most of the time though, we don't even want to rescue StandardError!</p>
+
+<h2 id="more-self-inflicted-fail">More Self-Inflicted Fail</h2>
+
+<p>Imagine a scenario where we're connecting to a 3rd-party API in our application. For example, we want our users to upload their cat photos to twitfaceagram. We definitely want to handle the scenarios where the connection times out, or the DNS fails to resolve, or the API returns bogus data. In these circumstances, we want to present a friendly message to the user that the application couldn't connect to the remote server.</p>
+
+<p><code>ruby
+def upload_to_twitfaceagram
+  # ... do something ...
+rescue =&gt; e
+  flash[:error] = "The internet broke"
+end
+</code></p>
+
+<p>Most of the time, this code will do what we expect. Something out of our control will go wrong, and it's appropriate to present the user with a friendly message. However, there's a major gotcha with this code: we're still rescuing many exceptions we're not aware of.</p>
+
+<p>Here's an abridged list of StandardErrors defined in ruby-core 2.0.0 (1.9 is not materially different):</p>
+
+<p><code>ruby
+StandardError
+  FiberError
+  ThreadError
+  IndexError
+    StopIteration
+    KeyError
+  Math::DomainError
+  LocalJumpError
+  IOError
+    EOFError
+  EncodingError
+    Encoding::ConverterNotFoundError
+    Encoding::InvalidByteSequenceError
+    Encoding::UndefinedConversionError
+    Encoding::CompatibilityError
+  RegexpError
+  SystemCallError
+    Errno::ERPCMISMATCH
+    # ... lots of system call errors ...
+    Errno::NOERROR # errrr.... what?
+  RangeError
+    FloatDomainError
+  ZeroDivisionError
+  RuntimeError
+    Gem::Exception
+      # ... lots of gem errors ...
+  NameError
+    NoMethodError
+  ArgumentError
+    Gem::Requirement::BadRequirementError
+  TypeError
+</code></p>
+
+<p>In a fresh Rails 3.2.13 application, there are <strong><a href="https://gist.github.com/danielfone/5654600">375 StandardErrors defined</a></strong>.</p>
+
+<p>Now let's say we're refactoring the API integration and we make a typo with a method name. What's going to happen?</p>
+
+<p>If we've wrapped the entire process in a <code>rescue =&gt; e</code> (which is rescuing StandardError) the NoMethodError is going to be swallowed and our graceful error handling code is going to be run instead. When we run our well written tests, they'll fail. But rather than raising a straight-forward NoMethodError, it'll look like there was an gracefully handled connectivity problem.</p>
+
+<p>Now <em>that</em> is going to take some debugging.</p>
+
+<p>If our tests are poorly written there'll be no exception and perhaps the tests will just pass. Granted, in production our users won't be seeing ugly 500 errors, but they sure won't be uploading their cat photos either.</p>
+
+<h2 id="best-rescue-specific-exceptions">Best: Rescue Specific Exceptions</h2>
+
+<p>Every part of our code is <em>qualified</em> to rescue from certain exceptional circumstances. If we want to catch connectivity problems in an API integration, our code will be qualified to rescue from a <a href="http://tammersaleh.com/posts/rescuing-net-http-exceptions">long list</a> of Net related exceptions. It is <em>not</em> qualified to rescue from an ArgumentError, which is a code-time problem and not a run-time problem!</p>
+
+<p>Every time we write a rescue, we need to think hard about what exceptions this code is actually qualified to handle.</p>
+
+<p>In the case of HTTP, we can make it easier on ourselves and use a wrapper like <a href="https://github.com/lostisland/faraday">faraday</a>. In this case we'll have a <a href="https://github.com/lostisland/faraday/blob/master/lib/faraday/error.rb">much shorter list</a> of possible exceptions to rescue.</p>
+
+<h2 id="so">So…</h2>
+
+<p>… if you encounter <code>rescue Exception =&gt; e</code> in an existing codebase, you can almost certainly replace it with <code>rescue =&gt; e</code>.</p>
+
+<p>… if you find yourself about to type <code>rescue Exception =&gt; e</code>, slap yourself in the face, figure out exactly what exceptions you're dealing with and rescue those instead. </p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <h4>About Me</h4>
+        <p>
+          I'm a freelance Ruby&nbsp;on&nbsp;Rails engineer,
+          based in Christchurch, New&nbsp;Zealand.<br>
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+        <p>
+          <a href="/blog/archives" class="button">Posts</a>
+        </p>
+        <p>
+          <a class="button" href="https://github.com/danielfone">Github</a>
+        </p>
+        <p>
+          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+    </div>
+  </body>
+</html>

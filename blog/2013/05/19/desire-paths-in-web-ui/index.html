@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <header>
+    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby on Rails Engineer</p>
+  </header>
+
+  <div class="row">
+    <div class="col-md-9">
+        <article>
+    <h2>
+      Desire Paths in Web UI
+    </h2>
+    <p>
+      <small class="text-muted">19 May, 2013</small>
+    </p>
+    <p>Slides and a rough transcription from my lightning talk
+at the <a href="https://twitter.com/chchruby">@chchruby</a> meetup on Thursday, 16th May, 2013.</p>
+
+<h2 id="desire-paths-in-web-uis">Desire Paths in Web UIs</h2>
+
+<p>{% img /images/desire-paths/slide.001.jpg %}</p>
+
+<blockquote>
+  <p>Hi everyone, I'm Daniel Fone
+I'm a freelance Rails engineer.
+<a href="https://twitter.com/danielfone">@danielfone</a></p>
+</blockquote>
+
+<blockquote>
+  <p>Before I start, I want to frame this by saying,
+this is more of a general "philosophy of web application design"
+than a technical talk
+so feel free to disagree — I don’t think there’s right and wrong —
+but hopefully these musings are helpful to some of you</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.002.jpg %}</p>
+
+<blockquote>
+  <p>Ok, so “desire paths in web UI”</p>
+
+  <p>Who's heard of these before? Who knows what a desire path is?
+Ok, who knows what a web UI is?</p>
+
+  <p>Good, we've got something to start with :)</p>
+
+  <p>Desire paths are something that everyone’s familiar with, you probably just didn’t know they had a name:</p>
+
+  <p>Little story…
+	I’ve got two little kids, and sometimes <a href="http://www.kungfugrippe.com/post/631603366/mommy-needs-a-minute">Mummy needs a minute</a>
+	so daddy takes the kids for endless walks in the parks around where we live. There’s heaps.
+And everywhere we go we see these things:</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.003.jpg %}
+{% img /images/desire-paths/slide.004.jpg %}
+{% img /images/desire-paths/slide.005.jpg %}
+{% img /images/desire-paths/slide.006.jpg %}</p>
+
+<blockquote>
+  <p>Those tracks you see between trees, between paved footpaths etc.
+that’s a desire path</p>
+
+  <p>When someone designed the paths, they figured everyone wanted to walk “here”
+turns out everyone wants to walk “over here”</p>
+</blockquote>
+
+<blockquote>
+  <p>Totally different story time:</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.007.jpg %}</p>
+
+<blockquote>
+  <p>ages ago I built a search feature for a client's in-house logistics system.
+kinda omnisearch, searches all these different fields, fuzzy matches etc.
+Some time later I was working with one of the users while they were using this system
+and they were looking for a particular Order or Parcel or something
+and instead of using my amazing search
+they clicked on the “All Orders” tab, went ctrl-f and typed in the order number they were looking for.
+So they just used the browser’s search function.</p>
+
+  <p>Turns out there was one field that was shown on the “All Orders” list that wasn’t shown on the search results page, so they were saving themselves an extra click by just going ctrl -&gt; find on the orders list.</p>
+
+  <p>I designing the app, I never would've thought about this particular edge case.</p>
+
+  <pre><code>And it got me thinking…
+These two stories are actually about the same thing!
+</code></pre>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.008.jpg %}</p>
+
+<blockquote>
+  <p>Because really, a desire path is
+the disconnect between a <strong>designer's intention</strong>
+and a <strong>user's desires</strong></p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.009.jpg %}</p>
+
+<blockquote>
+  <p>Here’s the dilema for us as application developers</p>
+
+  <p>When I’m sitting down with a client and they want this new-fangled in house management tool.</p>
+
+  <ul>
+    <li>firstly, I don’t have any idea what their users (usually their staff) actually want</li>
+    <li>secondly, the technical managers I’m talking to usually only have a limited idea</li>
+    <li>finally, if you talk with the future users about how they do their job, and how they want this application to work… they have no idea either until they start using it!</li>
+  </ul>
+
+  <p>Basically, no-one knows exactly what they want until it’s in-front of them,
+and then all they know they want something slightly different.</p>
+
+  <p>So what are we to do?</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.010.jpg %}</p>
+
+<blockquote>
+  <p>Here’s my pet theory…</p>
+
+  <p><strong>Build paths, not corridors.</strong></p>
+
+  <p>Going back to our outdoor examples,
+paved footpaths leave users the opportunity to express desire paths
+they can take shortcuts when they know where they’re going</p>
+
+  <p>Corridors don’t leave opportunities for desire paths. You go the way the architect intended you to.</p>
+
+  <p>I know what you’re thinking at this point…</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.011.jpg %}</p>
+
+<blockquote>
+  <p>Yeah. paths, corridors, muddy tracks in the ground. WAT.</p>
+
+  <p>So let’s put some legs on this.
+Technically, what does this look like?</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.012.jpg %}</p>
+
+<blockquote>
+  <ol>
+    <li>
+      <p>Display more data, not less. Perhaps you have to hide it behind a “show more” link. But if you give it to the user, they can do something with it. This is the difference between omitting data and hiding it. I’ll come back to this in a sec.</p>
+    </li>
+    <li>
+      <p>Give the users all their data. export via CSV/XML whatever. In the business world, if they can get data out of your system and into excel, they can do anything with it. Like people can do ANYTHING with excel.</p>
+    </li>
+    <li>
+      <p>Expose APIs, same idea. Give them the data and let them find the ways they want to use it.</p>
+    </li>
+  </ol>
+
+  <p>There's a caveat though…</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.013.jpg %}</p>
+
+<blockquote>
+  <p>Letting users make desire paths doesn’t mean making none of your own paths in the UI.
+You’ve still got to make decisions.</p>
+
+  <p>New users of your application need to see well marked paths so they learn how this information system works.
+But as users become comfortable, they want the space to find their own shortcuts etc.
+So it is good to <strong>hide</strong> all the unneeded data, but it’s not good to <strong>omit</strong> it entirely.</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.014.jpg %}</p>
+
+<blockquote>
+  <p>For bonus points…</p>
+
+  <p>If you’re doing SaaS or whatever, i.e. building value into your own product
+You can leverage desire paths.</p>
+
+  <p>And if you can analyse your logs, or implement some JS tracking,
+Or — heaven forbid — talk to your users!</p>
+
+  <p>You can discover the odd use cases you’d never thought of and then build those out.</p>
+
+  <p>So to recap:</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.015.jpg %}</p>
+
+<blockquote>
+  <ol>
+    <li>Let your users figure out how to do cool stuff with your app.</li>
+    <li>Figure out what cool stuff they’re doing</li>
+    <li>And then make it easier for everyone</li>
+  </ol>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.016.jpg %}</p>
+
+<blockquote>
+  <p>But basically…</p>
+
+  <p><strong>Build paths, not corridors.</strong></p>
+
+  <p>Whatever that means for you.</p>
+</blockquote>
+
+<p>{% img /images/desire-paths/slide.017.jpg %}</p>
+
+<blockquote>
+  <p>THANKS</p>
+</blockquote>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <h4>About Me</h4>
+        <p>
+          I'm a freelance Ruby&nbsp;on&nbsp;Rails engineer,
+          based in Christchurch, New&nbsp;Zealand.<br>
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+        <p>
+          <a href="/blog/archives" class="button">Posts</a>
+        </p>
+        <p>
+          <a class="button" href="https://github.com/danielfone">Github</a>
+        </p>
+        <p>
+          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+    </div>
+  </body>
+</html>

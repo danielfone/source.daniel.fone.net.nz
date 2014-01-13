@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <header>
+    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby on Rails Engineer</p>
+  </header>
+
+  <div class="row">
+    <div class="col-md-9">
+        <article>
+    <h2>
+      Generating a Class Hierarchy in Ruby
+    </h2>
+    <p>
+      <small class="text-muted">27 May, 2013</small>
+    </p>
+    <p>Here's a way to see what classes descend from a particular superclass in Ruby. You can use it to list all ActiveRecord models defined in your application, every implementation on a particular base class, or whatever else might be of interest.</p>
+
+<p><code>
+&gt; puts ClassHierarchy.new ActionController::Base
+ActionController::Base
+  ApplicationController
+    UsersController
+    UserSessionsController
+    OrdersController
+    ...
+</code></p>
+
+<p>If you're using Rails, bear in mind that most of your classes won't be loaded by default in the development environment. You can get around this by manually requiring the files you're interested in:</p>
+
+<p><code>
+Dir.glob File.join(Rails.root, 'app/models/**/*.rb'), &amp;method(:require)
+</code></p>
+
+<p>To use in your code, simply put <code>class_hierarchy.rb</code> somewhere that makes sense (perhaps /lib) and <code>require 'class_hierarchy'</code>.</p>
+
+<p>{% gist 5654633 class_hierarchy.rb %}</p>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <h4>About Me</h4>
+        <p>
+          I'm a freelance Ruby&nbsp;on&nbsp;Rails engineer,
+          based in Christchurch, New&nbsp;Zealand.<br>
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+        <p>
+          <a href="/blog/archives" class="button">Posts</a>
+        </p>
+        <p>
+          <a class="button" href="https://github.com/danielfone">Github</a>
+        </p>
+        <p>
+          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+    </div>
+  </body>
+</html>

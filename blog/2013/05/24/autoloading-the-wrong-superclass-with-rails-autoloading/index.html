@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <header>
+    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby on Rails Engineer</p>
+  </header>
+
+  <div class="row">
+    <div class="col-md-9">
+        <article>
+    <h2>
+      Autoloading The Wrong Superclass with Rails
+    </h2>
+    <p>
+      <small class="text-muted">24 May, 2013</small>
+    </p>
+    <p>Autoloading in Ruby on Rails can cause all kinds of grief if you don't watch out. Here's a really quick tip to avoid hours of debugging down the track.</p>
+
+<blockquote>
+  <p>Always use the full class namespace when specifying a superclass inside a module</p>
+</blockquote>
+
+<p>For example:</p>
+
+<p><code>ruby
+  module MyEngine
+    class WidgetController &lt; ApplicationController
+      # BAD! ApplicationController is ambiguous
+    end
+  end
+</code></p>
+
+<p><code>ruby
+  module MyEngine
+    class WidgetController &lt; MyEngine::ApplicationController
+      # Good - inherits from the module specific ApplicationController
+    end
+  end
+</code></p>
+
+<p><code>ruby
+  module MyEngine
+    class WidgetController &lt; ::ApplicationController
+      # Good - inherits from the top-level ApplicationController
+    end
+  end
+</code></p>
+
+<p>In the first example, the superclass for WidgetController <strong>will depend on which classes are already loaded</strong>. Ruby will look for the following classes in order:</p>
+
+<ol>
+  <li><code>MyEngine::ApplicationController</code></li>
+  <li><code>::ApplicationController</code></li>
+</ol>
+
+<p>The trouble occurs when Rails has already autoloaded <code>::ApplicationController</code> and not <code>MyEngine::ApplicationController</code>. In this case, Rails will never need to autoload <code>MyEngine::ApplicationController</code> because <code>::ApplicationController</code> already matches the superclass.</p>
+
+<p>Autoloading can occur in a different order between execution environments. For example, tests could all pass and while production system fails because of the different autoloading behavior.</p>
+
+<p>The examples below demonstrate how the order of the class definitions affect which superclass is used if the superclass is ambiguous. When written out like this, the behavior is fairly obvious.</p>
+
+<p>```ruby
+class Base
+  def initialize
+    raise "This is the wrong super class!"
+  end
+end</p>
+
+<p>module Widget
+  class MyWidget &lt; Base
+    # Inherits from ::Base because Widget::Base isn't defined yet
+  end
+end</p>
+
+<p>module Widget
+  class Base
+    def initialize
+      puts "Success!"
+    end
+  end
+end</p>
+
+<p>```</p>
+
+<pre><code>&gt; Widget::MyWidget.new
+RuntimeError: This is the wrong super class!
+</code></pre>
+
+<p>```ruby
+class Base
+  def initialize
+    raise "This is the wrong super class!"
+  end
+end</p>
+
+<p>module Widget
+  class Base
+    def initialize
+      puts "Success!"
+    end
+  end
+end</p>
+
+<p>module Widget
+  class MyWidget &lt; Base
+    # Inherits from Widget::Base
+  end
+end</p>
+
+<p>```</p>
+
+<pre><code>&gt; Widget::MyWidget.new
+Success!
+</code></pre>
+
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <h4>About Me</h4>
+        <p>
+          I'm a freelance Ruby&nbsp;on&nbsp;Rails engineer,
+          based in Christchurch, New&nbsp;Zealand.<br>
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+        <p>
+          <a href="/blog/archives" class="button">Posts</a>
+        </p>
+        <p>
+          <a class="button" href="https://github.com/danielfone">Github</a>
+        </p>
+        <p>
+          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+    </div>
+  </body>
+</html>
