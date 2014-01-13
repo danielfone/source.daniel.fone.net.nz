@@ -1,43 +1,38 @@
 <% wrap_layout :layout do %>
-  <header role="banner">
-    <%= image_tag 'blue-dot.png', width: 100 %>
-    <h1>
-      <a href="/">Daniel Fone</a>
-    </h1>
-    <h2>Ruby on Rails Engineer</h2>
+  <header>
+    <%= image_tag 'blue-dot.png', width: 100, style: 'float: left; margin-right: 1em' %>
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby on Rails Engineer</p>
   </header>
 
-  <ul class="main-navigation">
-    <li><a href="/">About</a></li>
-    <li><a href="/blog/archives">Blog</a></li>
-    <li><a href="/hire">Hire Me</a></li>
-  </ul>
-
-  <div id="main" role="main">
-    <%= yield %>
+  <div class="row">
+    <div class="col-md-9">
+      <%= yield %>
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <%= image_tag '//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300', width: 80, class: 'img-thumbnail', style: 'float: right' %>
+        <h4>About Me</h4>
+        <p>
+          I'm a freelance Ruby on Rails engineer,
+          based in Christchurch, New Zealand.<br>
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+        <p>
+          <a href="/blog/archives" class="button">More posts</a>
+        </p>
+        <p>
+          <%= link_to 'Github', 'https://github.com/danielfone', class: 'button' %>
+        </p>
+        <p>
+          <%= link_to 'Twitter', 'https://twitter.com/danielfone', class: 'button' %>
+        </p>
+      </aside>
+    </div>
   </div>
 
-  <aside>
-    <section>
-      <p>
-        <a href="/hire" class="button">Hire me</a>
-      </p>
-    </section>
-    <section>
-      <%= image_tag '//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300', width: 150 %>
-      <h1>About Me</h1>
-      <p>
-        I'm a freelance Ruby on Rails engineer,
-        based in Christchurch, New Zealand.<br>
-      </p>
-      <p>
-        <%= link_to 'Github Profile', 'https://github.com/danielfone' %>
-      </p>
-      <p>
-        <%= link_to '@danielfone on Twitter', 'https://twitter.com/danielfone' %>
-      </p>
-    </section>
-  </aside>
   <footer role="contentinfo">
     <p>&copy; 2014 - Daniel Fone</p>
   </footer>

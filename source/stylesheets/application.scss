@@ -1,1 +1,41 @@
+@import 'variables';
 @import "bootstrap";
+
+a:hover {
+  text-decoration: none;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+header {
+  border-bottom: 1px solid $gray-lighter;
+  margin-bottom: 1em;
+
+  .lead {
+    margin-left: 120px;
+  }
+}
+
+aside {
+  padding: 1em;
+  margin-bottom: 1em;
+  background-color: #f7f7f7;
+  font-size: 75%;
+
+  .img-thumbnail {
+    margin: 0.25em;
+  }
+
+  .button {
+    @extend .btn;
+    @extend .btn-large;
+    @extend .btn-default;
+    width: 100%;
+
+    &.primary {
+      @extend .btn-primary;
+    }
+  }
+}
