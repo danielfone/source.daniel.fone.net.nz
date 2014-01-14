@@ -66,7 +66,7 @@ helpers do
   end
 
   def comments_enabled?
-    current_article.metadata[:page]['comments']
+    current_article.metadata[:page]['comments'] != false
   end
 
 end
