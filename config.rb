@@ -1,3 +1,5 @@
+set :layout, :page
+
 ###
 # Blog settings
 ###
@@ -12,7 +14,7 @@ activate :blog do |blog|
   # Matcher for blog source files
   blog.sources = "{year}/{year}-{month}-{day}-{title}"
   # blog.taglink = "tags/{tag}.html"
-  # blog.layout = "layout"
+  blog.layout = 'post'
   # blog.summary_separator = /(READMORE)/
   # blog.summary_length = 250
   # blog.year_link = "{year}.html"
@@ -44,12 +46,6 @@ end
 ###
 
 # Per-page layout changes:
-
-page "*", layout: :page
-
-with_layout :post do
-  page "/blog/*.markdown"
-end
 
 page "/feed.xml", layout: false
 
