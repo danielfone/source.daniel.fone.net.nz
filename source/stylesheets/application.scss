@@ -5,6 +5,10 @@ a:hover {
   text-decoration: none;
 }
 
+article p {
+  margin-bottom: $line-height-computed;
+}
+
 h1 {
   margin-bottom: 0;
 }
@@ -32,11 +36,11 @@ aside {
 
   .button {
     @extend .btn;
-    @extend .btn-large;
     @extend .btn-default;
     width: 100%;
 
     &.primary {
+      @extend .btn-lg;
       @extend .btn-primary;
     }
   }
@@ -44,4 +48,12 @@ aside {
 
 blockquote {
   font-style: italic;
+}
+
+img.hire {
+  width: 2em;
+  margin-right: 1em;
+  margin-bottom: 0;
+  padding-top: 0.25em;
+  float: left;
 }
