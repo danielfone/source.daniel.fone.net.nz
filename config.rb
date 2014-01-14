@@ -29,7 +29,6 @@ activate :blog do |blog|
   # blog.page_link = "page/{num}"
 end
 
-page "/feed.xml", layout: false
 
 ###
 # Compass
@@ -51,6 +50,8 @@ page "*", layout: :page
 with_layout :post do
   page "/blog/*.markdown"
 end
+
+page "/feed.xml", layout: false
 
 # Proxy pages (http://middlemanapp.com/dynamic-pages/)
 # proxy "/this-page-has-no-template.html", "/template-file.html", locals: {

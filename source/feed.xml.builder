@@ -2,7 +2,7 @@ xml.instruct!
 xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
   site_url = "http://daniel.fone.net.nz/"
   xml.title "Daniel Fone"
-  xml.subtitle "Ruby on Rails Engineer"
+  xml.subtitle "Ruby/Rails Engineer"
   xml.id URI.join(site_url, blog.options.prefix.to_s)
   xml.link "href" => URI.join(site_url, blog.options.prefix.to_s)
   xml.link "href" => URI.join(site_url, current_page.path), "rel" => "self"
