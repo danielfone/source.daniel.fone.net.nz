@@ -6384,3 +6384,7 @@ img.hire {
   margin-bottom: 0;
   padding-top: 0.25em;
   float: left; }
+
+/* line 61, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+article img {
+  margin: 0.25em 0; }
