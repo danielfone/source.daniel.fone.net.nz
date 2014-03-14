@@ -18,8 +18,35 @@
     <%= partial 'analytics' %>
   </head>
   <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item active" href="/">Home</a>
+          <a class="blog-nav-item" href="/blog/archives">Posts</a>
+          <%= link_to 'Code', 'https://github.com/danielfone', class: 'blog-nav-item' %>
+          <a class="blog-nav-item callout" href="/hire">Hire Me</a>
+        </nav>
+      </div>
+    </div>
+
     <div class="container">
       <%= yield %>
+
+      <div class="blog-footer">
+        <p>
+          &copy; 2014 Daniel Fone
+          -
+          Powered by
+          <%= link_to 'Middleman', 'http://middlemanapp.com/' %>
+          and
+          <%= link_to 'GitHub Pages', 'http://pages.github.com/' %>
+        </p>
+        <p>
+          <a href="#">Back to top</a>
+        </p>
+      </div>
+
     </div>
+
   </body>
 </html>
