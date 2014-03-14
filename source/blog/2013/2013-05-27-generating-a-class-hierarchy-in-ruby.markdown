@@ -24,6 +24,6 @@ If you're using Rails, bear in mind that most of your classes won't be loaded by
 Dir.glob File.join(Rails.root, 'app/models/**/*.rb'), &method(:require)
 ~~~
 
-To use in your code, simply put `class_hierarchy.rb` somewhere that makes sense (perhaps /lib) and `require 'class_hierarchy'`.
+To use in your code, simply put class_hierarchy.rb somewhere that makes sense (perhaps /lib) and `require 'class_hierarchy'`.
 
-{% gist 5654633 class_hierarchy.rb %}
+<script src="https://gist.github.com/danielfone/5654633.js"></script>
