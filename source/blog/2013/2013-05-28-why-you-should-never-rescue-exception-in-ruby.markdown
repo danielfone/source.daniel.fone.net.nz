@@ -14,25 +14,25 @@ The equivalent of `rescue` with an argument is `rescue => e` or `rescue Standard
 
 A common pattern for rescuing exceptions in Ruby is:
 
-```ruby
+~~~ruby
 def do_some_job!
   # ... do something ...
   job_succeeded
 rescue
   job_failed
 end
-```
+~~~
 
 This is *okay*, but when developers need to know the exception details, a horrible, *nasty*, **brain-devouring** pattern tends to emerge:
 
-```ruby
+~~~ruby
 def do_some_job!
   # ... do something ...
   job_succeeded
 rescue Exception => e
   job_failed e
 end
-```
+~~~
 
 I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.
 
@@ -42,7 +42,7 @@ I have been caught out by that code on at least three separate occasions. Twice 
 
 `Exception` is the root of the exception class hierarchy in Ruby. Everything from signal handling to memory errors will raise a subclass of Exception. Here's the full list of exceptions from ruby-core that we'll inadvertently rescue when rescuing Exception.
 
-```ruby
+~~~ruby
 SystemStackError
 NoMemoryError
 SecurityError
@@ -55,7 +55,7 @@ SignalException
   Interrupt
 SystemExit
   Gem::SystemExitException
-```
+~~~
 
 Do you really want to rescue a `NoMemoryError` and send an email saying the job failed?!? Good luck with that.
 
@@ -69,19 +69,19 @@ Most of the time though, we don't even want to rescue StandardError!
 
 Imagine a scenario where we're connecting to a 3rd-party API in our application. For example, we want our users to upload their cat photos to twitfaceagram. We definitely want to handle the scenarios where the connection times out, or the DNS fails to resolve, or the API returns bogus data. In these circumstances, we want to present a friendly message to the user that the application couldn't connect to the remote server.
 
-```ruby
+~~~ruby
 def upload_to_twitfaceagram
   # ... do something ...
 rescue => e
   flash[:error] = "The internet broke"
 end
-```
+~~~
 
 Most of the time, this code will do what we expect. Something out of our control will go wrong, and it's appropriate to present the user with a friendly message. However, there's a major gotcha with this code: we're still rescuing many exceptions we're not aware of.
 
 Here's an abridged list of StandardErrors defined in ruby-core 2.0.0 (1.9 is not materially different):
 
-```ruby
+~~~ruby
 StandardError
   FiberError
   ThreadError
@@ -113,7 +113,7 @@ StandardError
   ArgumentError
     Gem::Requirement::BadRequirementError
   TypeError
-```
+~~~
 
 In a fresh Rails 3.2.13 application, there are **[375 StandardErrors defined](https://gist.github.com/danielfone/5654600)**.
 
