@@ -18,23 +18,25 @@ If anyone ever finds themselves in a similar situation, here's what I ended up d
 
 I'm going to use a model called Subscription by way of example. This same pattern will work on any ActiveRecord model.
 
-### Add a `record_errors` text column
+### Add a new text column
 
 We'll serialize the validation errors and store them in a field called `record_errors`.
 
-{% codeblock /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb %}
+~~~ ruby
+# /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb
 class AddRecordErrorsToSubscriptions < ActiveRecord::Migration
   def change
     add_column :subscriptions, :record_errors, :text
   end
 end
-{% endcodeblock %}
+~~~
 
 ### Add an ActiveRecord extension to handle persistence
 
 This module will catch validation failures and persist the record anyway. It's completely independent of the domain/business logic of the application so I like to store it in /lib. This is the main logic for achieving our required behaviour.
 
-{% codeblock /lib/save_with_errors.rb %}
+~~~ ruby
+# /lib/save_with_errors.rb
 require 'active_record'
 require 'active_support'
 
@@ -65,13 +67,14 @@ private
   end
 
 end
-{% endcodeblock %}
+~~~
 
 ### Include our ActiveRecord extension on our model
 
-All we need to do is `include` the `SaveWithErrors` module into our ActiveRecord model. We could also require 'save_with_errors' in `config/application.rb`.
+All we need to do is include the SaveWithErrors module into our ActiveRecord model. We should also require 'save_with_errors' in config/application.rb.
 
-{% codeblock /app/models/subscription.rb %}
+~~~ ruby
+# /app/models/subscription.rb
 require 'save_with_errors'
 
 class Subscription < ActiveRecord::Base
@@ -89,7 +92,7 @@ private
   end
 
 end
-{% endcodeblock %}
+~~~
 
 ### The Result
 
