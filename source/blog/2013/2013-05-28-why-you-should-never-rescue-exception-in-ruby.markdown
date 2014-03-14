@@ -6,11 +6,13 @@ comments: true
 categories: Debugging
 ---
 
-**tl;dr** **`rescue Exception => e` will turn your code into a brain eating zombie.**
+### tl;dr
 
-The equivalent of `rescue` with an argument is `rescue => e` or `rescue StandardError => e`. Use these, or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`
+**`rescue Exception => e` will turn your code into a brain eating zombie.**
 
-## What's the deal?
+The equivalent of `rescue` with an argument is `rescue => e` or `rescue StandardError => e`. Use these, or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
+
+### What's the deal?
 
 A common pattern for rescuing exceptions in Ruby is:
 
@@ -23,7 +25,7 @@ rescue
 end
 ~~~
 
-This is *okay*, but when developers need to know the exception details, a horrible, *nasty*, **brain-devouring** pattern tends to emerge:
+This is fine, but when developers need to capture the exception details, a terrible, *terrible* thing happens:
 
 ~~~ruby
 def do_some_job!
@@ -36,9 +38,9 @@ end
 
 I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.
 
-*(Just to confirm this is a actually bad practice, here's [~200k results](https://github.com/search?l=ruby&o=asc&p=1&q=%22rescue+Exception+=%3E+%22&ref=searchresults&type=Code) for `rescue Exception => ` on Github)*
+*Just to confirm this is a actually bad practice, here's [~200k results](https://github.com/search?l=ruby&o=asc&p=1&q=%22rescue+Exception+=%3E+%22&ref=searchresults&type=Code) for `rescue Exception =>` on Github*
 
-## What is this I don't even…
+### What is this I don't even…
 
 `Exception` is the root of the exception class hierarchy in Ruby. Everything from signal handling to memory errors will raise a subclass of Exception. Here's the full list of exceptions from ruby-core that we'll inadvertently rescue when rescuing Exception.
 
@@ -59,13 +61,13 @@ SystemExit
 
 Do you really want to rescue a `NoMemoryError` and send an email saying the job failed?!? Good luck with that.
 
-## Better: Rescue StandardError
+### Better: Rescue StandardError
 
 `rescue => e` is shorthand for `rescue StandardError => e` and is almost certainly the broadest type of Exception that we want to rescue. In almost every circumstance, we can replace `rescue Exception => e` with `rescue => e` and be better off for it. The only time when that's *not* a good idea is for code that's doing some kind of exception logging/reporting/management. In those rare cases, it's possible we'll want to rescue non-StandardErrors — but we still need to think pretty hard about what happens after we've rescued them.
 
 Most of the time though, we don't even want to rescue StandardError!
 
-## More Self-Inflicted Fail
+### More Self-Inflicted Fail
 
 Imagine a scenario where we're connecting to a 3rd-party API in our application. For example, we want our users to upload their cat photos to twitfaceagram. We definitely want to handle the scenarios where the connection times out, or the DNS fails to resolve, or the API returns bogus data. In these circumstances, we want to present a friendly message to the user that the application couldn't connect to the remote server.
 
@@ -125,7 +127,7 @@ Now *that* is going to take some debugging.
 
 If our tests are poorly written there'll be no exception and perhaps the tests will just pass. Granted, in production our users won't be seeing ugly 500 errors, but they sure won't be uploading their cat photos either.
 
-## Best: Rescue Specific Exceptions
+### Best: Rescue Specific Exceptions
 
 Every part of our code is *qualified* to rescue from certain exceptional circumstances. If we want to catch connectivity problems in an API integration, our code will be qualified to rescue from a [long list](http://tammersaleh.com/posts/rescuing-net-http-exceptions) of Net related exceptions. It is *not* qualified to rescue from an ArgumentError, which is a code-time problem and not a run-time problem!
 
@@ -133,7 +135,7 @@ Every time we write a rescue, we need to think hard about what exceptions this c
 
 In the case of HTTP, we can make it easier on ourselves and use a wrapper like [faraday](https://github.com/lostisland/faraday). In this case we'll have a [much shorter list](https://github.com/lostisland/faraday/blob/master/lib/faraday/error.rb) of possible exceptions to rescue.
 
-## So…
+### So…
 
 … if you encounter `rescue Exception => e` in an existing codebase, you can almost certainly replace it with `rescue => e`.
 
