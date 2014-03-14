@@ -5,6 +5,14 @@ a:hover {
   text-decoration: none;
 }
 
+a.external {
+  background-image: linear-gradient(transparent,transparent),
+                    url('/images/external.svg');
+  background-position: center right;
+  background-repeat: no-repeat;
+  padding-right: 13px;
+}
+
 article p {
   margin-bottom: $line-height-computed;
 }
@@ -106,13 +114,13 @@ article img {
  */
 
 .blog-footer {
-  font-size: $font-size-small;
+  font-size: small;
   padding: 3em 0;
   color: #ccc;
 
   a {
     color: #ccc;
-    text-decoration: underline;
-    &:hover { text-decoration: none; }
+    border-bottom: 1px dotted;
+    &:hover { border: none; }
   }
 }
