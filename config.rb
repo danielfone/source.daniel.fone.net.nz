@@ -1,10 +1,13 @@
 set :layout, :page
+set :css_dir, 'stylesheets'
+set :js_dir, 'javascripts'
+set :images_dir, 'images'
+
+Time.zone = "Wellington"
 
 ###
 # Blog settings
 ###
-
-Time.zone = "Wellington"
 
 activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
@@ -31,16 +34,6 @@ activate :blog do |blog|
   # blog.page_link = "page/{num}"
 end
 
-
-###
-# Compass
-###
-
-# Change Compass configuration
-# compass_config do |config|
-#   config.output_style = :compact
-# end
-
 ###
 # Page options, layouts, aliases and proxies
 ###
@@ -48,10 +41,6 @@ end
 # Per-page layout changes:
 
 page "/feed.xml", layout: false
-
-# Proxy pages (http://middlemanapp.com/dynamic-pages/)
-# proxy "/this-page-has-no-template.html", "/template-file.html", locals: {
-#  which_fake_page: "Rendering a fake page with a local variable" }
 
 ###
 # Helpers
@@ -70,12 +59,6 @@ helpers do
   end
 
 end
-
-set :css_dir, 'stylesheets'
-
-set :js_dir, 'javascripts'
-
-set :images_dir, 'images'
 
 # Build-specific configuration
 configure :build do
