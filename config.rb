@@ -2,6 +2,7 @@ set :layout, :page
 set :css_dir, 'stylesheets'
 set :js_dir, 'javascripts'
 set :images_dir, 'images'
+set :markdown, :fenced_code_blocks => true, :smartypants => true
 
 Time.zone = "Wellington"
 
@@ -77,3 +78,5 @@ configure :build do
   # Or use a different image path
   # set :http_prefix, "/Content/images/"
 end
+
+activate :syntax
