@@ -66,6 +66,7 @@ img.hire {
 }
 
 article img {
+  @extend .img-responsive;
   margin: 0.25em 0;
 }
 

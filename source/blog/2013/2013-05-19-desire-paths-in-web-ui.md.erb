@@ -5,37 +5,27 @@ date: 2013-05-19 16:50
 comments: true
 ---
 
-_Slides and a rough transcription from my lightning talk
-at the [@chchruby](https://twitter.com/chchruby) meetup on Thursday, 16th May, 2013._
+_Slides and a rough transcription from my lightning talk at the [@chchruby](https://twitter.com/chchruby) meetup on Thursday, 16th May, 2013._
 
 ---
 
 ![slide.001.jpg](2013-05-19-desire-paths-in-web-ui/slide.001.jpg)
 
-Hi everyone, I'm Daniel Fone.
-I'm a freelance Rails engineer.
-[@danielfone](https://twitter.com/danielfone)
+Hi everyone, I'm Daniel Fone. I'm a freelance Rails engineer.
 
-Before I start, I want to frame this by saying,
-this is more of a general "philosophy of web application design"
-than a technical talk
-so feel free to disagree — I don’t think there’s right and wrong —
-but hopefully these musings are helpful to some of you
+Before I start, I want to frame this by saying, this is more of a general "philosophy of web application design" than a technical talk so feel free to disagree — I don’t think there’s right and wrong — but hopefully these musings are helpful to some of you
 
 ![slide.002.jpg](2013-05-19-desire-paths-in-web-ui/slide.002.jpg)
 
-Ok, so “desire paths in web UI”
+Ok, so “desire paths in web UI” Who's heard of these before? Who knows what a desire path is?
 
-Who's heard of these before? Who knows what a desire path is?
-Ok, who knows what a web UI is?
-
-Good, we've got something to start with :)
+Ok, who knows what a web UI is? Good, we've got something to start with…
 
 Desire paths are something that everyone’s familiar with, you probably just didn’t know they had a name:
 
 Little story…
 I’ve got two little kids, and sometimes [Mummy needs a minute](http://www.kungfugrippe.com/post/631603366/mommy-needs-a-minute)
-so daddy takes the kids for endless walks in the parks around where we live. There’s heaps.
+so Daddy takes the kids for endless walks in the parks around where we live. There’s heaps.
 And everywhere we go we see these things:
 
 ![slide.003.jpg](2013-05-19-desire-paths-in-web-ui/slide.003.jpg)
@@ -65,8 +55,8 @@ Turns out there was one field that was shown on the “All Orders” list that w
 
 I designing the app, I never would've thought about this particular edge case.
 
-	And it got me thinking…
-	These two stories are actually about the same thing!
+And it got me thinking…
+These two stories are actually about the same thing!
 
 ![slide.008.jpg](2013-05-19-desire-paths-in-web-ui/slide.008.jpg)
 
@@ -79,11 +69,11 @@ and a **user's desires**
 Here’s the dilema for us as application developers
 
 When I’m sitting down with a client and they want this new-fangled in house management tool.
->
+
 * firstly, I don’t have any idea what their users (usually their staff) actually want
 * secondly, the technical managers I’m talking to usually only have a limited idea
 * finally, if you talk with the future users about how they do their job, and how they want this application to work… they have no idea either until they start using it!
->
+
 Basically, no-one knows exactly what they want until it’s in-front of them,
 and then all they know they want something slightly different.
 
@@ -92,7 +82,7 @@ So what are we to do?
 ![slide.010.jpg](2013-05-19-desire-paths-in-web-ui/slide.010.jpg)
 
 Here’s my pet theory…
->
+
 **Build paths, not corridors.**
 
 Going back to our outdoor examples,
@@ -117,7 +107,7 @@ Technically, what does this look like?
 1. Give the users all their data. export via CSV/XML whatever. In the business world, if they can get data out of your system and into excel, they can do anything with it. Like people can do ANYTHING with excel.
 
 1. Expose APIs, same idea. Give them the data and let them find the ways they want to use it.
->
+
 There's a caveat though…
 
 ![slide.013.jpg](2013-05-19-desire-paths-in-web-ui/slide.013.jpg)
@@ -140,7 +130,7 @@ And if you can analyse your logs, or implement some JS tracking,
 Or — heaven forbid — talk to your users!
 
 You can discover the odd use cases you’d never thought of and then build those out.
->
+
 So to recap:
 
 ![slide.015.jpg](2013-05-19-desire-paths-in-web-ui/slide.015.jpg)
