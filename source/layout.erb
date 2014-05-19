@@ -21,11 +21,10 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class="blog-nav-item active" href="/">Home</a>
-          <a class="blog-nav-item" href="/blog/archives">Posts</a>
-          <a class="blog-nav-item" href="/hire">Hire Me</a>
-          <%= link_to 'Code', 'https://github.com/danielfone', class: 'blog-nav-item external' %>
-          <%# link_to 'Talks', 'https://speakerdeck.com/danielfone', class: 'blog-nav-item external' %>
+          <%= nav_link_to 'Home', '/' %>
+          <%= nav_link_to 'Posts', '/blog/archives/' %>
+          <%= nav_link_to 'Hire Me', '/hire/' %>
+          <%= nav_link_to 'Code', 'https://github.com/danielfone', class: 'external' %>
         </nav>
       </div>
     </div>

@@ -59,6 +59,13 @@ helpers do
     current_article.metadata[:page]['comments'] != false
   end
 
+  def nav_link_to(link_text, url, options = {})
+    options[:class] ||= ""
+    options[:class] << ' blog-nav-item'
+    options[:class] << " active" if url == current_page.url
+    link_to link_text, url, options
+  end
+
 end
 
 # Build-specific configuration
