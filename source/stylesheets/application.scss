@@ -14,7 +14,7 @@ a.external {
   padding-right: 13px;
 }
 
-pre.highlight {  
+pre.highlight {
   overflow: auto;
   word-wrap: normal;
 }
@@ -28,7 +28,7 @@ header {
   margin-bottom: 1em;
 
   .lead {
-    margin-left: 120px;
+    margin-left: 1em;
   }
 }
 
@@ -58,9 +58,9 @@ blockquote {
 }
 
 img.hire {
-  width: 2em;
-  margin-right: 1em;
-  margin-bottom: 0;
+  width: 1.5em;
+  margin-right: 0.5em;
+  margin-bottom: 0.25em;
   padding-top: 0.25em;
   float: left;
 }
@@ -128,5 +128,5 @@ article img {
 
 code {
   color: #555;
-  background-color: #fff;
+  background-color: #f1f1f1;
 }
