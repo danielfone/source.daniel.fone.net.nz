@@ -66,6 +66,10 @@ helpers do
     link_to link_text, url, options
   end
 
+  def page_title
+    [current_page.data.title, 'Daniel Fone'].compact.join ' - '
+  end
+
 end
 
 # Build-specific configuration
