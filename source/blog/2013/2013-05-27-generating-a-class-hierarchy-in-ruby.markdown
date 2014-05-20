@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Generating a Class Hierarchy in Ruby"
-date: 2013-05-27 12:59
-comments: true
-categories: Metaprogramming
 ---
 
 Here's a way to see what classes descend from a particular superclass in Ruby. You can use it to list all ActiveRecord models defined in your application, every implementation on a particular base class, or whatever else might be of interest.

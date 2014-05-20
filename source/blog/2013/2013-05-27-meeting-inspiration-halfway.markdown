@@ -1,7 +1,5 @@
 ---
 title: "Meeting Inspiration Halfway"
-date: 2013-05-27 12:43
-comments: true
 ---
 
 > [Inspiration] does not always respond to the first invitation.

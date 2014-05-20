@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Why You Should Never Rescue Exception in Ruby"
-date: 2013-05-28 04:27
-comments: true
-categories: Debugging
 ---
 
 ### tl;dr
@@ -139,4 +135,4 @@ In the case of HTTP, we can make it easier on ourselves and use a wrapper like [
 
 … if you encounter `rescue Exception => e` in an existing codebase, you can almost certainly replace it with `rescue => e`.
 
-… if you find yourself about to type `rescue Exception => e`, slap yourself in the face, figure out exactly what exceptions you're dealing with and rescue those instead. 
+… if you find yourself about to type `rescue Exception => e`, slap yourself in the face, figure out exactly what exceptions you're dealing with and rescue those instead.

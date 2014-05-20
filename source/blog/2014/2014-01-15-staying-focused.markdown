@@ -1,6 +1,5 @@
 ---
 title: Staying Focused
-date: 2014-01-15 11:35 NZDT
 published: false
 ---
 

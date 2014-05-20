@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Customising Scaffold Views in Ruby on Rails"
-date: 2014-02-01 22:24
-comments: true
-categories: 
 ---
 
 > In Rails 3.0 and above, generators don't just look in the source root for templates,

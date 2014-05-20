@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Managing Heroku Config Vars from the Web"
-date: 2013-05-19 20:50
-comments: true
-categories: Gems Heroku
 ---
 
 **tl;dr** The [heroku_config_vars](https://github.com/danielfone/heroku_config_vars) Rails engine provides a secure web interface for managing an application's Heroku configuration.

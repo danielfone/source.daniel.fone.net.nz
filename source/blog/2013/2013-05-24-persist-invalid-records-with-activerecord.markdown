@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Persist Invalid Records with ActiveRecord"
-date: 2013-05-24 12:38
-comments: true
-categories: ActiveRecord Validation
 ---
 
 Some time ago, I had an unusual design brief for a Rails app:
@@ -100,7 +96,7 @@ end
 
     > Subscription.create! name: 'My Name', email: 'test@example.com'
       SQL (3.6ms)  INSERT INTO "subscriptions" ("created_at", "email", "name", "record_errors", "token", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["created_at", Fri, 24 May 2013 01:55:07 UTC +00:00], ["email", "test@example.com"], ["name", "My Name"], ["record_errors", "--- !omap\n- :token:\n  - is invalid\n"], ["token", nil], ["updated_at", Fri, 24 May 2013 01:55:07 UTC +00:00]]
-    
+
     ActiveRecord::RecordInvalid: Validation failed: Token is invalid
       [... backtrace ...]
 
@@ -113,7 +109,7 @@ Notice that a record has been inserted, but the exception that we'd expect from 
       id: 19
       name: My Name
       email: test@example.com
-      token: 
+      token:
       created_at: 2013-05-24 01:55:07.747035000 Z
       updated_at: 2013-05-24 01:55:07.747035000 Z
       record_errors: !omap

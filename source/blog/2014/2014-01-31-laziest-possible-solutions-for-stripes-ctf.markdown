@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Laziest possible solutions for Stripe's CTF"
-date: 2014-01-31 12:24
-comments: true
-categories: 
 ---
 
 A good programmer is a lazy programmer right? Here's my solutions to Stripe's latest CTF.

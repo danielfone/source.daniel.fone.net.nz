@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "A better way to manage the Rails secret token"
-date: 2013-05-20 07:35
-comments: true
-categories: Heroku Security
 ---
 
 **tl;dr** Don't hardcode secret tokens. Load them from the environment like this…

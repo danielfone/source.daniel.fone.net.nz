@@ -1,9 +1,5 @@
 ---
-layout: post
 title: "Prototyping Web Applications in Rails 4"
-date: 2013-10-19 14:29
-comments: true
-categories: 
 ---
 
 _From a presentation I gave at the at the [@chchruby](https://twitter.com/chchruby) meetup on Thursday, 17th Oct, 2013.

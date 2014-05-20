@@ -1,6 +1,5 @@
 ---
 title: Migrating from Octopress to Middleman
-date: 2014-01-15 11:49 NZDT
 published: false
 ---
 
