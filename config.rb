@@ -41,7 +41,7 @@ end
 
 # Per-page layout changes:
 
-page "/feed.xml", layout: false
+page "/atom.xml", layout: false
 
 ###
 # Helpers
