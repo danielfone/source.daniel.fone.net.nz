@@ -6555,328 +6555,328 @@ button.close {
   /* line 18, /Users/danielfone/.gem/ruby/2.1.2/gems/bootstrap-sass-3.1.1.1/vendor/assets/stylesheets/bootstrap/mixins/_responsive-visibility.scss */
   .hidden-print {
     display: none !important; } }
-/* line 1, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 1, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight table td {
   padding: 5px; }
 
-/* line 2, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 2, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight table pre {
   margin: 0; }
 
-/* line 3, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 3, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .cm {
   color: #999988;
   font-style: italic; }
 
-/* line 7, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 7, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .cp {
   color: #999999;
   font-weight: bold; }
 
-/* line 11, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 11, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .c1 {
   color: #999988;
   font-style: italic; }
 
-/* line 15, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 15, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .cs {
   color: #999999;
   font-weight: bold;
   font-style: italic; }
 
-/* line 20, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 20, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .c, .highlight .cd {
   color: #999988;
   font-style: italic; }
 
-/* line 24, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 24, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .err {
   color: #a61717;
   background-color: #e3d2d2; }
 
-/* line 28, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 28, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gd {
   color: #000000;
   background-color: #ffdddd; }
 
-/* line 32, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 32, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .ge {
   color: #000000;
   font-style: italic; }
 
-/* line 36, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 36, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gr {
   color: #aa0000; }
 
-/* line 39, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 39, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gh {
   color: #999999; }
 
-/* line 42, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 42, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gi {
   color: #000000;
   background-color: #ddffdd; }
 
-/* line 46, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 46, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .go {
   color: #888888; }
 
-/* line 49, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 49, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gp {
   color: #555555; }
 
-/* line 52, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 52, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gs {
   font-weight: bold; }
 
-/* line 55, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 55, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gu {
   color: #aaaaaa; }
 
-/* line 58, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 58, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .gt {
   color: #aa0000; }
 
-/* line 61, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 61, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .kc {
   color: #000000;
   font-weight: bold; }
 
-/* line 65, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 65, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .kd {
   color: #000000;
   font-weight: bold; }
 
-/* line 69, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 69, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .kn {
   color: #000000;
   font-weight: bold; }
 
-/* line 73, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 73, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .kp {
   color: #000000;
   font-weight: bold; }
 
-/* line 77, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 77, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .kr {
   color: #000000;
   font-weight: bold; }
 
-/* line 81, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 81, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .kt {
   color: #445588;
   font-weight: bold; }
 
-/* line 85, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 85, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .k, .highlight .kv {
   color: #000000;
   font-weight: bold; }
 
-/* line 89, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 89, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .mf {
   color: #009999; }
 
-/* line 92, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 92, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .mh {
   color: #009999; }
 
-/* line 95, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 95, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .il {
   color: #009999; }
 
-/* line 98, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 98, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .mi {
   color: #009999; }
 
-/* line 101, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 101, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .mo {
   color: #009999; }
 
-/* line 104, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 104, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .m, .highlight .mb, .highlight .mx {
   color: #009999; }
 
-/* line 107, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 107, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .sb {
   color: #d14; }
 
-/* line 110, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 110, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .sc {
   color: #d14; }
 
-/* line 113, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 113, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .sd {
   color: #d14; }
 
-/* line 116, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 116, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .s2 {
   color: #d14; }
 
-/* line 119, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 119, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .se {
   color: #d14; }
 
-/* line 122, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 122, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .sh {
   color: #d14; }
 
-/* line 125, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 125, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .si {
   color: #d14; }
 
-/* line 128, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 128, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .sx {
   color: #d14; }
 
-/* line 131, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 131, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .sr {
   color: #009926; }
 
-/* line 134, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 134, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .s1 {
   color: #d14; }
 
-/* line 137, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 137, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .ss {
   color: #990073; }
 
-/* line 140, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 140, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .s {
   color: #d14; }
 
-/* line 143, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 143, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .na {
   color: #008080; }
 
-/* line 146, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 146, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .bp {
   color: #999999; }
 
-/* line 149, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 149, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nb {
   color: #0086B3; }
 
-/* line 152, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 152, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nc {
   color: #445588;
   font-weight: bold; }
 
-/* line 156, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 156, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .no {
   color: #008080; }
 
-/* line 159, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 159, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nd {
   color: #3c5d5d;
   font-weight: bold; }
 
-/* line 163, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 163, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .ni {
   color: #800080; }
 
-/* line 166, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 166, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .ne {
   color: #990000;
   font-weight: bold; }
 
-/* line 170, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 170, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nf {
   color: #990000;
   font-weight: bold; }
 
-/* line 174, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 174, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nl {
   color: #990000;
   font-weight: bold; }
 
-/* line 178, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 178, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nn {
   color: #555555; }
 
-/* line 181, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 181, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nt {
   color: #000080; }
 
-/* line 184, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 184, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .vc {
   color: #008080; }
 
-/* line 187, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 187, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .vg {
   color: #008080; }
 
-/* line 190, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 190, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .vi {
   color: #008080; }
 
-/* line 193, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 193, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .nv {
   color: #008080; }
 
-/* line 196, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 196, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .ow {
   color: #000000;
   font-weight: bold; }
 
-/* line 200, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 200, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .o {
   color: #000000;
   font-weight: bold; }
 
-/* line 204, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 204, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight .w {
   color: #bbbbbb; }
 
-/* line 207, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
+/* line 207, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/highlight.css.erb */
 .highlight {
   background-color: #f8f8f8; }
 
-/* line 5, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 5, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 a:hover {
   text-decoration: none; }
 
-/* line 9, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 9, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 a.external {
   background-image: linear-gradient(transparent, transparent), url("/images/external.svg");
   background-position: center right;
   background-repeat: no-repeat;
   padding-right: 13px; }
 
-/* line 17, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 17, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 pre.highlight {
   overflow: auto;
   word-wrap: normal; }
 
-/* line 22, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 22, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 h1 {
   margin-bottom: 0; }
 
-/* line 26, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 26, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 header {
   border-bottom: 1px solid #eeeeee;
   margin-bottom: 1em; }
-  /* line 30, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+  /* line 30, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
   header .lead {
     margin-left: 1em; }
 
-/* line 35, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 35, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 aside {
   padding: 1em;
   margin-bottom: 1em;
   background-color: #f5f5f5;
   font-size: 80%; }
-  /* line 41, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+  /* line 41, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
   aside .img-thumbnail {
     margin: 0.25em; }
-  /* line 45, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+  /* line 45, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
   aside .button {
     width: 100%; }
 
-/* line 56, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 56, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 blockquote {
   font-style: italic; }
 
-/* line 60, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 60, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 img.hire {
   width: 1.5em;
   margin-right: 0.5em;
@@ -6884,38 +6884,38 @@ img.hire {
   padding-top: 0.25em;
   float: left; }
 
-/* line 68, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 68, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 article img {
   margin: 0.25em 0; }
 
 /*
  * Masthead for nav
  */
-/* line 77, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 77, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-masthead {
   background-color: #67aaf7;
   box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.1); }
 
 /* Nav links */
-/* line 83, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 83, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav-item {
   position: relative;
   display: inline-block;
   padding: 10px;
   color: #c8e0fc; }
 
-/* line 90, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 90, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav-item:hover,
 .blog-nav-item:focus {
   color: #fff;
   text-decoration: none; }
 
 /* Active state gets a caret at the bottom */
-/* line 96, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 96, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav .active {
   color: #fff; }
 
-/* line 99, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 99, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav .active:after {
   position: absolute;
   bottom: 0;
@@ -6932,20 +6932,20 @@ article img {
 /*
  * Footer
  */
-/* line 117, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 117, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-footer {
   font-size: small;
   padding: 3em 0;
   color: #ccc; }
-  /* line 122, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+  /* line 122, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
   .blog-footer a {
     color: #ccc;
     border-bottom: 1px dotted; }
-    /* line 125, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+    /* line 125, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
     .blog-footer a:hover {
       border: none; }
 
-/* line 129, /Users/danielfone/Development/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 129, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 code {
   color: #555;
   background-color: #f1f1f1; }
