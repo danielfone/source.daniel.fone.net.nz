@@ -14,7 +14,7 @@ activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
   blog.prefix = "blog"
 
-  blog.permalink = "{year}/{month}/{day}/{title}"
+  blog.permalink = "{year}/{month}/{day}/{title}.html"
   # Matcher for blog source files
   blog.sources = "{year}/{year}-{month}-{day}-{title}.html"
   # blog.taglink = "tags/{tag}.html"
@@ -35,6 +35,8 @@ activate :blog do |blog|
   # blog.page_link = "page/{num}"
 end
 
+activate :directory_indexes
+
 ###
 # Page options, layouts, aliases and proxies
 ###
@@ -46,8 +48,6 @@ page "/atom.xml", layout: false
 ###
 # Helpers
 ###
-
-activate :directory_indexes
 
 # Methods defined in the helpers block are available in templates
 helpers do
