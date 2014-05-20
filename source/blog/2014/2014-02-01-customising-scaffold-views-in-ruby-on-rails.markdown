@@ -7,23 +7,25 @@ title: "Customising Scaffold Views in Ruby on Rails"
 >
 > — [RailsGuide on Generators][guide]
 
-This fact makes it very easy for us to change the views that are generated when we run `rails generate scaffold [...]`. Let's say we want to change the scaffold's form template so that it uses a select box for a `belongs_to` relationship.
+This fact makes it very easy for us to change the views that are generated when we run `rails generate scaffold ...`. Let's say we want to change the scaffold's form template so that it uses a select box for a `belongs_to` relationship.
 
 ![select box](2014-02-01-customising-scaffold-views-in-ruby-on-rails/select-box.png)
 
 Here are the steps we need to take:
 
-**Find the original template**
+1. **Find the original template**
 
-These live in the lib/rails/generators/erb/scaffold/templates folder of the railties gem. To find the path of the gem, we can run `bundle show railties`. Alternatively we can run `bundle open railties` and navigate to the _form.html.erb file. Once we've found this, we'll want to copy it.
+    These live in the `lib/rails/generators/erb/scaffold/templates` folder of the railties gem. To find the path of the gem, we can run `bundle show railties`. Alternatively we can run `bundle open railties` and navigate to the `_form.html.erb` file. Once we've found this, we'll want to copy it.
 
-**Copy it into our application**
+2. **Copy it into our application**
 
-As quoted above, generators will search for templates in lib/templates. For this template, we'll need to copy it into lib/templates/erb/scaffold/_form.erb.html within our application's root.
+    As quoted above, generators will search for templates in `lib/templates`. For this template, we'll need to copy it into `lib/templates/erb/scaffold/_form.erb.html` within our application's root.
 
-**Change the template**
+3. **Change the template**
 
-At this point, we can make whatever changes we like! By way of illustration, here's one way to use a select box for a belongs_to relationship.
+    At this point, we can make whatever changes we like!
+
+By way of illustration, here's one way to use a select box for a belongs_to relationship.
 
 ~~~ diff
 # lib/templates/erb/scaffold/_form.html.erb
