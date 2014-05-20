@@ -45,37 +45,6 @@ activate :directory_indexes
 
 page "/atom.xml", layout: false
 
-###
-# Helpers
-###
-
-# Methods defined in the helpers block are available in templates
-helpers do
-  def format_date(date)
-    date.strftime('%e %b, %Y')
-  end
-
-  def comments_enabled?
-    current_article.metadata[:page]['comments'] != false
-  end
-
-  def nav_link_to(link_text, url, options = {})
-    options[:class] ||= ""
-    options[:class] << ' blog-nav-item'
-    options[:class] << " active" if url == current_page.url
-    link_to link_text, url, options
-  end
-
-  def page_title
-    [current_page.data.title, 'Daniel Fone'].compact.join ' - '
-  end
-
-  def disqus_identifier
-    'http://daniel.fone.net.nz'+url_for(current_page)
-  end
-
-end
-
 # Build-specific configuration
 configure :build do
   # For example, change the Compass output style for deployment
