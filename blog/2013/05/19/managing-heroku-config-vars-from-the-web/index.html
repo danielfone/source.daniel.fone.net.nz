@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Daniel Fone</title>
+    <title>Managing Heroku Config Vars from the Web - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
     <link href="/favicon.png" rel="icon">
     <!-- Bootstrap -->
-    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,9 +29,20 @@
 
   </head>
   <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class=" blog-nav-item" href="/">Home</a>
+          <a class=" blog-nav-item" href="/blog/archives/">Posts</a>
+          <a class=" blog-nav-item" href="/hire/">Hire Me</a>
+          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+        </nav>
+      </div>
+    </div>
+
     <div class="container">
         <header>
-    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -44,30 +56,30 @@
     <p>
       <small class="text-muted">19 May, 2013</small>
     </p>
-    <p><strong>tl;dr</strong> The <a href="https://github.com/danielfone/heroku_config_vars">heroku_config_vars</a> Rails engine provides a secure web interface for managing an application's Heroku configuration.</p>
+    <p><strong>tl;dr</strong> The <a href="https://github.com/danielfone/heroku_config_vars">heroku_config_vars</a> Rails engine provides a secure web interface for managing an application’s Heroku configuration.</p>
 
-<h2 id="the-problem">The Problem</h2>
+<h3 id="the-problem">The Problem</h3>
 
-<p><a href="http://heroku.com">Heroku</a> don't provide a way to manage an application's <a href="https://devcenter.heroku.com/articles/config-vars">configuration variables</a> through a web interface. Although an application's ENV shouldn't really be used for domain-specific configuration or settings that change frequently, sometimes it's a hassle to drop into a console when doing something as trivial as updating SMTP settings or cycling OAuth tokens.</p>
+<p><a href="http://heroku.com">Heroku</a> don’t provide a way to manage an application’s <a href="https://devcenter.heroku.com/articles/config-vars">configuration variables</a> through a web interface. Although an application’s ENV shouldn’t really be used for domain-specific configuration or settings that change frequently, sometimes it’s a hassle to drop into a console when doing something as trivial as updating SMTP settings or cycling OAuth tokens.</p>
 
 <p>What I really want to achieve is turning this:</p>
 
-<pre><code>$ heroku config:set GITHUB_USERNAME=joesmith
+<pre class="highlight plaintext">$ heroku config:set GITHUB_USERNAME=joesmith
 Adding config vars and restarting myapp... done, v12
 GITHUB_USERNAME: joesmith
-</code></pre>
+</pre>
 
 <p>into this:</p>
 
-<p>{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/heroku-config-update.png %}</p>
+<p><img alt="heroku-config-update" src="/blog/2013/05/19/managing-heroku-config-vars-from-the-web/heroku-config-update.png" /></p>
 
-<h2 id="the-solution">The Solution</h2>
+<h3 id="the-solution">The Solution</h3>
 
-<p>The <a href="https://github.com/danielfone/heroku_config_vars">heroku_config_vars</a> Rails engine provides a web interface for managing an application's Heroku configuration. This makes it possible for administrators without CLI access to manage their Heroku configuration.</p>
+<p>The <a href="https://github.com/danielfone/heroku_config_vars">heroku_config_vars</a> Rails engine provides a web interface for managing an application’s Heroku configuration. This makes it possible for administrators without CLI access to manage their Heroku configuration.</p>
 
-<p>{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/screenshot-1.png %}
-{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/screenshot-2.png %}
-{% img /images/2013-05-19-managing-heroku-config-vars-from-the-web/screenshot-3.png %}</p>
+<p><img alt="screenshot" src="/blog/2013/05/19/managing-heroku-config-vars-from-the-web/screenshot-1.png" />
+<img alt="screenshot" src="/blog/2013/05/19/managing-heroku-config-vars-from-the-web/screenshot-2.png" />
+<img alt="screenshot" src="/blog/2013/05/19/managing-heroku-config-vars-from-the-web/screenshot-3.png" /></p>
 
 <p>Installation and usage instructions can be found on <a href="https://github.com/danielfone/heroku_config_vars">github</a>. Feedback, questions, bugs, PRs are welcome!</p>
 
@@ -93,28 +105,38 @@ GITHUB_USERNAME: joesmith
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
         <h4>About Me</h4>
         <p>
-          I'm a freelance Ruby/Rails engineer,
-          based in Christchurch, New&nbsp;Zealand.<br>
+          I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
+          I'm available for freelancing, consulting and remote contracting.
+        </p>
+        <p>
+          Follow me on <a href="https://twitter.com/danielfone">Twitter</a>.
         </p>
         <p>
           <a href="/hire" class="button primary">Hire me</a>
-        </p>
-        <p>
-          <a href="/blog/archives" class="button">Posts</a>
-        </p>
-        <p>
-          <a class="button" href="https://github.com/danielfone">Github</a>
-        </p>
-        <p>
-          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
         </p>
       </aside>
     </div>
   </div>
 
+
+      <div class="blog-footer">
+        <p>
+          &copy; 2014 Daniel Fone
+          -
+          Powered by
+          <a href="http://middlemanapp.com/">Middleman</a>
+          and
+          <a href="http://pages.github.com/">GitHub Pages</a>
+        </p>
+        <p>
+          <a href="#">Back to top</a>
+        </p>
+      </div>
+
     </div>
+
   </body>
 </html>

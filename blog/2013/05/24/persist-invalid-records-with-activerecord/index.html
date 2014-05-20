@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Daniel Fone</title>
+    <title>Persist Invalid Records with ActiveRecord - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
     <link href="/favicon.png" rel="icon">
     <!-- Bootstrap -->
-    <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,9 +29,20 @@
 
   </head>
   <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class=" blog-nav-item" href="/">Home</a>
+          <a class=" blog-nav-item" href="/blog/archives/">Posts</a>
+          <a class=" blog-nav-item" href="/hire/">Hire Me</a>
+          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+        </nav>
+      </div>
+    </div>
+
     <div class="container">
         <header>
-    <img width="100" style="float: left; margin-right: 1em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -54,110 +66,110 @@
 
 <p>The idea behind this design was that administrators could see the unsuccessful submissions and intervene to assist the users if necessary.</p>
 
-<p>If anyone ever finds themselves in a similar situation, here's what I ended up doing:</p>
+<p>If anyone ever finds themselves in a similar situation, here’s what I ended up doing:</p>
 
-<p>I'm going to use a model called Subscription by way of example. This same pattern will work on any ActiveRecord model.</p>
+<p>I’m going to use a model called Subscription by way of example. This same pattern will work on any ActiveRecord model.</p>
 
-<h3 id="add-a-recorderrors-text-column">Add a <code>record_errors</code> text column</h3>
+<h3 id="add-a-new-text-column">Add a new text column</h3>
 
-<p>We'll serialize the validation errors and store them in a field called <code>record_errors</code>.</p>
+<p>We’ll serialize the validation errors and store them in a field called <code>record_errors</code>.</p>
 
-<p>{% codeblock /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb %}
-class AddRecordErrorsToSubscriptions &lt; ActiveRecord::Migration
-  def change
-    add_column :subscriptions, :record_errors, :text
-  end
-end
-{% endcodeblock %}</p>
+<pre class="highlight ruby"><span class="c1"># /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb</span>
+<span class="k">class</span> <span class="nc">AddRecordErrorsToSubscriptions</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+    <span class="n">add_column</span> <span class="ss">:subscriptions</span><span class="p">,</span> <span class="ss">:record_errors</span><span class="p">,</span> <span class="ss">:text</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
 
 <h3 id="add-an-activerecord-extension-to-handle-persistence">Add an ActiveRecord extension to handle persistence</h3>
 
-<p>This module will catch validation failures and persist the record anyway. It's completely independent of the domain/business logic of the application so I like to store it in /lib. This is the main logic for achieving our required behaviour.</p>
+<p>This module will catch validation failures and persist the record anyway. It’s completely independent of the domain/business logic of the application so I like to store it in /lib. This is the main logic for achieving our required behaviour.</p>
 
-<p>{% codeblock /lib/save_with_errors.rb %}
-require 'active_record'
-require 'active_support'</p>
+<pre class="highlight ruby"><span class="c1"># /lib/save_with_errors.rb</span>
+<span class="nb">require</span> <span class="s1">'active_record'</span>
+<span class="nb">require</span> <span class="s1">'active_support'</span>
 
-<p>module SaveWithErrors</p>
+<span class="k">module</span> <span class="nn">SaveWithErrors</span>
 
-<p>def save_with_errors!(*args)
-    save_without_errors! *args
-  rescue ActiveRecord::RecordInvalid
-    save_anyway
-    raise # this re-raises the exception we just rescued
-  end</p>
+  <span class="k">def</span> <span class="nf">save_with_errors!</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">save_without_errors!</span> <span class="o">*</span><span class="n">args</span>
+  <span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordInvalid</span>
+    <span class="n">save_anyway</span>
+    <span class="k">raise</span> <span class="c1"># this re-raises the exception we just rescued</span>
+  <span class="k">end</span>
 
-<p>def save_with_errors(*args)
-    save_without_errors *args or save_anyway
-  end</p>
+  <span class="k">def</span> <span class="nf">save_with_errors</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">save_without_errors</span> <span class="o">*</span><span class="n">args</span> <span class="n">or</span> <span class="n">save_anyway</span>
+  <span class="k">end</span>
 
-<p>def self.included(receiver)
-    receiver.serialize :record_errors, Hash
-    receiver.alias_method_chain :save, :errors
-    receiver.alias_method_chain :save!, :errors
-  end</p>
+  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">included</span><span class="p">(</span><span class="n">receiver</span><span class="p">)</span>
+    <span class="n">receiver</span><span class="p">.</span><span class="nf">serialize</span> <span class="ss">:record_errors</span><span class="p">,</span> <span class="no">Hash</span>
+    <span class="n">receiver</span><span class="p">.</span><span class="nf">alias_method_chain</span> <span class="ss">:save</span><span class="p">,</span> <span class="ss">:errors</span>
+    <span class="n">receiver</span><span class="p">.</span><span class="nf">alias_method_chain</span> <span class="ss">:save!</span><span class="p">,</span> <span class="ss">:errors</span>
+  <span class="k">end</span>
 
-<p>private</p>
+<span class="kp">private</span>
 
-<p>def save_anyway
-    dup.tap { |s| s.record_errors = errors.messages }.save(validate: false)
-    false
-  end</p>
+  <span class="k">def</span> <span class="nf">save_anyway</span>
+    <span class="nb">dup</span><span class="p">.</span><span class="nf">tap</span> <span class="p">{</span> <span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span><span class="p">.</span><span class="nf">record_errors</span> <span class="o">=</span> <span class="n">errors</span><span class="p">.</span><span class="nf">messages</span> <span class="p">}.</span><span class="nf">save</span><span class="p">(</span><span class="ss">validate: </span><span class="kp">false</span><span class="p">)</span>
+    <span class="kp">false</span>
+  <span class="k">end</span>
 
-<p>end
-{% endcodeblock %}</p>
+<span class="k">end</span>
+</pre>
 
 <h3 id="include-our-activerecord-extension-on-our-model">Include our ActiveRecord extension on our model</h3>
 
-<p>All we need to do is <code>include</code> the <code>SaveWithErrors</code> module into our ActiveRecord model. We could also require 'save_with_errors' in <code>config/application.rb</code>.</p>
+<p>All we need to do is include the SaveWithErrors module into our ActiveRecord model. We should also require ‘save_with_errors’ in config/application.rb.</p>
 
-<p>{% codeblock /app/models/subscription.rb %}
-require 'save_with_errors'</p>
+<pre class="highlight ruby"><span class="c1"># /app/models/subscription.rb</span>
+<span class="nb">require</span> <span class="s1">'save_with_errors'</span>
 
-<p>class Subscription &lt; ActiveRecord::Base
-  include SaveWithErrors</p>
+<span class="k">class</span> <span class="nc">Subscription</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="kp">include</span> <span class="no">SaveWithErrors</span>
 
-<p>attr_accessible :email, :name, :token</p>
+  <span class="n">attr_accessible</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:token</span>
 
-<p>validate :valid_token</p>
+  <span class="n">validate</span> <span class="ss">:valid_token</span>
 
-<p>private</p>
+<span class="kp">private</span>
 
-<p>def valid_token
-    # something meaningful
-    errors.add :token, 'is invalid' unless token == '12345'
-  end</p>
+  <span class="k">def</span> <span class="nf">valid_token</span>
+    <span class="c1"># something meaningful</span>
+    <span class="n">errors</span><span class="p">.</span><span class="nf">add</span> <span class="ss">:token</span><span class="p">,</span> <span class="s1">'is invalid'</span> <span class="k">unless</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">'12345'</span>
+  <span class="k">end</span>
 
-<p>end
-{% endcodeblock %}</p>
+<span class="k">end</span>
+</pre>
 
 <h3 id="the-result">The Result</h3>
 
-<pre><code>Loading development environment (Rails 3.2.13)
+<pre class="highlight plaintext">Loading development environment (Rails 3.2.13)
 
 &gt; Subscription.create! name: 'My Name', email: 'test@example.com'
   SQL (3.6ms)  INSERT INTO "subscriptions" ("created_at", "email", "name", "record_errors", "token", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["created_at", Fri, 24 May 2013 01:55:07 UTC +00:00], ["email", "test@example.com"], ["name", "My Name"], ["record_errors", "--- !omap\n- :token:\n  - is invalid\n"], ["token", nil], ["updated_at", Fri, 24 May 2013 01:55:07 UTC +00:00]]
 
 ActiveRecord::RecordInvalid: Validation failed: Token is invalid
   [... backtrace ...]
-</code></pre>
+</pre>
 
-<p>Notice that a record has been inserted, but the exception that we'd expect from <code>create!</code> has still been raised. We can verify this by inspecting the last Subscription record:</p>
+<p>Notice that a record has been inserted, but the exception that we’d expect from <code>create!</code> has still been raised. We can verify this by inspecting the last Subscription record:</p>
 
-<pre><code>&gt; y Subscription.last
+<pre class="highlight plaintext">&gt; y Subscription.last
   Subscription Load (0.3ms)  SELECT "subscriptions".* FROM "subscriptions" ORDER BY "subscriptions"."id" DESC LIMIT 1
 --- !ruby/object:Subscription
 attributes:
   id: 19
   name: My Name
   email: test@example.com
-  token: 
+  token:
   created_at: 2013-05-24 01:55:07.747035000 Z
   updated_at: 2013-05-24 01:55:07.747035000 Z
   record_errors: !omap
   - :token:
     - is invalid
-</code></pre>
+</pre>
 
 <p>Exactly what we want!</p>
 
@@ -182,28 +194,38 @@ attributes:
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="80" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=300" />
         <h4>About Me</h4>
         <p>
-          I'm a freelance Ruby/Rails engineer,
-          based in Christchurch, New&nbsp;Zealand.<br>
+          I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
+          I'm available for freelancing, consulting and remote contracting.
+        </p>
+        <p>
+          Follow me on <a href="https://twitter.com/danielfone">Twitter</a>.
         </p>
         <p>
           <a href="/hire" class="button primary">Hire me</a>
-        </p>
-        <p>
-          <a href="/blog/archives" class="button">Posts</a>
-        </p>
-        <p>
-          <a class="button" href="https://github.com/danielfone">Github</a>
-        </p>
-        <p>
-          <a class="button" href="https://twitter.com/danielfone">Twitter</a>
         </p>
       </aside>
     </div>
   </div>
 
+
+      <div class="blog-footer">
+        <p>
+          &copy; 2014 Daniel Fone
+          -
+          Powered by
+          <a href="http://middlemanapp.com/">Middleman</a>
+          and
+          <a href="http://pages.github.com/">GitHub Pages</a>
+        </p>
+        <p>
+          <a href="#">Back to top</a>
+        </p>
+      </div>
+
     </div>
+
   </body>
 </html>
