@@ -6874,9 +6874,13 @@ aside {
 
 /* line 56, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 blockquote {
-  font-style: italic; }
+  font-style: italic;
+  padding: 0;
+  padding-left: 1em;
+  font-size: inherit;
+  margin-bottom: 0.75em; }
 
-/* line 60, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 64, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 img.hire {
   width: 1.5em;
   margin-right: 0.5em;
@@ -6884,38 +6888,38 @@ img.hire {
   padding-top: 0.25em;
   float: left; }
 
-/* line 68, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 72, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 article img {
   margin: 0.25em 0; }
 
 /*
  * Masthead for nav
  */
-/* line 77, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 81, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-masthead {
   background-color: #67aaf7;
   box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.1); }
 
 /* Nav links */
-/* line 83, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 87, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav-item {
   position: relative;
   display: inline-block;
   padding: 10px;
   color: #c8e0fc; }
 
-/* line 90, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 94, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav-item:hover,
 .blog-nav-item:focus {
   color: #fff;
   text-decoration: none; }
 
 /* Active state gets a caret at the bottom */
-/* line 96, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 100, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav .active {
   color: #fff; }
 
-/* line 99, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 103, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-nav .active:after {
   position: absolute;
   bottom: 0;
@@ -6932,20 +6936,20 @@ article img {
 /*
  * Footer
  */
-/* line 117, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 121, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 .blog-footer {
   font-size: small;
   padding: 3em 0;
   color: #ccc; }
-  /* line 122, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+  /* line 126, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
   .blog-footer a {
     color: #ccc;
     border-bottom: 1px dotted; }
-    /* line 125, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+    /* line 129, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
     .blog-footer a:hover {
       border: none; }
 
-/* line 129, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+/* line 133, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
 code {
   color: #555;
   background-color: #f1f1f1; }
