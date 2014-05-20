@@ -70,6 +70,10 @@ helpers do
     [current_page.data.title, 'Daniel Fone'].compact.join ' - '
   end
 
+  def disqus_identifier
+    'http://daniel.fone.net.nz'+url_for(current_page)
+  end
+
 end
 
 # Build-specific configuration
