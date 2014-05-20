@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+
+function usage(){
+  echo "USAGE: $0 preview|live"
+  exit -1
+}
+
+[[ $# -lt 1 ]] && usage
+
+if [ $1 == 'preview' ]; then
+  GIT_DEST="source master:gh-pages"
+elif [ $1 == 'live' ]; then
+  GIT_DEST="live master"
+else
+  usage
+fi
+
+
+bin/middleman build
+cd build
+git add -A
+git commit -m "Updated `date`" || true
+git push $GIT_DEST
