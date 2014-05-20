@@ -4,7 +4,9 @@
       <%= current_article.title %>
     </h2>
     <p>
-      <small class="text-muted">By Daniel Fone — <%= format_date current_article.date %></small>
+      <small class="text-muted">
+        <%= format_date current_article.date %>
+      </small>
     </p>
     <%= yield %>
   </article>

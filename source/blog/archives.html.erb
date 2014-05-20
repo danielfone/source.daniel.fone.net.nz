@@ -13,9 +13,11 @@ title: Posts
 <% end %>
 
 <% page_articles.each do |article| %>
-  <p class="row">
-    <span class="col-sm-2  col-xs-4"><small class="text-muted"><%= format_date article.date %></small></span>
-    <span class='col-sm-10 col-xs-8'><%= link_to article.title, article %></span>
+  <%- monthly_header article.date do |header| %>
+    <h4 class="text-muted"><%= header %></h4>
+  <%- end -%>
+  <p>
+    <%= link_to article.title, article %>
   </p>
 <% end %>
 

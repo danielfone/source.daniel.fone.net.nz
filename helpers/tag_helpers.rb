@@ -1,6 +1,13 @@
 module TagHelpers
+  def monthly_header(date)
+    date_string = format_date date
+    return if date_string == @prev_date_string
+    yield date_string
+    @prev_date_string = date_string
+  end
+
   def format_date(date)
-    date.strftime('%e %b, %Y')
+    date.strftime('%B %Y')
   end
 
   def nav_link_to(link_text, url, options = {})
