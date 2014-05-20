@@ -8,3 +8,5 @@ gem "middleman-syntax"
 gem "builder", "~> 3.0"
 
 gem 'bootstrap-sass', require: false
+
+gem 'pry'

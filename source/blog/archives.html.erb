@@ -12,7 +12,7 @@ title: Posts
   <% end %>
 <% end %>
 
-<% page_articles.select(&:title).each do |article| %>
+<% page_articles.each do |article| %>
   <p>
     <small class="text-muted"><%= format_date article.date %></small>
     <%= link_to article.title, article %>
