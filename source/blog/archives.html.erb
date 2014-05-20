@@ -1,9 +1,9 @@
 ---
 pageable: true
 per_page: 50
-title: Posts
+title: Articles
 ---
-<h2>Posts</h2>
+<h2>Articles</h2>
 <% if paginate && num_pages > 1 %>
   <p>Page <%= page_number %> of <%= num_pages %></p>
 
@@ -14,7 +14,7 @@ title: Posts
 
 <% page_articles.each do |article| %>
   <%- monthly_header article.date do |header| %>
-    <h4 class="text-muted"><%= header %></h4>
+    <h5 class="text-muted"><%= header %></h5>
   <%- end -%>
   <p>
     <%= link_to article.title, article %>
