@@ -3,7 +3,7 @@ title: "Customising Scaffold Views in Ruby on Rails"
 ---
 
 > In Rails 3.0 and above, generators don't just look in the source root for templates,
-> they also search for templates in other paths. And one of them is lib/templates
+> they also search for templates in other paths. And one of them is `lib/templates`
 >
 > — [RailsGuide on Generators][guide]
 
