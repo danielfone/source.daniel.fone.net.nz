@@ -5,10 +5,44 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2014-02-01T00:00:00+13:00</updated>
+  <updated>2014-05-22T00:17:00+12:00</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
+  <entry>
+    <title>Upload Progress in Ruby with curb</title>
+    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/05/22/upload-progress-in-ruby-with-curb/"/>
+    <id>http://daniel.fone.net.nz/blog/2014/05/22/upload-progress-in-ruby-with-curb/</id>
+    <published>2014-05-22T00:17:00+12:00</published>
+    <updated>2014-05-22T00:58:45+12:00</updated>
+    <author>
+      <name>Daniel Fone</name>
+    </author>
+    <content type="html">&lt;p&gt;A friend was telling me how difficult it was to get the progress of a file upload in ruby using the standard Net::HTTP library or any of the popular HTTP wrapper gems. He wanted to get simple details similar to curl.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;$ curl --progress-bar --form --upload=@1mb.txt http://requestb.in/ztmawczt &amp;gt; /dev/null
+######################################################                    75.5%
+&lt;/pre&gt;
+
+&lt;p&gt;Fortunately, there is the &lt;a href="https://github.com/taf2/curb"&gt;curb&lt;/a&gt; gem which provides ruby bindings around &lt;a href="http://curl.haxx.se/libcurl/"&gt;libcurl&lt;/a&gt;. Using this gem, we can use the &lt;code&gt;on_progress&lt;/code&gt; method to do something like this:&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;curl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;on_progress&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;download_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;downloaded&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;upload_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;uploaded&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+  &lt;span class="nb"&gt;print&lt;/span&gt; &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="se"&gt;\r&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;uploaded&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;upload_size&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
+  &lt;span class="kp"&gt;true&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;The &lt;a href="http://rubydoc.info/gems/curb/Curl/Easy#on_progress-instance_method"&gt;documentation&lt;/a&gt; is a little sparse, and there are two major caveats to watch out for:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;You MUST return true from this block if you want the upload to continue&lt;/li&gt;
+  &lt;li&gt;Any exceptions that occur in the block will be swallowed and reraised as an Curl::Err::AbortedByCallbackError. This makes development a little bit painful, but you use your own &lt;code&gt;begin ... rescue ... end&lt;/code&gt; inside the block to help debug if needed.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I’ve published a full &lt;a href="https://github.com/danielfone/curb-upload-progress"&gt;working example on github&lt;/a&gt;.&lt;/p&gt;
+
+</content>
+  </entry>
   <entry>
     <title>Customising Scaffold Views in Ruby on Rails</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/02/01/customising-scaffold-views-in-ruby-on-rails/"/>
@@ -421,37 +455,6 @@ but the rest is fairly straight forward.&lt;/p&gt;
 &lt;p&gt;… if you encounter &lt;code&gt;rescue Exception =&amp;gt; e&lt;/code&gt; in an existing codebase, you can almost certainly replace it with &lt;code&gt;rescue =&amp;gt; e&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;… if you find yourself about to type &lt;code&gt;rescue Exception =&amp;gt; e&lt;/code&gt;, slap yourself in the face, figure out exactly what exceptions you’re dealing with and rescue those instead.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Generating a Class Hierarchy in Ruby</title>
-    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2013/05/27/generating-a-class-hierarchy-in-ruby/"/>
-    <id>http://daniel.fone.net.nz/blog/2013/05/27/generating-a-class-hierarchy-in-ruby/</id>
-    <published>2013-05-27T00:00:00+12:00</published>
-    <updated>2014-05-20T13:55:02+12:00</updated>
-    <author>
-      <name>Daniel Fone</name>
-    </author>
-    <content type="html">&lt;p&gt;Here’s a way to see what classes descend from a particular superclass in Ruby. You can use it to list all ActiveRecord models defined in your application, every implementation on a particular base class, or whatever else might be of interest.&lt;/p&gt;
-
-&lt;pre class="highlight plaintext"&gt;&amp;gt; puts ClassHierarchy.new ActionController::Base
-ActionController::Base
-  ApplicationController
-    UsersController
-    UserSessionsController
-    OrdersController
-    ...
-&lt;/pre&gt;
-
-&lt;p&gt;If you’re using Rails, bear in mind that most of your classes won’t be loaded by default in the development environment. You can get around this by manually requiring the files you’re interested in:&lt;/p&gt;
-
-&lt;pre class="highlight plaintext"&gt;Dir.glob File.join(Rails.root, 'app/models/**/*.rb'), &amp;amp;method(:require)
-&lt;/pre&gt;
-
-&lt;p&gt;To use in your code, simply put class_hierarchy.rb somewhere that makes sense (perhaps /lib) and &lt;code&gt;require 'class_hierarchy'&lt;/code&gt;.&lt;/p&gt;
-
-&lt;script src="https://gist.github.com/danielfone/5654633.js"&gt;&lt;/script&gt;
-
 </content>
   </entry>
   <entry>
