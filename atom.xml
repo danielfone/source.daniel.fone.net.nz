@@ -14,15 +14,11 @@
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/"/>
     <id>http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/</id>
     <published>2014-11-28T10:51:00+13:00</published>
-    <updated>2014-11-28T21:47:46+13:00</updated>
+    <updated>2014-11-28T21:49:48+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
-    <content type="html">&lt;blockquote&gt;
-  &lt;p&gt;tl;dr If you’re going to submit forms via GET, keep your parameter names short!&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Today I came across an exception that was caused by a collision of two uncommon circumstances:&lt;/p&gt;
+    <content type="html">&lt;p&gt;Today I came across an exception that was caused by a collision of two uncommon circumstances:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;A large and complex form, submitted via GET (it was a search for with a &lt;em&gt;lot&lt;/em&gt; of parameters)&lt;/li&gt;
