@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/"/>
     <id>http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/</id>
     <published>2014-11-28T10:51:00+13:00</published>
-    <updated>2014-11-28T21:49:48+13:00</updated>
+    <updated>2014-11-28T21:55:17+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -70,19 +70,7 @@
 
 &lt;p&gt;I wrote a simple initializer to monkey patch the method and prevent it storing excessively long urls in the session.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="c1"&gt;# /config/initializers/devise_safe_store_location.rb&lt;/span&gt;
-  &lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;SafeStoreLocation&lt;/span&gt;
-
-    &lt;span class="no"&gt;MAX_LOCATION_SIZE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ActionDispatch&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Cookies&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;MAX_COOKIE_SIZE&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
-
-    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;store_location_for&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;resource_or_scope&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-      &lt;span class="k"&gt;super&lt;/span&gt; &lt;span class="k"&gt;unless&lt;/span&gt; &lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;size&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;MAX_LOCATION_SIZE&lt;/span&gt;
-    &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="k"&gt;end&lt;/span&gt;
-
-  &lt;span class="no"&gt;Devise&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;FailureApp&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;include&lt;/span&gt; &lt;span class="no"&gt;SafeStoreLocation&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;script src="https://gist.github.com/danielfone/c8ab593c326a8052651c.js"&gt;&lt;/script&gt;
 
 &lt;p&gt;The downside to this approach is that the user loses their place in the form, but it is far better than an unhandled exception when submitting. I’ve submitted a &lt;a href="https://github.com/plataformatec/devise/pull/3347"&gt;pull request&lt;/a&gt; to the Devise project, but to be honest this is such an edge case that it may not warrant it. We’ll see what happens.&lt;/p&gt;
 
