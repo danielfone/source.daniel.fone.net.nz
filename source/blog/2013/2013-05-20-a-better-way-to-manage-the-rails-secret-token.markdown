@@ -7,7 +7,7 @@ summary: Don't hardcode secret tokens, load them from the environment instead.
 
 ### Update — Rails 4.1
 
-Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slight out of date, the same principal applies though: **don't store real secrets in this file!** Load them from the environment like so:
+Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: **don't store real secrets in this file!** Load them from the environment like so:
 
     production:
       secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
