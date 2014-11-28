@@ -58,6 +58,8 @@
         October 2013
       </small>
     </p>
+
+
     <p><em>From a presentation I gave at the at the <a href="https://twitter.com/chchruby">@chchruby</a> meetup on Thursday, 17th Oct, 2013.
 It was aimed at folks who were unfamiliar with Rails and bear in mind, this was a <strong>15 minute</strong> lightning talk.
 I’ve linked to specific commits below, but you can view the finished repo on <a href="https://github.com/danielfone/reimburser-wizard">GitHub</a>.</em></p>
@@ -98,16 +100,16 @@ We want to manage expense claims which consist of:</p>
 
 <h3 id="the-application-skeleton">The Application Skeleton</h3>
 
-<pre class="highlight plaintext">$ rails new reimburser-wizard -T -m ~/Development/rails-templates/default-prototype.rb
+<pre class="highlight plaintext"><code>$ rails new reimburser-wizard -T -m ~/Development/rails-templates/default-prototype.rb
 $ cd reimburser-wizard
-</pre>
+</code></pre>
 
 <p>The <code>rails new</code> command is pretty self-explanatory. It creates a new Rails application in a directory of the same name.
 The only two options I’m specifying are:</p>
 
-<pre class="highlight plaintext">-T, [--skip-test-unit]         # Skip Test::Unit files
+<pre class="highlight plaintext"><code>-T, [--skip-test-unit]         # Skip Test::Unit files
 -m, [--template=TEMPLATE]      # Path to some application template (can be a filesystem path or URL)
-</pre>
+</code></pre>
 
 <p>You can check out my <a href="https://github.com/danielfone/rails-templates/blob/master/default-prototype.rb">prototyping template on Github</a>,
 but here’s the basic rundown:</p>
@@ -128,10 +130,10 @@ and some bootstrap overrides (<a href="https://github.com/danielfone/reimburser-
 <p>Here’s where we really start building our prototype. Most of the work is done by Rails’ scaffold generators.
 In this simple prototype, we’ll model our domain with just two resources, a Reimbursement and an Employee.</p>
 
-<pre class="highlight plaintext">$ rails generate scaffold Reimbursement reference:string payee:references comments:text data:text
+<pre class="highlight plaintext"><code>$ rails generate scaffold Reimbursement reference:string payee:references comments:text data:text
 $ rails generate scaffold Employee name:string
 $ rake db:migrate
-</pre>
+</code></pre>
 
 <p>Our Reimbursement model is very simple: we’ve got three regular attributes (<code>reference</code>, <code>payee</code> and <code>comments</code>),
 and a <code>data</code> field we’ll use as a  meta-attribute for serializing whatever other attributes we need later.
@@ -141,10 +143,10 @@ As you can see in the <a href="https://github.com/danielfone/reimburser-wizard/c
 
 <p>Now we’ll run some bootstrap helpers to replace the default rails views with <a href="https://github.com/danielfone/reimburser-wizard/commit/f4cd02940a06b1cf1972a71a557f11612b61db39">bootstrap themed views</a>.</p>
 
-<pre class="highlight plaintext">$ rm app/assets/stylesheets/scaffolds.css.scss
+<pre class="highlight plaintext"><code>$ rm app/assets/stylesheets/scaffolds.css.scss
 $ rails generate bootstrap:themed Reimbursements
 $ rails generate bootstrap:themed Employees
-</pre>
+</code></pre>
 
 <p>That’s it for our scaffolding! The basic foundation of the prototype is in place.</p>
 
@@ -152,8 +154,8 @@ $ rails generate bootstrap:themed Employees
 
 <p>Now’s an excellent time to play with the application. Let’s start the web server:</p>
 
-<pre class="highlight plaintext">$ rails server
-</pre>
+<pre class="highlight plaintext"><code>$ rails server
+</code></pre>
 
 <p>Because we haven’t set up our <a href="http://api.rubyonrails.org/v4.0.0/classes/ActionDispatch/Routing/Mapper/Base.html#method-i-root">root route</a>,
 you’ll need to navigate to http://localhost:3000/reimbursements .</p>

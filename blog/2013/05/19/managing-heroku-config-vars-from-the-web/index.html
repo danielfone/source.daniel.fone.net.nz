@@ -55,10 +55,21 @@
     </h2>
     <p>
       <small class="text-muted">
+          Updated November 2014
+          —
+          Originally written
         May 2013
       </small>
     </p>
-    <p><strong>tl;dr</strong> The <a href="https://github.com/danielfone/heroku_config_vars">heroku_config_vars</a> Rails engine provides a secure web interface for managing an application’s Heroku configuration.</p>
+
+
+    <div class="alert alert-warning">
+  <p><strong>Deprecation Notice</strong></p>
+  <p>
+    This functionality has now been implemented (in its rightful place) in the Heroku dashboard. The gem no longer maintained.
+    See <a href="https://devcenter.heroku.com/changelog-items/455">https://devcenter.heroku.com/changelog-items/455</a>
+  </p>
+</div>
 
 <h3 id="the-problem">The Problem</h3>
 
@@ -66,10 +77,10 @@
 
 <p>What I really want to achieve is turning this:</p>
 
-<pre class="highlight plaintext">$ heroku config:set GITHUB_USERNAME=joesmith
+<pre class="highlight plaintext"><code>$ heroku config:set GITHUB_USERNAME=joesmith
 Adding config vars and restarting myapp... done, v12
 GITHUB_USERNAME: joesmith
-</pre>
+</code></pre>
 
 <p>into this:</p>
 

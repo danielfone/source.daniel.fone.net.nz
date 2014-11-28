@@ -55,36 +55,38 @@
     </h2>
     <p>
       <small class="text-muted">
+          Updated November 2014
+          —
+          Originally written
         May 2013
       </small>
     </p>
-    <h3 id="tldr">tl;dr</h3>
 
-<p><strong><code>rescue Exception =&gt; e</code> will turn your code into a brain eating zombie.</strong></p>
+      <div class="well">
+        <strong>tl;dr</strong> Don't write `rescue Exception => e`. Write `rescue => e` or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
+      </div>
 
-<p>The equivalent of <code>rescue</code> with an argument is <code>rescue =&gt; e</code> or <code>rescue StandardError =&gt; e</code>. Use these, or better still, figure out exactly what you’re trying to rescue and use <code>rescue OneError, AnotherError =&gt; e</code>.</p>
-
-<h3 id="whats-the-deal">What’s the deal?</h3>
+    <h3 id="whats-the-deal">What’s the deal?</h3>
 
 <p>A common pattern for rescuing exceptions in Ruby is:</p>
 
-<pre class="highlight ruby"><span class="k">def</span> <span class="nf">do_some_job!</span>
+<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">do_some_job!</span>
   <span class="c1"># ... do something ...</span>
   <span class="n">job_succeeded</span>
 <span class="k">rescue</span>
   <span class="n">job_failed</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>This is fine, but when developers need to capture the exception details, a terrible, <em>terrible</em> thing happens:</p>
 
-<pre class="highlight ruby"><span class="k">def</span> <span class="nf">do_some_job!</span>
+<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">do_some_job!</span>
   <span class="c1"># ... do something ...</span>
   <span class="n">job_succeeded</span>
 <span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">e</span>
   <span class="n">job_failed</span> <span class="n">e</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.</p>
 
@@ -94,7 +96,7 @@
 
 <p><code>Exception</code> is the root of the exception class hierarchy in Ruby. Everything from signal handling to memory errors will raise a subclass of Exception. Here’s the full list of exceptions from ruby-core that we’ll inadvertently rescue when rescuing Exception.</p>
 
-<pre class="highlight ruby"><span class="no">SystemStackError</span>
+<pre class="highlight ruby"><code><span class="no">SystemStackError</span>
 <span class="no">NoMemoryError</span>
 <span class="no">SecurityError</span>
 <span class="no">ScriptError</span>
@@ -106,7 +108,7 @@
   <span class="no">Interrupt</span>
 <span class="no">SystemExit</span>
   <span class="no">Gem</span><span class="o">::</span><span class="no">SystemExitException</span>
-</pre>
+</code></pre>
 
 <p>Do you really want to rescue a <code>NoMemoryError</code> and send an email saying the job failed?!? Good luck with that.</p>
 
@@ -120,18 +122,18 @@
 
 <p>Imagine a scenario where we’re connecting to a 3rd-party API in our application. For example, we want our users to upload their cat photos to twitfaceagram. We definitely want to handle the scenarios where the connection times out, or the DNS fails to resolve, or the API returns bogus data. In these circumstances, we want to present a friendly message to the user that the application couldn’t connect to the remote server.</p>
 
-<pre class="highlight ruby"><span class="k">def</span> <span class="nf">upload_to_twitfaceagram</span>
+<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">upload_to_twitfaceagram</span>
   <span class="c1"># ... do something ...</span>
 <span class="k">rescue</span> <span class="o">=&gt;</span> <span class="n">e</span>
-  <span class="n">flash</span><span class="o">[</span><span class="ss">:error</span><span class="o">]</span> <span class="o">=</span> <span class="s2">"The internet broke"</span>
+  <span class="n">flash</span><span class="p">[</span><span class="ss">:error</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"The internet broke"</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>Most of the time, this code will do what we expect. Something out of our control will go wrong, and it’s appropriate to present the user with a friendly message. However, there’s a major gotcha with this code: we’re still rescuing many exceptions we’re not aware of.</p>
 
 <p>Here’s an abridged list of StandardErrors defined in ruby-core 2.0.0 (1.9 is not materially different):</p>
 
-<pre class="highlight ruby"><span class="no">StandardError</span>
+<pre class="highlight ruby"><code><span class="no">StandardError</span>
   <span class="no">FiberError</span>
   <span class="no">ThreadError</span>
   <span class="no">IndexError</span>
@@ -162,7 +164,7 @@
   <span class="no">ArgumentError</span>
     <span class="no">Gem</span><span class="o">::</span><span class="no">Requirement</span><span class="o">::</span><span class="no">BadRequirementError</span>
   <span class="no">TypeError</span>
-</pre>
+</code></pre>
 
 <p>In a fresh Rails 3.2.13 application, there are <strong><a href="https://gist.github.com/danielfone/5654600">375 StandardErrors defined</a></strong>.</p>
 

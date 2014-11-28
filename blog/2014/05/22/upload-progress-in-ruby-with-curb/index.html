@@ -58,19 +58,21 @@
         May 2014
       </small>
     </p>
+
+
     <p>A friend was telling me how difficult it was to get the progress of a file upload in ruby using the standard Net::HTTP library or any of the popular HTTP wrapper gems. He wanted to get simple details similar to curl.</p>
 
-<pre class="highlight plaintext">$ curl --progress-bar --form --upload=@1mb.txt http://requestb.in/ztmawczt &gt; /dev/null
+<pre class="highlight plaintext"><code>$ curl --progress-bar --form --upload=@1mb.txt http://requestb.in/ztmawczt &gt; /dev/null
 ######################################################                    75.5%
-</pre>
+</code></pre>
 
 <p>Fortunately, there is the <a href="https://github.com/taf2/curb">curb</a> gem which provides ruby bindings around <a href="http://curl.haxx.se/libcurl/">libcurl</a>. Using this gem, we can use the <code>on_progress</code> method to do something like this:</p>
 
-<pre class="highlight ruby"><span class="n">curl</span><span class="p">.</span><span class="nf">on_progress</span> <span class="k">do</span> <span class="o">|</span><span class="n">download_size</span><span class="p">,</span> <span class="n">downloaded</span><span class="p">,</span> <span class="n">upload_size</span><span class="p">,</span> <span class="n">uploaded</span><span class="o">|</span>
+<pre class="highlight ruby"><code><span class="n">curl</span><span class="p">.</span><span class="nf">on_progress</span> <span class="k">do</span> <span class="o">|</span><span class="n">download_size</span><span class="p">,</span> <span class="n">downloaded</span><span class="p">,</span> <span class="n">upload_size</span><span class="p">,</span> <span class="n">uploaded</span><span class="o">|</span>
   <span class="nb">print</span> <span class="s2">"</span><span class="se">\r</span><span class="si">#{</span><span class="n">uploaded</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">upload_size</span><span class="si">}</span><span class="s2">"</span>
   <span class="kp">true</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <p>The <a href="http://rubydoc.info/gems/curb/Curl/Easy#on_progress-instance_method">documentation</a> is a little sparse, and there are two major caveats to watch out for:</p>
 

@@ -58,6 +58,8 @@
         February 2014
       </small>
     </p>
+
+
     <blockquote>
   <p>In Rails 3.0 and above, generators don’t just look in the source root for templates,
 they also search for templates in other paths. And one of them is <code>lib/templates</code></p>
@@ -91,7 +93,7 @@ they also search for templates in other paths. And one of them is <code>lib/temp
 
 <p>By way of illustration, here’s one way to use a select box for a belongs_to relationship.</p>
 
-<pre class="highlight diff"><span class="err"># lib/templates/erb/scaffold/_form.html.erb
+<pre class="highlight diff"><code><span class="err"># lib/templates/erb/scaffold/_form.html.erb
 </span><span class="gh">@@ -23,7 +23,7 @@
 </span> &lt;% else -%&gt;
    &lt;%- if attribute.reference? -%&gt;
@@ -101,7 +103,7 @@ they also search for templates in other paths. And one of them is <code>lib/temp
 </span>   &lt;%- else -%&gt;
      &lt;%%= f.label :&lt;%= attribute.name %&gt; %&gt;&lt;br&gt;
      &lt;%%= f.&lt;%= attribute.field_type %&gt; :&lt;%= attribute.name %&gt; %&gt;
-</pre>
+</code></pre>
 
 <p>I’ve uploaded an <a href="https://github.com/danielfone/rails4-custom-scaffold-test">example app</a> to github, where you can see the <a href="https://github.com/danielfone/rails4-custom-scaffold-test/blob/master/lib/templates/erb/scaffold/_form.html.erb">customised template</a> in full and also <a href="https://github.com/danielfone/rails4-custom-scaffold-test/blob/master/app/views/smart_users/_form.html.erb">the view</a> it generates.</p>
 

@@ -55,9 +55,17 @@
     </h2>
     <p>
       <small class="text-muted">
+          Updated November 2014
+          —
+          Originally written
         May 2013
       </small>
     </p>
+
+      <div class="well">
+        <strong>tl;dr</strong> We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+      </div>
+
     <p>Some time ago, I had an unusual design brief for a Rails app:</p>
 
 <blockquote>
@@ -76,19 +84,19 @@
 
 <p>We’ll serialize the validation errors and store them in a field called <code>record_errors</code>.</p>
 
-<pre class="highlight ruby"><span class="c1"># /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb</span>
+<pre class="highlight ruby"><code><span class="c1"># /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb</span>
 <span class="k">class</span> <span class="nc">AddRecordErrorsToSubscriptions</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
   <span class="k">def</span> <span class="nf">change</span>
     <span class="n">add_column</span> <span class="ss">:subscriptions</span><span class="p">,</span> <span class="ss">:record_errors</span><span class="p">,</span> <span class="ss">:text</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <h3 id="add-an-activerecord-extension-to-handle-persistence">Add an ActiveRecord extension to handle persistence</h3>
 
 <p>This module will catch validation failures and persist the record anyway. It’s completely independent of the domain/business logic of the application so I like to store it in /lib. This is the main logic for achieving our required behaviour.</p>
 
-<pre class="highlight ruby"><span class="c1"># /lib/save_with_errors.rb</span>
+<pre class="highlight ruby"><code><span class="c1"># /lib/save_with_errors.rb</span>
 <span class="nb">require</span> <span class="s1">'active_record'</span>
 <span class="nb">require</span> <span class="s1">'active_support'</span>
 
@@ -119,13 +127,13 @@
   <span class="k">end</span>
 
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <h3 id="include-our-activerecord-extension-on-our-model">Include our ActiveRecord extension on our model</h3>
 
 <p>All we need to do is include the SaveWithErrors module into our ActiveRecord model. We should also require ‘save_with_errors’ in config/application.rb.</p>
 
-<pre class="highlight ruby"><span class="c1"># /app/models/subscription.rb</span>
+<pre class="highlight ruby"><code><span class="c1"># /app/models/subscription.rb</span>
 <span class="nb">require</span> <span class="s1">'save_with_errors'</span>
 
 <span class="k">class</span> <span class="nc">Subscription</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
@@ -143,22 +151,22 @@
   <span class="k">end</span>
 
 <span class="k">end</span>
-</pre>
+</code></pre>
 
 <h3 id="the-result">The Result</h3>
 
-<pre class="highlight plaintext">Loading development environment (Rails 3.2.13)
+<pre class="highlight plaintext"><code>Loading development environment (Rails 3.2.13)
 
 &gt; Subscription.create! name: 'My Name', email: 'test@example.com'
   SQL (3.6ms)  INSERT INTO "subscriptions" ("created_at", "email", "name", "record_errors", "token", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["created_at", Fri, 24 May 2013 01:55:07 UTC +00:00], ["email", "test@example.com"], ["name", "My Name"], ["record_errors", "--- !omap\n- :token:\n  - is invalid\n"], ["token", nil], ["updated_at", Fri, 24 May 2013 01:55:07 UTC +00:00]]
 
 ActiveRecord::RecordInvalid: Validation failed: Token is invalid
   [... backtrace ...]
-</pre>
+</code></pre>
 
 <p>Notice that a record has been inserted, but the exception that we’d expect from <code>create!</code> has still been raised. We can verify this by inspecting the last Subscription record:</p>
 
-<pre class="highlight plaintext">&gt; y Subscription.last
+<pre class="highlight plaintext"><code>&gt; y Subscription.last
   Subscription Load (0.3ms)  SELECT "subscriptions".* FROM "subscriptions" ORDER BY "subscriptions"."id" DESC LIMIT 1
 --- !ruby/object:Subscription
 attributes:
@@ -171,7 +179,7 @@ attributes:
   record_errors: !omap
   - :token:
     - is invalid
-</pre>
+</code></pre>
 
 <p>Exactly what we want!</p>
 

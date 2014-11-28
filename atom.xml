@@ -42,7 +42,7 @@
 
 &lt;p&gt;Fortunately, it’s very easy to replicate the problem in tests. Anytime an unauthenticated user requests a url approaching ActionDispatch::Cookies::MAX_COOKIE_SIZE, Devise will attempt to store the the url and cause the exception to be raised.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;  &lt;span class="c1"&gt;# /spec/requests/large_request_spec.rb&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="c1"&gt;# /spec/requests/large_request_spec.rb&lt;/span&gt;
   &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'spec_helper'&lt;/span&gt;
 
   &lt;span class="no"&gt;RSpec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;describe&lt;/span&gt; &lt;span class="s1"&gt;'A very large request'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;type: :request&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
@@ -51,15 +51,15 @@
       &lt;span class="n"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nf"&gt;to&lt;/span&gt; &lt;span class="n"&gt;redirect_to&lt;/span&gt; &lt;span class="s1"&gt;'/users/sign_in'&lt;/span&gt;
     &lt;span class="k"&gt;end&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This reliably produces&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;1) A very large request should not overflow cookies
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;1) A very large request should not overflow cookies
    Failure/Error: get '/', foo: 'bar' * 1000
    ActionDispatch::Cookies::CookieOverflow:
      ActionDispatch::Cookies::CookieOverflow
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id="solutions"&gt;Solutions&lt;/h3&gt;
 
@@ -74,7 +74,7 @@
 
 &lt;p&gt;I wrote a simple initializer to monkey patch the method and prevent it storing excessively long urls in the session.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;  &lt;span class="c1"&gt;# /config/initializers/devise_safe_store_location.rb&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="c1"&gt;# /config/initializers/devise_safe_store_location.rb&lt;/span&gt;
   &lt;span class="k"&gt;module&lt;/span&gt; &lt;span class="nn"&gt;SafeStoreLocation&lt;/span&gt;
 
     &lt;span class="no"&gt;MAX_LOCATION_SIZE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;ActionDispatch&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Cookies&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;MAX_COOKIE_SIZE&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
@@ -86,7 +86,7 @@
   &lt;span class="k"&gt;end&lt;/span&gt;
 
   &lt;span class="no"&gt;Devise&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;FailureApp&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;include&lt;/span&gt; &lt;span class="no"&gt;SafeStoreLocation&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The downside to this approach is that the user loses their place in the form, but it is far better than an unhandled exception when submitting. I’ve submitted a &lt;a href="https://github.com/plataformatec/devise/pull/3347"&gt;pull request&lt;/a&gt; to the Devise project, but to be honest this is such an edge case that it may not warrant it. We’ll see what happens.&lt;/p&gt;
 
@@ -103,17 +103,17 @@
     </author>
     <content type="html">&lt;p&gt;A friend was telling me how difficult it was to get the progress of a file upload in ruby using the standard Net::HTTP library or any of the popular HTTP wrapper gems. He wanted to get simple details similar to curl.&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;$ curl --progress-bar --form --upload=@1mb.txt http://requestb.in/ztmawczt &amp;gt; /dev/null
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ curl --progress-bar --form --upload=@1mb.txt http://requestb.in/ztmawczt &amp;gt; /dev/null
 ######################################################                    75.5%
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Fortunately, there is the &lt;a href="https://github.com/taf2/curb"&gt;curb&lt;/a&gt; gem which provides ruby bindings around &lt;a href="http://curl.haxx.se/libcurl/"&gt;libcurl&lt;/a&gt;. Using this gem, we can use the &lt;code&gt;on_progress&lt;/code&gt; method to do something like this:&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;span class="n"&gt;curl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;on_progress&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;download_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;downloaded&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;upload_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;uploaded&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="n"&gt;curl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;on_progress&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;download_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;downloaded&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;upload_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;uploaded&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
   &lt;span class="nb"&gt;print&lt;/span&gt; &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="se"&gt;\r&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;uploaded&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;upload_size&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
   &lt;span class="kp"&gt;true&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;a href="http://rubydoc.info/gems/curb/Curl/Easy#on_progress-instance_method"&gt;documentation&lt;/a&gt; is a little sparse, and there are two major caveats to watch out for:&lt;/p&gt;
 
@@ -168,7 +168,7 @@ they also search for templates in other paths. And one of them is &lt;code&gt;li
 
 &lt;p&gt;By way of illustration, here’s one way to use a select box for a belongs_to relationship.&lt;/p&gt;
 
-&lt;pre class="highlight diff"&gt;&lt;span class="err"&gt;# lib/templates/erb/scaffold/_form.html.erb
+&lt;pre class="highlight diff"&gt;&lt;code&gt;&lt;span class="err"&gt;# lib/templates/erb/scaffold/_form.html.erb
 &lt;/span&gt;&lt;span class="gh"&gt;@@ -23,7 +23,7 @@
 &lt;/span&gt; &amp;lt;% else -%&amp;gt;
    &amp;lt;%- if attribute.reference? -%&amp;gt;
@@ -178,7 +178,7 @@ they also search for templates in other paths. And one of them is &lt;code&gt;li
 &lt;/span&gt;   &amp;lt;%- else -%&amp;gt;
      &amp;lt;%%= f.label :&amp;lt;%= attribute.name %&amp;gt; %&amp;gt;&amp;lt;br&amp;gt;
      &amp;lt;%%= f.&amp;lt;%= attribute.field_type %&amp;gt; :&amp;lt;%= attribute.name %&amp;gt; %&amp;gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;I’ve uploaded an &lt;a href="https://github.com/danielfone/rails4-custom-scaffold-test"&gt;example app&lt;/a&gt; to github, where you can see the &lt;a href="https://github.com/danielfone/rails4-custom-scaffold-test/blob/master/lib/templates/erb/scaffold/_form.html.erb"&gt;customised template&lt;/a&gt; in full and also &lt;a href="https://github.com/danielfone/rails4-custom-scaffold-test/blob/master/app/views/smart_users/_form.html.erb"&gt;the view&lt;/a&gt; it generates.&lt;/p&gt;
 
@@ -290,16 +290,16 @@ We want to manage expense claims which consist of:&lt;/p&gt;
 
 &lt;h3 id="the-application-skeleton"&gt;The Application Skeleton&lt;/h3&gt;
 
-&lt;pre class="highlight plaintext"&gt;$ rails new reimburser-wizard -T -m ~/Development/rails-templates/default-prototype.rb
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ rails new reimburser-wizard -T -m ~/Development/rails-templates/default-prototype.rb
 $ cd reimburser-wizard
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;code&gt;rails new&lt;/code&gt; command is pretty self-explanatory. It creates a new Rails application in a directory of the same name.
 The only two options I’m specifying are:&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;-T, [--skip-test-unit]         # Skip Test::Unit files
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;-T, [--skip-test-unit]         # Skip Test::Unit files
 -m, [--template=TEMPLATE]      # Path to some application template (can be a filesystem path or URL)
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can check out my &lt;a href="https://github.com/danielfone/rails-templates/blob/master/default-prototype.rb"&gt;prototyping template on Github&lt;/a&gt;,
 but here’s the basic rundown:&lt;/p&gt;
@@ -320,10 +320,10 @@ and some bootstrap overrides (&lt;a href="https://github.com/danielfone/reimburs
 &lt;p&gt;Here’s where we really start building our prototype. Most of the work is done by Rails’ scaffold generators.
 In this simple prototype, we’ll model our domain with just two resources, a Reimbursement and an Employee.&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;$ rails generate scaffold Reimbursement reference:string payee:references comments:text data:text
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ rails generate scaffold Reimbursement reference:string payee:references comments:text data:text
 $ rails generate scaffold Employee name:string
 $ rake db:migrate
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Our Reimbursement model is very simple: we’ve got three regular attributes (&lt;code&gt;reference&lt;/code&gt;, &lt;code&gt;payee&lt;/code&gt; and &lt;code&gt;comments&lt;/code&gt;),
 and a &lt;code&gt;data&lt;/code&gt; field we’ll use as a  meta-attribute for serializing whatever other attributes we need later.
@@ -333,10 +333,10 @@ As you can see in the &lt;a href="https://github.com/danielfone/reimburser-wizar
 
 &lt;p&gt;Now we’ll run some bootstrap helpers to replace the default rails views with &lt;a href="https://github.com/danielfone/reimburser-wizard/commit/f4cd02940a06b1cf1972a71a557f11612b61db39"&gt;bootstrap themed views&lt;/a&gt;.&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;$ rm app/assets/stylesheets/scaffolds.css.scss
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ rm app/assets/stylesheets/scaffolds.css.scss
 $ rails generate bootstrap:themed Reimbursements
 $ rails generate bootstrap:themed Employees
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;That’s it for our scaffolding! The basic foundation of the prototype is in place.&lt;/p&gt;
 
@@ -344,8 +344,8 @@ $ rails generate bootstrap:themed Employees
 
 &lt;p&gt;Now’s an excellent time to play with the application. Let’s start the web server:&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;$ rails server
-&lt;/pre&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ rails server
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Because we haven’t set up our &lt;a href="http://api.rubyonrails.org/v4.0.0/classes/ActionDispatch/Routing/Mapper/Base.html#method-i-root"&gt;root route&lt;/a&gt;,
 you’ll need to navigate to http://localhost:3000/reimbursements .&lt;/p&gt;
@@ -405,37 +405,31 @@ but the rest is fairly straight forward.&lt;/p&gt;
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/"/>
     <id>http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/</id>
     <published>2013-05-28T00:00:00+12:00</published>
-    <updated>2014-05-20T13:55:02+12:00</updated>
+    <updated>2014-11-28T21:11:03+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
-    <content type="html">&lt;h3 id="tldr"&gt;tl;dr&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;rescue Exception =&amp;gt; e&lt;/code&gt; will turn your code into a brain eating zombie.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The equivalent of &lt;code&gt;rescue&lt;/code&gt; with an argument is &lt;code&gt;rescue =&amp;gt; e&lt;/code&gt; or &lt;code&gt;rescue StandardError =&amp;gt; e&lt;/code&gt;. Use these, or better still, figure out exactly what you’re trying to rescue and use &lt;code&gt;rescue OneError, AnotherError =&amp;gt; e&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id="whats-the-deal"&gt;What’s the deal?&lt;/h3&gt;
+    <content type="html">&lt;h3 id="whats-the-deal"&gt;What’s the deal?&lt;/h3&gt;
 
 &lt;p&gt;A common pattern for rescuing exceptions in Ruby is:&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;do_some_job!&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;do_some_job!&lt;/span&gt;
   &lt;span class="c1"&gt;# ... do something ...&lt;/span&gt;
   &lt;span class="n"&gt;job_succeeded&lt;/span&gt;
 &lt;span class="k"&gt;rescue&lt;/span&gt;
   &lt;span class="n"&gt;job_failed&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This is fine, but when developers need to capture the exception details, a terrible, &lt;em&gt;terrible&lt;/em&gt; thing happens:&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;do_some_job!&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;do_some_job!&lt;/span&gt;
   &lt;span class="c1"&gt;# ... do something ...&lt;/span&gt;
   &lt;span class="n"&gt;job_succeeded&lt;/span&gt;
 &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;Exception&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
   &lt;span class="n"&gt;job_failed&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.&lt;/p&gt;
 
@@ -445,7 +439,7 @@ but the rest is fairly straight forward.&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;Exception&lt;/code&gt; is the root of the exception class hierarchy in Ruby. Everything from signal handling to memory errors will raise a subclass of Exception. Here’s the full list of exceptions from ruby-core that we’ll inadvertently rescue when rescuing Exception.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;span class="no"&gt;SystemStackError&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SystemStackError&lt;/span&gt;
 &lt;span class="no"&gt;NoMemoryError&lt;/span&gt;
 &lt;span class="no"&gt;SecurityError&lt;/span&gt;
 &lt;span class="no"&gt;ScriptError&lt;/span&gt;
@@ -457,7 +451,7 @@ but the rest is fairly straight forward.&lt;/p&gt;
   &lt;span class="no"&gt;Interrupt&lt;/span&gt;
 &lt;span class="no"&gt;SystemExit&lt;/span&gt;
   &lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;SystemExitException&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Do you really want to rescue a &lt;code&gt;NoMemoryError&lt;/code&gt; and send an email saying the job failed?!? Good luck with that.&lt;/p&gt;
 
@@ -471,18 +465,18 @@ but the rest is fairly straight forward.&lt;/p&gt;
 
 &lt;p&gt;Imagine a scenario where we’re connecting to a 3rd-party API in our application. For example, we want our users to upload their cat photos to twitfaceagram. We definitely want to handle the scenarios where the connection times out, or the DNS fails to resolve, or the API returns bogus data. In these circumstances, we want to present a friendly message to the user that the application couldn’t connect to the remote server.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;upload_to_twitfaceagram&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;upload_to_twitfaceagram&lt;/span&gt;
   &lt;span class="c1"&gt;# ... do something ...&lt;/span&gt;
 &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
-  &lt;span class="n"&gt;flash&lt;/span&gt;&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:error&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"The internet broke"&lt;/span&gt;
+  &lt;span class="n"&gt;flash&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:error&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"The internet broke"&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Most of the time, this code will do what we expect. Something out of our control will go wrong, and it’s appropriate to present the user with a friendly message. However, there’s a major gotcha with this code: we’re still rescuing many exceptions we’re not aware of.&lt;/p&gt;
 
 &lt;p&gt;Here’s an abridged list of StandardErrors defined in ruby-core 2.0.0 (1.9 is not materially different):&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;span class="no"&gt;StandardError&lt;/span&gt;
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;StandardError&lt;/span&gt;
   &lt;span class="no"&gt;FiberError&lt;/span&gt;
   &lt;span class="no"&gt;ThreadError&lt;/span&gt;
   &lt;span class="no"&gt;IndexError&lt;/span&gt;
@@ -513,7 +507,7 @@ but the rest is fairly straight forward.&lt;/p&gt;
   &lt;span class="no"&gt;ArgumentError&lt;/span&gt;
     &lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Requirement&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;BadRequirementError&lt;/span&gt;
   &lt;span class="no"&gt;TypeError&lt;/span&gt;
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;In a fresh Rails 3.2.13 application, there are &lt;strong&gt;&lt;a href="https://gist.github.com/danielfone/5654600"&gt;375 StandardErrors defined&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
 
