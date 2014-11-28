@@ -50,20 +50,7 @@ Ultimately, I wanted to solve this at the Devise level. The problematic behaviou
 
 I wrote a simple initializer to monkey patch the method and prevent it storing excessively long urls in the session.
 
-~~~ ruby
-  # /config/initializers/devise_safe_store_location.rb
-  module SafeStoreLocation
-
-    MAX_LOCATION_SIZE = ActionDispatch::Cookies::MAX_COOKIE_SIZE / 2
-
-    def store_location_for(resource_or_scope, location)
-      super unless location && location.size > MAX_LOCATION_SIZE
-    end
-
-  end
-
-  Devise::FailureApp.include SafeStoreLocation
-~~~
+<script src="https://gist.github.com/danielfone/c8ab593c326a8052651c.js"></script>
 
 The downside to this approach is that the user loses their place in the form, but it is far better than an unhandled exception when submitting. I've submitted a [pull request][3] to the Devise project, but to be honest this is such an edge case that it may not warrant it. We'll see what happens.
 
