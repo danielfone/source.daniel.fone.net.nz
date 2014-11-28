@@ -1,10 +1,8 @@
 ---
 title: Devise causing a CookieOverflow error
 date: 2014-11-28 10:51 NZDT
-tags:
+summary: If you're going to submit forms via GET, keep your parameter names short!
 ---
-
-> tl;dr If you're going to submit forms via GET, keep your parameter names short!
 
 Today I came across an exception that was caused by a collision of two uncommon circumstances:
 
