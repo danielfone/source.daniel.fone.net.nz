@@ -1,28 +1,20 @@
 ---
 title: "A better way to manage the Rails secret token"
+featured: true
+updated: 2014-11-28
+summary: Don't hardcode secret tokens, load them from the environment instead.
 ---
 
-**tl;dr** Don't hardcode secret tokens. Load them from the environment like this…
+### Update — Rails 4.1
 
-~~~ ruby
-# Be sure to restart your server when you modify this file.
+Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slight out of date, the same principal applies though: **don't store real secrets in this file!** Load them from the environment like so:
 
-# Your secret key for verifying the integrity of signed cookies.
-# If you change this key, all old signed cookies will become invalid!
-# Make sure the secret is at least 30 characters and all random,
-# no regular words or you'll be exposed to dictionary attacks.
-MyApp::Application.config.secret_token = if Rails.env.development? or Rails.env.test?
-  ('x' * 30) # meets minimum requirement of 30 chars long
-else
-  ENV['SECRET_TOKEN']
-end
-~~~
-
-… and use the [Dotenv](https://github.com/bkeepers/dotenv) gem in production if needed.
+    production:
+      secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
 
 ### Insecure defaults
 
-When you create a new Rails project, one of the files created will be config/initializers/secret_token.rb. This file will look something like this:
+Until recently, one of the files created in a new Rails project was config/initializers/secret_token.rb. This file looked something like this:
 
 ~~~ruby
 # config/initializers/secret_token.rb

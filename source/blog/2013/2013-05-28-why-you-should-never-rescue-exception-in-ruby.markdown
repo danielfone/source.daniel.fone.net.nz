@@ -1,12 +1,9 @@
 ---
 title: "Why You Should Never Rescue Exception in Ruby"
+featured: true
+updated: 2014-11-28
+summary: Don't write `rescue Exception => e`. Write `rescue => e` or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
 ---
-
-### tl;dr
-
-**`rescue Exception => e` will turn your code into a brain eating zombie.**
-
-The equivalent of `rescue` with an argument is `rescue => e` or `rescue StandardError => e`. Use these, or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
 
 ### What's the deal?
 

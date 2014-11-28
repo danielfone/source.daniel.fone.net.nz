@@ -1,5 +1,8 @@
 ---
 title: "Persist Invalid Records with ActiveRecord"
+featured: true
+summary: We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+updated: 2014-11-28
 ---
 
 Some time ago, I had an unusual design brief for a Rails app:

@@ -5,9 +5,21 @@
     </h2>
     <p>
       <small class="text-muted">
+        <%- if current_article.data[:updated] -%>
+          Updated <%= format_date current_article.data[:updated] %>
+          —
+          Originally written
+        <%- end -%>
         <%= format_date current_article.date %>
       </small>
     </p>
+
+    <%- if current_article.data[:summary] -%>
+      <div class="well">
+        <strong>tl;dr</strong> <%= current_article.data[:summary] %>
+      </div>
+    <%- end -%>
+
     <%= yield %>
   </article>
 

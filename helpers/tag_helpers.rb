@@ -20,4 +20,8 @@ module TagHelpers
   def page_title
     [current_page.data.title, 'Daniel Fone'].compact.join ' - '
   end
+
+  def link_to_self(url)
+    link_to url, url
+  end
 end
