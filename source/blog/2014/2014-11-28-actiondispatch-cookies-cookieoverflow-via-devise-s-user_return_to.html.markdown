@@ -6,7 +6,7 @@ summary: If you're going to submit forms via GET, keep your parameter names shor
 
 Today I came across an exception that was caused by a collision of two uncommon circumstances:
 
-* A large and complex form, submitted via GET (it was a search for with a _lot_ of parameters)
+* A large and complex form, submitted via GET (it was a search form with a _lot_ of parameters)
 * A Devise session time out
 
 ### How It Happens
