@@ -10,11 +10,11 @@
     <name>Daniel Fone</name>
   </author>
   <entry>
-    <title>ActionDispatch::Cookies::CookieOverflow via Devise's user_return_to</title>
+    <title>Devise causing a CookieOverflow error</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/"/>
     <id>http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/</id>
     <published>2014-11-28T10:51:00+13:00</published>
-    <updated>2014-11-28T20:02:46+13:00</updated>
+    <updated>2014-11-28T21:47:46+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
