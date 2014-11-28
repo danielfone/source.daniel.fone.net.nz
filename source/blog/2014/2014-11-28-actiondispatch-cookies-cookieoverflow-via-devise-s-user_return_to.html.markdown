@@ -1,5 +1,5 @@
 ---
-title: ActionDispatch::Cookies::CookieOverflow via Devise's user_return_to
+title: Devise causing a CookieOverflow error
 date: 2014-11-28 10:51 NZDT
 tags:
 ---
