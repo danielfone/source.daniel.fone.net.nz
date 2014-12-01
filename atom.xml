@@ -5,10 +5,38 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2014-11-28T10:51:00+13:00</updated>
+  <updated>2014-12-01T12:43:00+13:00</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
+  <entry>
+    <title>Fixing Connection Errors After Upgrading Postgres</title>
+    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/"/>
+    <id>http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/</id>
+    <published>2014-12-01T12:43:00+13:00</published>
+    <updated>2014-12-01T13:13:49+13:00</updated>
+    <author>
+      <name>Daniel Fone</name>
+    </author>
+    <content type="html">&lt;p&gt;I recently upgraded postgres from 9.2 to 9.3 using &lt;code&gt;brew upgrade postgres&lt;/code&gt;. The process was smooth and &lt;code&gt;pg_upgrade&lt;/code&gt; is a very handy tool.&lt;/p&gt;
+
+&lt;p&gt;However, trouble struck once I tried to run any specs that needed to connect to postgres. Even though postgres was &lt;em&gt;definitely&lt;/em&gt; running, suddenly I was getting:&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;could not connect to server: No such file or directory (PG::ConnectionBad)
+Is the server running locally and accepting
+connections on Unix domain socket "/var/pgsql_socket/.s.PGSQL.5432"?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The fix is simple, if a little suprising. When you install the pg gem, it detects which version of postgres is installed and sets the domain socket path appropriately. The solution is as simple as reinstalling the gem.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ gem uninstall pg
+$ cd my-rails-app/
+$ bundle install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hat tip to &lt;a href="http://tammersaleh.com/posts/installing-postgresql-for-rails-3-1-on-lion/"&gt;Tammer Selah&lt;/a&gt; and this &lt;a href="http://stackoverflow.com/questions/6770649/repairing-postgresql-after-upgrading-to-osx-10-7-lion#comment8687127_6772559"&gt;Stack Overflow comment&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Devise causing a CookieOverflow error</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/"/>
@@ -382,140 +410,6 @@ but the rest is fairly straight forward.&lt;/p&gt;
 
 &lt;p&gt;&lt;img alt="form.png" src="/blog/2013/10/19/prototyping-web-applications-in-rails-4/form.png" /&gt;&lt;/p&gt;
 
-</content>
-  </entry>
-  <entry>
-    <title>Why You Should Never Rescue Exception in Ruby</title>
-    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/"/>
-    <id>http://daniel.fone.net.nz/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/</id>
-    <published>2013-05-28T00:00:00+12:00</published>
-    <updated>2014-11-28T21:11:03+13:00</updated>
-    <author>
-      <name>Daniel Fone</name>
-    </author>
-    <content type="html">&lt;h3 id="whats-the-deal"&gt;What’s the deal?&lt;/h3&gt;
-
-&lt;p&gt;A common pattern for rescuing exceptions in Ruby is:&lt;/p&gt;
-
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;do_some_job!&lt;/span&gt;
-  &lt;span class="c1"&gt;# ... do something ...&lt;/span&gt;
-  &lt;span class="n"&gt;job_succeeded&lt;/span&gt;
-&lt;span class="k"&gt;rescue&lt;/span&gt;
-  &lt;span class="n"&gt;job_failed&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is fine, but when developers need to capture the exception details, a terrible, &lt;em&gt;terrible&lt;/em&gt; thing happens:&lt;/p&gt;
-
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;do_some_job!&lt;/span&gt;
-  &lt;span class="c1"&gt;# ... do something ...&lt;/span&gt;
-  &lt;span class="n"&gt;job_succeeded&lt;/span&gt;
-&lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;Exception&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
-  &lt;span class="n"&gt;job_failed&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Just to confirm this is a actually bad practice, here’s &lt;a href="https://github.com/search?l=ruby&amp;amp;o=asc&amp;amp;p=1&amp;amp;q=%22rescue+Exception+=%3E+%22&amp;amp;ref=searchresults&amp;amp;type=Code"&gt;~200k results&lt;/a&gt; for &lt;code&gt;rescue Exception =&amp;gt;&lt;/code&gt; on Github&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id="what-is-this-i-dont-even"&gt;What is this I don’t even…&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;Exception&lt;/code&gt; is the root of the exception class hierarchy in Ruby. Everything from signal handling to memory errors will raise a subclass of Exception. Here’s the full list of exceptions from ruby-core that we’ll inadvertently rescue when rescuing Exception.&lt;/p&gt;
-
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SystemStackError&lt;/span&gt;
-&lt;span class="no"&gt;NoMemoryError&lt;/span&gt;
-&lt;span class="no"&gt;SecurityError&lt;/span&gt;
-&lt;span class="no"&gt;ScriptError&lt;/span&gt;
-  &lt;span class="no"&gt;NotImplementedError&lt;/span&gt;
-  &lt;span class="no"&gt;LoadError&lt;/span&gt;
-    &lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;LoadError&lt;/span&gt;
-  &lt;span class="no"&gt;SyntaxError&lt;/span&gt;
-&lt;span class="no"&gt;SignalException&lt;/span&gt;
-  &lt;span class="no"&gt;Interrupt&lt;/span&gt;
-&lt;span class="no"&gt;SystemExit&lt;/span&gt;
-  &lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;SystemExitException&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Do you really want to rescue a &lt;code&gt;NoMemoryError&lt;/code&gt; and send an email saying the job failed?!? Good luck with that.&lt;/p&gt;
-
-&lt;h3 id="better-rescue-standarderror"&gt;Better: Rescue StandardError&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;rescue =&amp;gt; e&lt;/code&gt; is shorthand for &lt;code&gt;rescue StandardError =&amp;gt; e&lt;/code&gt; and is almost certainly the broadest type of Exception that we want to rescue. In almost every circumstance, we can replace &lt;code&gt;rescue Exception =&amp;gt; e&lt;/code&gt; with &lt;code&gt;rescue =&amp;gt; e&lt;/code&gt; and be better off for it. The only time when that’s &lt;em&gt;not&lt;/em&gt; a good idea is for code that’s doing some kind of exception logging/reporting/management. In those rare cases, it’s possible we’ll want to rescue non-StandardErrors — but we still need to think pretty hard about what happens after we’ve rescued them.&lt;/p&gt;
-
-&lt;p&gt;Most of the time though, we don’t even want to rescue StandardError!&lt;/p&gt;
-
-&lt;h3 id="more-self-inflicted-fail"&gt;More Self-Inflicted Fail&lt;/h3&gt;
-
-&lt;p&gt;Imagine a scenario where we’re connecting to a 3rd-party API in our application. For example, we want our users to upload their cat photos to twitfaceagram. We definitely want to handle the scenarios where the connection times out, or the DNS fails to resolve, or the API returns bogus data. In these circumstances, we want to present a friendly message to the user that the application couldn’t connect to the remote server.&lt;/p&gt;
-
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;upload_to_twitfaceagram&lt;/span&gt;
-  &lt;span class="c1"&gt;# ... do something ...&lt;/span&gt;
-&lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
-  &lt;span class="n"&gt;flash&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;:error&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;"The internet broke"&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Most of the time, this code will do what we expect. Something out of our control will go wrong, and it’s appropriate to present the user with a friendly message. However, there’s a major gotcha with this code: we’re still rescuing many exceptions we’re not aware of.&lt;/p&gt;
-
-&lt;p&gt;Here’s an abridged list of StandardErrors defined in ruby-core 2.0.0 (1.9 is not materially different):&lt;/p&gt;
-
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;StandardError&lt;/span&gt;
-  &lt;span class="no"&gt;FiberError&lt;/span&gt;
-  &lt;span class="no"&gt;ThreadError&lt;/span&gt;
-  &lt;span class="no"&gt;IndexError&lt;/span&gt;
-    &lt;span class="no"&gt;StopIteration&lt;/span&gt;
-    &lt;span class="no"&gt;KeyError&lt;/span&gt;
-  &lt;span class="no"&gt;Math&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;DomainError&lt;/span&gt;
-  &lt;span class="no"&gt;LocalJumpError&lt;/span&gt;
-  &lt;span class="no"&gt;IOError&lt;/span&gt;
-    &lt;span class="no"&gt;EOFError&lt;/span&gt;
-  &lt;span class="no"&gt;EncodingError&lt;/span&gt;
-    &lt;span class="no"&gt;Encoding&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;ConverterNotFoundError&lt;/span&gt;
-    &lt;span class="no"&gt;Encoding&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;InvalidByteSequenceError&lt;/span&gt;
-    &lt;span class="no"&gt;Encoding&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;UndefinedConversionError&lt;/span&gt;
-    &lt;span class="no"&gt;Encoding&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;CompatibilityError&lt;/span&gt;
-  &lt;span class="no"&gt;RegexpError&lt;/span&gt;
-  &lt;span class="no"&gt;SystemCallError&lt;/span&gt;
-    &lt;span class="no"&gt;Errno&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;ERPCMISMATCH&lt;/span&gt;
-    &lt;span class="c1"&gt;# ... lots of system call errors ...&lt;/span&gt;
-    &lt;span class="no"&gt;Errno&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;NOERROR&lt;/span&gt; &lt;span class="c1"&gt;# errrr.... what?&lt;/span&gt;
-  &lt;span class="no"&gt;RangeError&lt;/span&gt;
-    &lt;span class="no"&gt;FloatDomainError&lt;/span&gt;
-  &lt;span class="no"&gt;ZeroDivisionError&lt;/span&gt;
-  &lt;span class="no"&gt;RuntimeError&lt;/span&gt;
-    &lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Exception&lt;/span&gt;
-      &lt;span class="c1"&gt;# ... lots of gem errors ...&lt;/span&gt;
-  &lt;span class="no"&gt;NameError&lt;/span&gt;
-    &lt;span class="no"&gt;NoMethodError&lt;/span&gt;
-  &lt;span class="no"&gt;ArgumentError&lt;/span&gt;
-    &lt;span class="no"&gt;Gem&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Requirement&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;BadRequirementError&lt;/span&gt;
-  &lt;span class="no"&gt;TypeError&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In a fresh Rails 3.2.13 application, there are &lt;strong&gt;&lt;a href="https://gist.github.com/danielfone/5654600"&gt;375 StandardErrors defined&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now let’s say we’re refactoring the API integration and we make a typo with a method name. What’s going to happen?&lt;/p&gt;
-
-&lt;p&gt;If we’ve wrapped the entire process in a &lt;code&gt;rescue =&amp;gt; e&lt;/code&gt; (which is rescuing StandardError) the NoMethodError is going to be swallowed and our graceful error handling code is going to be run instead. When we run our well written tests, they’ll fail. But rather than raising a straight-forward NoMethodError, it’ll look like there was an gracefully handled connectivity problem.&lt;/p&gt;
-
-&lt;p&gt;Now &lt;em&gt;that&lt;/em&gt; is going to take some debugging.&lt;/p&gt;
-
-&lt;p&gt;If our tests are poorly written there’ll be no exception and perhaps the tests will just pass. Granted, in production our users won’t be seeing ugly 500 errors, but they sure won’t be uploading their cat photos either.&lt;/p&gt;
-
-&lt;h3 id="best-rescue-specific-exceptions"&gt;Best: Rescue Specific Exceptions&lt;/h3&gt;
-
-&lt;p&gt;Every part of our code is &lt;em&gt;qualified&lt;/em&gt; to rescue from certain exceptional circumstances. If we want to catch connectivity problems in an API integration, our code will be qualified to rescue from a &lt;a href="http://tammersaleh.com/posts/rescuing-net-http-exceptions"&gt;long list&lt;/a&gt; of Net related exceptions. It is &lt;em&gt;not&lt;/em&gt; qualified to rescue from an ArgumentError, which is a code-time problem and not a run-time problem!&lt;/p&gt;
-
-&lt;p&gt;Every time we write a rescue, we need to think hard about what exceptions this code is actually qualified to handle.&lt;/p&gt;
-
-&lt;p&gt;In the case of HTTP, we can make it easier on ourselves and use a wrapper like &lt;a href="https://github.com/lostisland/faraday"&gt;faraday&lt;/a&gt;. In this case we’ll have a &lt;a href="https://github.com/lostisland/faraday/blob/master/lib/faraday/error.rb"&gt;much shorter list&lt;/a&gt; of possible exceptions to rescue.&lt;/p&gt;
-
-&lt;h3 id="so"&gt;So…&lt;/h3&gt;
-
-&lt;p&gt;… if you encounter &lt;code&gt;rescue Exception =&amp;gt; e&lt;/code&gt; in an existing codebase, you can almost certainly replace it with &lt;code&gt;rescue =&amp;gt; e&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;… if you find yourself about to type &lt;code&gt;rescue Exception =&amp;gt; e&lt;/code&gt;, slap yourself in the face, figure out exactly what exceptions you’re dealing with and rescue those instead.&lt;/p&gt;
 </content>
   </entry>
 </feed>
