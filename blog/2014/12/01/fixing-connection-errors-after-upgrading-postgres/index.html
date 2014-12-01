@@ -69,6 +69,8 @@ Is the server running locally and accepting
 connections on Unix domain socket "/var/pgsql_socket/.s.PGSQL.5432"?
 </code></pre>
 
+<p>The problem was that the new version of postgres listens on /tmp/.s.PGSQL.5432 instead. I could’ve messed around with the config and made postgres use the domain socket it was previously, or told rails explictly how to connect, but both of those approaches seemed like work I shouldn’t have to do. At no point had I told rails to connect to postgres on that path, rails had assumed it, and now its assumptions were wrong.</p>
+
 <p>The fix is simple, if a little suprising. When you install the pg gem, it detects which version of postgres is installed and sets the domain socket path appropriately. The solution is as simple as reinstalling the gem.</p>
 
 <pre class="highlight plaintext"><code>$ gem uninstall pg
