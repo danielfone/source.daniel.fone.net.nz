@@ -7165,3 +7165,9 @@ article img {
 code {
   color: #555;
   background-color: #f1f1f1; }
+
+/* line 140, /Users/danielfone/Production/personal/daniel.fone.net.nz/source/stylesheets/application.scss */
+.footnotes {
+  border-top: 1px solid #eeeeee;
+  padding-top: 1em;
+  margin: 3em 0; }
