@@ -137,6 +137,8 @@ code {
   background-color: #f1f1f1;
 }
 
+pre code { white-space: pre; }
+
 .footnotes {
   border-top: 1px solid $gray-lighter;
   padding-top: 1em;
