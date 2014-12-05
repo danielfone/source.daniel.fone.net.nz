@@ -5,10 +5,80 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2014-12-03T23:33:00+13:00</updated>
+  <updated>2014-12-05T13:31:00+13:00</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
+  <entry>
+    <title>Efficient Uniqueness Validations</title>
+    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/"/>
+    <id>http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/</id>
+    <published>2014-12-05T13:31:00+13:00</published>
+    <updated>2014-12-05T14:09:02+13:00</updated>
+    <author>
+      <name>Daniel Fone</name>
+    </author>
+    <content type="html">&lt;p&gt;Although ActiveRecord uniqueness validations aren’t bullet-proof,&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; they’re often helpful. Unfortunately, they can add overhead to save operations, since they require an extra call to the database. Consider the following simple ActiveRecord class:&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubscriptionPlan&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="n"&gt;validates&lt;/span&gt; &lt;span class="ss"&gt;:code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;uniqueness: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;
+  &lt;span class="n"&gt;validates_uniqueness_of&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When we try to create this we’ll see two SELECT queries as we’d expect.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt; &amp;gt;&amp;gt; SubscriptionPlan.create! name: 'Starter - 100', code: 'starter-100'
+   (0.2ms)  BEGIN
+  SubscriptionPlan Exists (2.1ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE "subscription_plans"."code" = 'starter-100' LIMIT 1
+  SubscriptionPlan Exists (0.2ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE "subscription_plans"."name" = 'Starter - 100' LIMIT 1
+   (0.1ms)  ROLLBACK
+ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Name has already been taken
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But what about when we update an existing record?&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt;&amp;gt; plan.update_attributes! quota: 99
+   (0.2ms)  BEGIN
+    SubscriptionPlan Exists (0.4ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE ("subscription_plans"."code" = 'starter-100' AND "subscription_plans"."id" != 1) LIMIT 1
+    SubscriptionPlan Exists (0.2ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE ("subscription_plans"."name" = 'Starter - 100' AND "subscription_plans"."id" != 1) LIMIT 1
+  SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
+   (0.3ms)  COMMIT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We still get two queries to check if the code and name are unique. These are almost certainly pointless, since neither the name or the code have changed, but they’re being checked anyway. On massive tables, these can be costly queries, even with well designed indexes.&lt;/p&gt;
+
+&lt;h3 id="activemodeldirty-to-the-rescue"&gt;ActiveModel::Dirty to the Rescue&lt;/h3&gt;
+
+&lt;p&gt;Fortunately, it’s quite simple to keep these queries in check. &lt;a href="http://api.rubyonrails.org/classes/ActiveModel/Dirty.html"&gt;ActiveModel::Dirty&lt;/a&gt; lets us check if any fields were changed since the record was loaded.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubscriptionPlan&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="n"&gt;validates&lt;/span&gt; &lt;span class="ss"&gt;:code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;uniqueness: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="ss"&gt;if: :code_changed?&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="n"&gt;validates_uniqueness_of&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;if: :name_changed?&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, create operations behave the same as before, validating the uniqueness of the fields. Likewise if we update one of those fields, it will query only the fields it needs to check.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, an update that doesn’t affect those fields won’t incur the cost of those potentially expensive SELECTS.&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt;&amp;gt; plan.update_attributes! quota: 99
+   (0.2ms)  BEGIN
+  SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
+   (0.3ms)  COMMIT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is much better. However, I think we can do better still. In a future post I’ll look at ways we can bypass manual uniqueness validations entirely.&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+  &lt;ol&gt;
+    &lt;li id="fn:1"&gt;
+      &lt;p&gt;Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. The should (almost) always be used in conjunction with a unique index at the database level. See the &lt;a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of"&gt;validates_uniqueness_of docs&lt;/a&gt; for more details. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
   <entry>
     <title>Unicode and Regex in Ruby 1.8</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/03/unicode-and-regex-in-ruby-1-8/"/>
@@ -266,57 +336,6 @@ they also search for templates in other paths. And one of them is &lt;code&gt;li
 
 &lt;p&gt;&lt;em&gt;Edit: This question was originally prompted by &lt;a href="http://daniel.fone.net.nz/blog/2013/10/19/prototyping-web-applications-in-rails-4/#comment-1225579568"&gt;a comment&lt;/a&gt; on another post, referencing a &lt;a href="http://stackoverflow.com/questions/21486137/rails-scaffold-references-with-select-input-and-entity-label-with-generators/21496682"&gt;StackOverflow question&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
-</content>
-  </entry>
-  <entry>
-    <title>Laziest possible solutions for Stripe's CTF</title>
-    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/01/31/laziest-possible-solutions-for-stripes-ctf/"/>
-    <id>http://daniel.fone.net.nz/blog/2014/01/31/laziest-possible-solutions-for-stripes-ctf/</id>
-    <published>2014-01-31T00:00:00+13:00</published>
-    <updated>2014-05-20T13:55:02+12:00</updated>
-    <author>
-      <name>Daniel Fone</name>
-    </author>
-    <content type="html">&lt;p&gt;A good programmer is a lazy programmer right? Here’s my solutions to Stripe’s latest CTF.
-I’m almost embarrassed how stupid some of them are, but at the end of the day, results matter.&lt;/p&gt;
-
-&lt;h3 id="level-0"&gt;Level 0&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/danielfone/stripe-ctf-level0/commit/fef0cfcba371dc29d9f0fd1f7bc0e1c9e1161b38#diff-1"&gt;Converted&lt;/a&gt; &lt;code&gt;array&lt;/code&gt; to &lt;code&gt;set&lt;/code&gt; for fast lookups.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/danielfone/stripe-ctf-level0"&gt;https://github.com/danielfone/stripe-ctf-level0&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id="level-1"&gt;Level 1&lt;/h3&gt;
-
-&lt;p&gt;Simply move the while loop into a single ruby process and use &lt;code&gt;Digest::SHA1&lt;/code&gt;. Slow, but fast enough to beat the level.
-This is the only level I had to write proper code for.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/danielfone/stripe-ctf-level1"&gt;https://github.com/danielfone/stripe-ctf-level1&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id="level-2"&gt;Level 2&lt;/h3&gt;
-
-&lt;p&gt;Exploit the fact that the test uses a fixed number of requests (and many more for “elephants” than “mice”), and &lt;a href="https://github.com/danielfone/stripe-ctf-level2/commit/7f1171a8400c39ac691c54fa0cddbc9ea4202edb#diff-1"&gt;limit each IP to 10 requests&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/danielfone/stripe-ctf-level2"&gt;https://github.com/danielfone/stripe-ctf-level2&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id="level-3"&gt;Level 3&lt;/h3&gt;
-
-&lt;p&gt;Friends don’t let friends use scala.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Set up a basic sinatra server to implement the API&lt;/li&gt;
-  &lt;li&gt;&lt;a href="https://github.com/danielfone/stripe-ctf-level3/blob/master/search.rb#L24"&gt;Shell out to grep&lt;/a&gt; to do actual searching. Single node, no index. O_o&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/danielfone/stripe-ctf-level3"&gt;https://github.com/danielfone/stripe-ctf-level3&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id="level-4"&gt;Level 4&lt;/h3&gt;
-
-&lt;p&gt;I was fortunate enough to reach this level early, and pass it before Stripe improved octopus. As such I passed it with &lt;a href="https://github.com/danielfone/stripe-ctf-level4/commit/10be54c6915d1492791bb147a0c9daeb3c27003d"&gt;my first attempt&lt;/a&gt;, simply by removing the failover (node0 becomes Single Point of Failure) and forwarding requests from the secondaries to the primary.&lt;/p&gt;
-
-&lt;p&gt;The remaining commits are my futile attempts to pass this level after the SPOF check was added to the tests. Looking at the code for successful solutions, I can see I was on the right path but needed to invest more time into making my command forwarding more robust.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/danielfone/stripe-ctf-level4"&gt;https://github.com/danielfone/stripe-ctf-level4&lt;/a&gt;&lt;/p&gt;
 </content>
   </entry>
 </feed>
