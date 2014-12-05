@@ -118,7 +118,7 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. The should (almost) always be used in conjunction with a unique index at the database level. See the <a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of">validates_uniqueness_of docs</a> for more details. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. They should (almost) always be used in conjunction with a unique index at the database level. See the <a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of">validates_uniqueness_of docs</a> for more details. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>

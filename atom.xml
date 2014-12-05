@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/</id>
     <published>2014-12-05T13:31:00+13:00</published>
-    <updated>2014-12-05T14:09:02+13:00</updated>
+    <updated>2014-12-05T14:14:10+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -73,7 +73,7 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
 &lt;div class="footnotes"&gt;
   &lt;ol&gt;
     &lt;li id="fn:1"&gt;
-      &lt;p&gt;Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. The should (almost) always be used in conjunction with a unique index at the database level. See the &lt;a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of"&gt;validates_uniqueness_of docs&lt;/a&gt; for more details. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. They should (almost) always be used in conjunction with a unique index at the database level. See the &lt;a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of"&gt;validates_uniqueness_of docs&lt;/a&gt; for more details. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
   &lt;/ol&gt;
 &lt;/div&gt;
