@@ -57,7 +57,7 @@ On the other hand, an update that doesn't affect those fields won't incur the co
 
 This is much better. However, I think we can do better still. In a future post I'll look at ways we can bypass manual uniqueness validations entirely.
 
-[^1]: Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. The should (almost) always be used in conjunction with a unique index at the database level. See the [validates_uniqueness_of docs][ar-uniquness-docs] for more details.
+[^1]: Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. They should (almost) always be used in conjunction with a unique index at the database level. See the [validates_uniqueness_of docs][ar-uniquness-docs] for more details.
 
 [ar-dirty-api]: http://api.rubyonrails.org/classes/ActiveModel/Dirty.html
 [ar-uniquness-docs]: http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of
