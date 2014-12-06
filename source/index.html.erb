@@ -7,22 +7,25 @@
   <a href="/hire">hire me</a>.
 </p>
 
-<p>As my son once said:</p>
-
-<blockquote>Let&#8217;s go build all the things!</blockquote>
+<p>As my son once said, &ldquo;Let&#8217;s go build all the things!&rdquo;</p>
 
 
 <div class="row">
   <div class="col-md-12">
-    <h4>Featured Posts</h4>
-    <% featured_articles.each do |article| %>
-      <a href="<%= article.url %>">
-        <h5><%= article.title %></h5>
-      </a>
-      <blockquote>
-        <%= article.data[:summary] %>
-      </blockquote>
-    <% end %>
+    <h4>Recent Posts</h4>
+    <ul>
+      <% recent_articles.each do |article| %>
+        <li>
+          <a href="<%= article.url %>">
+            <h5><%= article.title %></h5>
+          </a>
+          <blockquote>
+            <%= article.data[:summary] %>
+          </blockquote>
+        </li>
+      <% end %>
+
+    </ul>
 
     <small>
       <p><%= link_to 'More posts', '/blog/archives/' %></p>
