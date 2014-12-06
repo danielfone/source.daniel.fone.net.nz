@@ -58,32 +58,55 @@
   <a href="/hire">hire me</a>.
 </p>
 
-<p>As my son once said:</p>
-
-<blockquote>Let&#8217;s go build all the things!</blockquote>
+<p>As my son once said, &ldquo;Let&#8217;s go build all the things!&rdquo;</p>
 
 
 <div class="row">
   <div class="col-md-12">
-    <h4>Featured Posts</h4>
-      <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-        <h5>Why You Should Never Rescue Exception in Ruby</h5>
-      </a>
-      <blockquote>
-        Don't write `rescue Exception => e`. Write `rescue => e` or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
-      </blockquote>
-      <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-        <h5>Persist Invalid Records with ActiveRecord</h5>
-      </a>
-      <blockquote>
-        We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
-      </blockquote>
-      <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
-        <h5>A better way to manage the Rails secret token</h5>
-      </a>
-      <blockquote>
-        Don't hardcode secret tokens, load them from the environment instead.
-      </blockquote>
+    <h4>Recent Posts</h4>
+    <ul>
+        <li>
+          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
+            <h5>Efficient Uniqueness Validations</h5>
+          </a>
+          <blockquote>
+            Use `:if => :field_changed?` on uniqueness validations to skip unnecessary checks on every save.
+          </blockquote>
+        </li>
+        <li>
+          <a href="/blog/2014/12/03/unicode-and-regex-in-ruby-1-8/">
+            <h5>Unicode and Regex in Ruby 1.8</h5>
+          </a>
+          <blockquote>
+            Regex doesn't play nicely with unicode in Ruby 1.8, so watch your input data! Specifically, '\W' (non-word character) only matches ascii characters.
+          </blockquote>
+        </li>
+        <li>
+          <a href="/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/">
+            <h5>Fixing Connection Errors After Upgrading Postgres</h5>
+          </a>
+          <blockquote>
+            You may need to reinstall the pg gem after upgrading postgres.
+          </blockquote>
+        </li>
+        <li>
+          <a href="/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/">
+            <h5>Devise causing a CookieOverflow error</h5>
+          </a>
+          <blockquote>
+            If you're going to submit forms via GET, keep your parameter names short!
+          </blockquote>
+        </li>
+        <li>
+          <a href="/blog/2014/05/22/upload-progress-in-ruby-with-curb/">
+            <h5>Upload Progress in Ruby with curb</h5>
+          </a>
+          <blockquote>
+            
+          </blockquote>
+        </li>
+
+    </ul>
 
     <small>
       <p><a href="/blog/archives/">More posts</a></p>
@@ -106,6 +129,32 @@
         <p>
           <a href="/hire" class="button primary">Hire me</a>
         </p>
+      </aside>
+
+      <aside>
+        <h4>Featured Posts</h4>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          </a>
+          <blockquote>
+            Don't write `rescue Exception => e`. Write `rescue => e` or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
+          </blockquote>
+          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
+            <h5>Persist Invalid Records with ActiveRecord</h5>
+          </a>
+          <blockquote>
+            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+          </blockquote>
+          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
+            <h5>A better way to manage the Rails secret token</h5>
+          </a>
+          <blockquote>
+            Don't hardcode secret tokens, load them from the environment instead.
+          </blockquote>
+
+        <small>
+          <p><a href="/blog/archives/">More posts</a></p>
+        </small>
       </aside>
     </div>
   </div>

@@ -59,19 +59,22 @@
       </small>
     </p>
 
+      <div class="well">
+        <strong>tl;dr</strong> You may need to reinstall the pg gem after upgrading postgres.
+      </div>
 
-    <p>I recently upgraded postgres from 9.2 to 9.3 using <code>brew upgrade postgres</code>. The process was smooth and <code>pg_upgrade</code> is a very handy tool.</p>
+    <p>I recently upgraded Postgres from 9.2 to 9.3 using <code>brew upgrade postgres</code>. The process was smooth and <code>pg_upgrade</code> is a very handy tool.</p>
 
-<p>However, trouble struck once I tried to run any specs that needed to connect to postgres. Even though postgres was <em>definitely</em> running, suddenly I was getting:</p>
+<p>However, trouble struck once I tried to run any specs that needed to connect to Postgres. Even though Postgres was <em>definitely</em> running, suddenly I was getting:</p>
 
 <pre class="highlight plaintext"><code>could not connect to server: No such file or directory (PG::ConnectionBad)
 Is the server running locally and accepting
 connections on Unix domain socket "/var/pgsql_socket/.s.PGSQL.5432"?
 </code></pre>
 
-<p>The problem was that the new version of postgres listens on /tmp/.s.PGSQL.5432 instead. I could’ve messed around with the config and made postgres use the domain socket it was previously, or told rails explictly how to connect, but both of those approaches seemed like work I shouldn’t have to do. At no point had I told rails to connect to postgres on that path, rails had assumed it, and now its assumptions were wrong.</p>
+<p>The problem was that the new version of Postgres listens on /tmp/.s.PGSQL.5432 instead. I could’ve messed around with the config and made Postgres use the domain socket it was previously, or told Rails explictly how to connect, but both of those approaches seemed like work I shouldn’t have to do. At no point had I told Rails to connect to postgres on that path, Rails had assumed it, and now its assumptions were wrong.</p>
 
-<p>The fix is simple, if a little suprising. When you install the pg gem, it detects which version of postgres is installed and sets the domain socket path appropriately. The solution is as simple as reinstalling the gem.</p>
+<p>The fix is simple, if a little suprising. When you install the ‘pg’ gem, it detects which version of Postgres is installed and sets the domain socket path appropriately. The solution is as simple as reinstalling the gem.</p>
 
 <pre class="highlight plaintext"><code>$ gem uninstall pg
 $ cd my-rails-app/
@@ -113,6 +116,32 @@ $ bundle install
         <p>
           <a href="/hire" class="button primary">Hire me</a>
         </p>
+      </aside>
+
+      <aside>
+        <h4>Featured Posts</h4>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          </a>
+          <blockquote>
+            Don't write `rescue Exception => e`. Write `rescue => e` or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
+          </blockquote>
+          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
+            <h5>Persist Invalid Records with ActiveRecord</h5>
+          </a>
+          <blockquote>
+            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+          </blockquote>
+          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
+            <h5>A better way to manage the Rails secret token</h5>
+          </a>
+          <blockquote>
+            Don't hardcode secret tokens, load them from the environment instead.
+          </blockquote>
+
+        <small>
+          <p><a href="/blog/archives/">More posts</a></p>
+        </small>
       </aside>
     </div>
   </div>
