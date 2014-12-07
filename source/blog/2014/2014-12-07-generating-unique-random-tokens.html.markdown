@@ -15,7 +15,7 @@ SecureRandom.uuid # => "16fc1d86-7d6e-4011-9b75-d6cd9501fe1e"
 
 This is a widely implemented[^1] and instantly recognisable format that is vanishingly unlikely to have a collision.[^2]
 
-Now, as an engineer, "unlikely" makes me nervous. I confess I don't have an intuitive grasp of the statistics involved, and to me the two options are "can't happen" or "will happen". Although my rational brain knows better, I still instinctively put "vanishingly unlikely" in the "will happen" category. Sure, if we're only dealing with a small number of records a collision is unlikely, but what if we're dealing with BigData&trade;?
+Now, as an engineer, "unlikely" makes me nervous. I confess I don't have an intuitive grasp of the statistics involved, and to me the two options are "can't happen" or "will happen". Although my rational brain knows better, I still instinctively put "vanishingly unlikely" in the "will happen" category. Sure, a collision might be unlikely if we're only dealing with a small number of records, but what if we're dealing with BigData&trade;?
 
 Well let me put it in perspective for you: you'd have to generate 112 terabytes of UUIDs before you'd even have a _one in a billion_ chance of a collision.[^3] So unless you've got a 112 terabyte database to fill with UUIDs, you're going to have a lot of other problems first.
 
