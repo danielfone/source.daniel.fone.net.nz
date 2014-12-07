@@ -2,8 +2,8 @@
 title: Efficient Uniqueness Validations
 date: 2014-12-05 13:31 NZDT
 tags:
-summary: Use `:if => :field_changed?` on uniqueness validations to skip unnecessary checks on every save.
-
+summary: Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
+featured: true
 ---
 
 Although ActiveRecord uniqueness validations aren't bullet-proof,[^1] they're often helpful. Unfortunately, they can add overhead to save operations, since they require an extra call to the database. Consider the following simple ActiveRecord class:
