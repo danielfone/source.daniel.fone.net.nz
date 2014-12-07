@@ -105,12 +105,6 @@ var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-            <h5>Why You Should Never Rescue Exception in Ruby</h5>
-          </a>
-          <blockquote>
-            Don't write `rescue Exception => e`. Write `rescue => e` or better still, figure out exactly what you're trying to rescue and use `rescue OneError, AnotherError => e`.
-          </blockquote>
           <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
             <h5>Persist Invalid Records with ActiveRecord</h5>
           </a>
@@ -122,6 +116,12 @@ var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s
           </a>
           <blockquote>
             Don't hardcode secret tokens, load them from the environment instead.
+          </blockquote>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
+          </a>
+          <blockquote>
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
 
         <small>

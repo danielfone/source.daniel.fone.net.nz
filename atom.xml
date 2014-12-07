@@ -5,16 +5,88 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2014-12-05T13:31:00+13:00</updated>
+  <updated>2014-12-07T21:10:00+13:00</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
+  <entry>
+    <title>Generating Unique, Random Tokens</title>
+    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/"/>
+    <id>http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/</id>
+    <published>2014-12-07T21:10:00+13:00</published>
+    <updated>2014-12-07T23:41:20+13:00</updated>
+    <author>
+      <name>Daniel Fone</name>
+    </author>
+    <content type="html">&lt;p&gt;Generating some kind of token for records is a common problem in web development. Fortunately, &lt;a href="http://tools.ietf.org/html/rfc4122"&gt;UUIDs&lt;/a&gt; are designed precisely for generating unique, random IDs or tokens. For most applications, you’ll probably want a fully random &lt;a href="http://tools.ietf.org/html/rfc4122#section-4.4"&gt;v4 UUID&lt;/a&gt;, which you can easily generate with &lt;a href="http://www.ruby-doc.org/stdlib-2.1.4/libdoc/securerandom/rdoc/SecureRandom.html#method-c-uuid"&gt;SecureRandom&lt;/a&gt; in Ruby’s standard library.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'securerandom'&lt;/span&gt;
+&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "16fc1d86-7d6e-4011-9b75-d6cd9501fe1e"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is a widely implemented&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; and instantly recognisable format that is vanishingly unlikely to have a collision.&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;Now, as an engineer, “unlikely” makes me nervous. I confess I don’t have an intuitive grasp of the statistics involved, and to me the two options are “can’t happen” or “will happen”. Although my rational brain knows better, I still instinctively put “vanishingly unlikely” in the “will happen” category. Sure, if we’re only dealing with a small number of records a collision is unlikely, but what if we’re dealing with BigData™?&lt;/p&gt;
+
+&lt;p&gt;Well let me put it in perspective for you: you’d have to generate 112 terabytes of UUIDs before you’d even have a &lt;em&gt;one in a billion&lt;/em&gt; chance of a collision.&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; So unless you’ve got a 112 terabyte database to fill with UUIDs, you’re going to have a lot of other problems first.&lt;/p&gt;
+
+&lt;p&gt;How would this look in practice then? If I wanted a token for an ActiveRecord object, it’d look something like:&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Order&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+  &lt;span class="n"&gt;before_create&lt;/span&gt; &lt;span class="ss"&gt;:generate_token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;unless: :token?&lt;/span&gt;
+&lt;span class="kp"&gt;private&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
+    &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;token&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you probably want an index on the &lt;code&gt;token&lt;/code&gt; column, so you might as well make it a unique index. However, a collision is so unlikely to occur there’s really no point handling the RecordNotUnique exception that would be raised in that event.&lt;/p&gt;
+
+&lt;h3 id="other-formats"&gt;Other Formats&lt;/h3&gt;
+
+&lt;p&gt;The downside of UUID is that it’s rather unwieldy. It uses 36 characters to render 16 bytes of entroy.&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt; Naturally, there are plenty of other ways to render 16 bytes of entropy and still have the same statistical properties outlined above.&lt;/p&gt;
+
+&lt;p&gt;SecureRandom offers a few other helpful methods for generating token-like strings. My two preferred choices are &lt;code&gt;hex&lt;/code&gt; and &lt;code&gt;urlsafe_base64&lt;/code&gt;. Here they all are for comparison.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt;           &lt;span class="c1"&gt;# =&amp;gt; "8efb5d40-32d8-43c8-a92d-d5f048c8729c"&lt;/span&gt;
+&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;            &lt;span class="c1"&gt;# =&amp;gt; "bad6650fc0142451e624bd89b6aa3acf"&lt;/span&gt;
+&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;urlsafe_base64&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "vp6xjBgi48Jgag6dqH8niw"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="short-memorable-readable-tokens"&gt;Short, Memorable, Readable Tokens&lt;/h3&gt;
+
+&lt;p&gt;What about if the token needs to be really short? I once worked on a project where certain customer facing records had an easy to read reference made of 6 hexadecimal digits. In that case, we only want 3 bytes, and the &lt;code&gt;hex&lt;/code&gt; method conveniently allows us to specify how many bytes we’ll need.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "bff1a1"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course, now we’re only dealing with 16,777,216 possible tokens and collisions are inevitable. In a future post, we’ll take a look at effective ways to deal with token collisions for ActiveRecord objects.&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+  &lt;ol&gt;
+    &lt;li id="fn:1"&gt;
+      &lt;p&gt;You can even generate one from the command line of most *nix systems with &lt;code&gt;uuidgen&lt;/code&gt;. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id="fn:2"&gt;
+      &lt;p&gt;This — and the discussion after it — is assuming that the PRNG has sufficient entropy. SecureRandom’s entropy source is system-dependent. &lt;a href="#fnref:2" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id="fn:3"&gt;
+      &lt;p&gt;Given that a UUID is 36 bytes, we want to know how many UUIDs (of which there are 2&lt;sup&gt;112&lt;/sup&gt; total) will give us a one in a billion (2&lt;sup&gt;-30&lt;/sup&gt;) chance of collision. We can plug the square approximation for the &lt;a href="http://en.wikipedia.org/wiki/Birthday_problem"&gt;Birthday Problem&lt;/a&gt; into WolframAlpha to get &lt;a href="http://www.wolframalpha.com/input/?i=sqrt%282+*+2%5E112+*+2%5E-30%29+*+36+bytes"&gt;the result&lt;/a&gt;. &lt;a href="#fnref:3" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id="fn:4"&gt;
+      &lt;p&gt;It’s actually 122 bits since 6 of 128 bits are fixed as per the &lt;a href="http://tools.ietf.org/html/rfc4122#section-4.4"&gt;RFC&lt;/a&gt;. &lt;a href="#fnref:4" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
   <entry>
     <title>Efficient Uniqueness Validations</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/</id>
     <published>2014-12-05T13:31:00+13:00</published>
-    <updated>2014-12-05T14:14:10+13:00</updated>
+    <updated>2014-12-07T21:12:44+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -271,70 +343,6 @@ $ bundle install
 &lt;/ol&gt;
 
 &lt;p&gt;I’ve published a full &lt;a href="https://github.com/danielfone/curb-upload-progress"&gt;working example on github&lt;/a&gt;.&lt;/p&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>Customising Scaffold Views in Ruby on Rails</title>
-    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/02/01/customising-scaffold-views-in-ruby-on-rails/"/>
-    <id>http://daniel.fone.net.nz/blog/2014/02/01/customising-scaffold-views-in-ruby-on-rails/</id>
-    <published>2014-02-01T00:00:00+13:00</published>
-    <updated>2014-05-21T22:34:36+12:00</updated>
-    <author>
-      <name>Daniel Fone</name>
-    </author>
-    <content type="html">&lt;blockquote&gt;
-  &lt;p&gt;In Rails 3.0 and above, generators don’t just look in the source root for templates,
-they also search for templates in other paths. And one of them is &lt;code&gt;lib/templates&lt;/code&gt;&lt;/p&gt;
-
-  &lt;p&gt;— &lt;a href="http://guides.rubyonrails.org/generators.html#customizing-your-workflow-by-changing-generators-templates"&gt;RailsGuide on Generators&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This fact makes it very easy for us to change the views that are generated when we run &lt;code&gt;rails generate scaffold ...&lt;/code&gt;. Let’s say we want to change the scaffold’s form template so that it uses a select box for a &lt;code&gt;belongs_to&lt;/code&gt; relationship.&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="select box" src="/blog/2014/02/01/customising-scaffold-views-in-ruby-on-rails/select-box.png" /&gt;&lt;/p&gt;
-
-&lt;p&gt;Here are the steps we need to take:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Find the original template&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;p&gt;These live in the &lt;code&gt;lib/rails/generators/erb/scaffold/templates&lt;/code&gt; folder of the railties gem. To find the path of the gem, we can run &lt;code&gt;bundle show railties&lt;/code&gt;. Alternatively we can run &lt;code&gt;bundle open railties&lt;/code&gt; and navigate to the &lt;code&gt;_form.html.erb&lt;/code&gt; file. Once we’ve found this, we’ll want to copy it.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Copy it into our application&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;p&gt;As quoted above, generators will search for templates in &lt;code&gt;lib/templates&lt;/code&gt;. For this template, we’ll need to copy it into &lt;code&gt;lib/templates/erb/scaffold/_form.erb.html&lt;/code&gt; within our application’s root.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Change the template&lt;/strong&gt;&lt;/p&gt;
-
-    &lt;p&gt;At this point, we can make whatever changes we like!&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;By way of illustration, here’s one way to use a select box for a belongs_to relationship.&lt;/p&gt;
-
-&lt;pre class="highlight diff"&gt;&lt;code&gt;&lt;span class="err"&gt;# lib/templates/erb/scaffold/_form.html.erb
-&lt;/span&gt;&lt;span class="gh"&gt;@@ -23,7 +23,7 @@
-&lt;/span&gt; &amp;lt;% else -%&amp;gt;
-   &amp;lt;%- if attribute.reference? -%&amp;gt;
-     &amp;lt;%%= f.label :&amp;lt;%= attribute.column_name %&amp;gt; %&amp;gt;&amp;lt;br&amp;gt;
-&lt;span class="gd"&gt;-    &amp;lt;%%= f.&amp;lt;%= attribute.field_type %&amp;gt; :&amp;lt;%= attribute.column_name %&amp;gt; %&amp;gt;
-&lt;/span&gt;&lt;span class="gi"&gt;+    &amp;lt;%%= f.collection_select :&amp;lt;%= attribute.column_name %&amp;gt;, &amp;lt;%= attribute.name.camelize %&amp;gt;.all, :id, :name, prompt: true  %&amp;gt;
-&lt;/span&gt;   &amp;lt;%- else -%&amp;gt;
-     &amp;lt;%%= f.label :&amp;lt;%= attribute.name %&amp;gt; %&amp;gt;&amp;lt;br&amp;gt;
-     &amp;lt;%%= f.&amp;lt;%= attribute.field_type %&amp;gt; :&amp;lt;%= attribute.name %&amp;gt; %&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I’ve uploaded an &lt;a href="https://github.com/danielfone/rails4-custom-scaffold-test"&gt;example app&lt;/a&gt; to github, where you can see the &lt;a href="https://github.com/danielfone/rails4-custom-scaffold-test/blob/master/lib/templates/erb/scaffold/_form.html.erb"&gt;customised template&lt;/a&gt; in full and also &lt;a href="https://github.com/danielfone/rails4-custom-scaffold-test/blob/master/app/views/smart_users/_form.html.erb"&gt;the view&lt;/a&gt; it generates.&lt;/p&gt;
-
-&lt;p&gt;Now when we run &lt;code&gt;rails generate scaffold user name:string user_type:references&lt;/code&gt;, our form will use a helpful select box instead of an empty text field.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;em&gt;Edit: This question was originally prompted by &lt;a href="http://daniel.fone.net.nz/blog/2013/10/19/prototyping-web-applications-in-rails-4/#comment-1225579568"&gt;a comment&lt;/a&gt; on another post, referencing a &lt;a href="http://stackoverflow.com/questions/21486137/rails-scaffold-references-with-select-input-and-entity-label-with-generators/21496682"&gt;StackOverflow question&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
 </content>
   </entry>
