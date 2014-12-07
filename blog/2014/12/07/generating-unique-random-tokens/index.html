@@ -71,7 +71,7 @@
 
 <p>This is a widely implemented<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> and instantly recognisable format that is vanishingly unlikely to have a collision.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup></p>
 
-<p>Now, as an engineer, “unlikely” makes me nervous. I confess I don’t have an intuitive grasp of the statistics involved, and to me the two options are “can’t happen” or “will happen”. Although my rational brain knows better, I still instinctively put “vanishingly unlikely” in the “will happen” category. Sure, if we’re only dealing with a small number of records a collision is unlikely, but what if we’re dealing with BigData™?</p>
+<p>Now, as an engineer, “unlikely” makes me nervous. I confess I don’t have an intuitive grasp of the statistics involved, and to me the two options are “can’t happen” or “will happen”. Although my rational brain knows better, I still instinctively put “vanishingly unlikely” in the “will happen” category. Sure, a collision might be unlikely if we’re only dealing with a small number of records, but what if we’re dealing with BigData™?</p>
 
 <p>Well let me put it in perspective for you: you’d have to generate 112 terabytes of UUIDs before you’d even have a <em>one in a billion</em> chance of a collision.<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> So unless you’ve got a 112 terabyte database to fill with UUIDs, you’re going to have a lot of other problems first.</p>
 
@@ -162,23 +162,23 @@
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
-            <h5>Efficient Uniqueness Validations</h5>
-          </a>
-          <blockquote>
-            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
-          </blockquote>
           <a href="/blog/2014/12/07/generating-unique-random-tokens/">
             <h5>Generating Unique, Random Tokens</h5>
           </a>
           <blockquote>
             If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
-          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
+            <h5>A better way to manage the Rails secret token</h5>
           </a>
           <blockquote>
-            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
+            Don't hardcode secret tokens, load them from the environment instead.
+          </blockquote>
+          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
+            <h5>Efficient Uniqueness Validations</h5>
+          </a>
+          <blockquote>
+            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
 
         <small>
