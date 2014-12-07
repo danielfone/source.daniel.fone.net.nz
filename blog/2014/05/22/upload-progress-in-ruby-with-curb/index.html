@@ -127,11 +127,11 @@
           <blockquote>
             We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
           </blockquote>
-          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
-            <h5>A better way to manage the Rails secret token</h5>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
           </a>
           <blockquote>
-            Don't hardcode secret tokens, load them from the environment instead.
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
           </blockquote>
           <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
             <h5>Efficient Uniqueness Validations</h5>
