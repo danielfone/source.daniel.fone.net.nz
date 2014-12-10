@@ -53,7 +53,7 @@ What about if the token needs to be really short? I once worked on a project whe
 SecureRandom.hex(3) # => "bff1a1"
 ~~~
 
-Of course, now we're only dealing with 16,777,216 possible tokens and collisions are inevitable. In a future post, we'll take a look at effective ways to deal with token collisions for ActiveRecord objects.
+Of course, now we're only dealing with 16,777,216 possible tokens and collisions are inevitable. In my [next post](/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/), we'll take a look at effective ways to deal with token collisions for ActiveRecord objects.
 
 
 
