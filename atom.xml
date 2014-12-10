@@ -5,16 +5,142 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2014-12-07T21:10:00+13:00</updated>
+  <updated>2014-12-10T12:28:00+13:00</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
+  <entry>
+    <title>Handling Token Generation Collisions In ActiveRecord</title>
+    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/"/>
+    <id>http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/</id>
+    <published>2014-12-10T12:28:00+13:00</published>
+    <updated>2014-12-10T14:32:41+13:00</updated>
+    <author>
+      <name>Daniel Fone</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;code style="float:right; margin: 0.1em; font-size: 20pt; background: #f1f1f1; padding: 0.1em 0.5em"&gt;
+  token=DEC0DE
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;In my &lt;a href="/blog/2014/12/07/generating-unique-random-tokens/"&gt;previous post&lt;/a&gt; we looked at generating unique, random tokens to securely identify records with. While UUIDs solve this problem well, they are unweidly. In some cases, it’s handy to have an identifier that’s shorter and hence easier to read out. Naturally, the problem with shorter tokens is collisions. As we reduce our available pool of tokens, the chance that a randomly selected one will be unique goes down quickly.&lt;/p&gt;
+
+&lt;p&gt;Whether this trade off makes sense is entirely dependent on the application. Let’s say we’re identifying an order in a particular month. If we need a short, readable token that’s unique &lt;em&gt;only among this month’s orders&lt;/em&gt;, we can probably use a short token. This is because the number of orders in a given month is not going to grow linearly — we can expect it to hover around a certain percentage of the total available tokens.&lt;/p&gt;
+
+&lt;p&gt;So let’s say we need to keep track of a hundred thousand constantly changing items with a six digit, hexadecimal token. The chance of a random token colliding with an existing one is going to be roughly 0.3%.&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; While this isn’t going to happen frequently, we definitely need to handle the case gracefully.&lt;/p&gt;
+
+&lt;h3 id="a-first-attempt"&gt;A First Attempt&lt;/h3&gt;
+
+&lt;p&gt;The trick is to set the token in a separate SQL query. ActiveRecord’s &lt;code&gt;after_create&lt;/code&gt; is a good fit for this kind of task. In the event of a collision, ActiveRecord will handily raise an &lt;code&gt;ActiveRecord::RecordNotUnique&lt;/code&gt; which we can rescue and retry. If we were setting the token in a &lt;code&gt;before_create&lt;/code&gt;, we wouldn’t be able to simply retry the save.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Order&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+
+  &lt;span class="n"&gt;after_create&lt;/span&gt; &lt;span class="ss"&gt;:generate_token&lt;/span&gt;
+
+&lt;span class="kp"&gt;private&lt;/span&gt;
+
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
+    &lt;span class="n"&gt;update_column&lt;/span&gt; &lt;span class="ss"&gt;:token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;RecordNotUnique&lt;/span&gt;
+    &lt;span class="k"&gt;retry&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt; Order.create!
+D, [2014-12-10T12:27:16.537985 #19797] DEBUG -- :    (0.1ms)  begin transaction
+D, [2014-12-10T12:27:16.538701 #19797] DEBUG -- :   SQL (0.1ms)  INSERT INTO "orders" DEFAULT VALUES
+D, [2014-12-10T12:27:16.541939 #19797] DEBUG -- :   SQL (2.6ms)  UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
+E, [2014-12-10T12:27:16.542037 #19797] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
+D, [2014-12-10T12:27:16.542747 #19797] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'd776b10' WHERE "orders"."id" = 9
+D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
+=&amp;gt; #&amp;lt;Order id: 9, token: "d776b10"&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not bad for a first try.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;SecureRandom.hex(3)&lt;/code&gt; produces something like &lt;code&gt;"c41a84"&lt;/code&gt; which is what our tokens should look like.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;update_column&lt;/code&gt; is the fastest way to update the attribute because it goes straight to the database. It’s been around since Rails 3.1.&lt;/li&gt;
+  &lt;li&gt;We’re only rescuing in the event of a token collision (&lt;code&gt;ActiveRecord::RecordNotUnique&lt;/code&gt;), so it’s pretty much safe to just retry. But…&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="limited-retries"&gt;Limited Retries&lt;/h3&gt;
+
+&lt;p&gt;While this works, it’s a bad idea to blindly retry without some kind of limit on the number of retries. Even if the system is designed so that the chances of multiple consecutive collisions are tiny, you never know when the system will start operating outside of its original design.&lt;/p&gt;
+
+&lt;p&gt;Let’s introduce a variable to monitor how many retries we’ve made.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
+  &lt;span class="n"&gt;update_column&lt;/span&gt; &lt;span class="ss"&gt;:token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;RecordNotUnique&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
+  &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;||=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+  &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+  &lt;span class="k"&gt;retry&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+  &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Retries exhausted"&lt;/span&gt;
+&lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;D, [2014-12-10T12:50:26.996927 #21209] DEBUG -- :    (0.0ms)  begin transaction
+D, [2014-12-10T12:50:26.997180 #21209] DEBUG -- :   SQL (0.0ms)  INSERT INTO "orders" DEFAULT VALUES
+D, [2014-12-10T12:50:26.997671 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
+E, [2014-12-10T12:50:26.997707 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
+D, [2014-12-10T12:50:26.998170 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
+E, [2014-12-10T12:50:26.998220 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
+D, [2014-12-10T12:50:26.998678 #21209] DEBUG -- :   SQL (0.2ms)  UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
+E, [2014-12-10T12:50:26.998713 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
+D, [2014-12-10T12:50:26.998856 #21209] DEBUG -- :    (0.1ms)  rollback transaction
+ActiveRecord::RecordNotUnique: Retries exhausted
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That’s functional, but it could be improved. Here’s a slightly nicer version.&lt;/p&gt;
+
+&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="no"&gt;MAX_RETRIES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+  &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
+    &lt;span class="n"&gt;update_column&lt;/span&gt; &lt;span class="ss"&gt;:token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;RecordNotUnique&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
+    &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="vi"&gt;@token_attempts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;to_i&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="k"&gt;retry&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;MAX_RETRIES&lt;/span&gt;
+    &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Retries exhausted"&lt;/span&gt;
+  &lt;span class="k"&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A few notes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;@token_attempts.to_i&lt;/code&gt; will evaluate to 0 if &lt;code&gt;@token_attempts&lt;/code&gt; hasn’t been previously set. This is because unassigned instance variables are &lt;code&gt;nil&lt;/code&gt; and &lt;code&gt;nil.to_i =&amp;gt; 0&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;It’s also a good habit to name our fixed numbers via constants. In the original version, the number the 3 was a bit of a magic number. &lt;code&gt;MAX_RETRIES&lt;/code&gt; communicates exactly what this number represents and makes it clear where to change it.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Our &lt;code&gt;raise&lt;/code&gt; encapsulates the original exception with a more helpful message. &lt;code&gt;e.cause&lt;/code&gt; is set to the rescued exception:&lt;/p&gt;
+
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;[1] pry(#&amp;lt;Order&amp;gt;)&amp;gt; e
+=&amp;gt; #&amp;lt;ActiveRecord::RecordNotUnique: Retries exhausted&amp;gt;
+[2] pry(#&amp;lt;Order&amp;gt;)&amp;gt; e.cause
+=&amp;gt; #&amp;lt;ActiveRecord::RecordNotUnique: SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '58' WHERE "orders"."id" = 68&amp;gt;
+[3] pry(#&amp;lt;Order&amp;gt;)&amp;gt; e.cause.cause
+=&amp;gt; #&amp;lt;SQLite3::ConstraintException: UNIQUE constraint failed: orders.token&amp;gt;
+[4] pry(#&amp;lt;Order&amp;gt;)&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There we have it. If the use-case is right, this is a safe and simple pattern for generating tokens on an ActiveRecord object where there is a reasonable possibility of collisions.&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+  &lt;ol&gt;
+    &lt;li id="fn:1"&gt;
+      &lt;p&gt;Once again using the square approximation of the &lt;a href="http://en.wikipedia.org/wiki/Birthday_problem"&gt;Birthday Problem&lt;/a&gt;. &lt;a href="http://www.wolframalpha.com/input/?i=100000+%2F+%282+*+%2816%5E6%29%29"&gt;WolframAlpha&lt;/a&gt;. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
   <entry>
     <title>Generating Unique, Random Tokens</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/</id>
     <published>2014-12-07T21:10:00+13:00</published>
-    <updated>2014-12-07T23:48:49+13:00</updated>
+    <updated>2014-12-10T14:30:25+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -61,7 +187,7 @@
 &lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "bff1a1"&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Of course, now we’re only dealing with 16,777,216 possible tokens and collisions are inevitable. In a future post, we’ll take a look at effective ways to deal with token collisions for ActiveRecord objects.&lt;/p&gt;
+&lt;p&gt;Of course, now we’re only dealing with 16,777,216 possible tokens and collisions are inevitable. In my &lt;a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/"&gt;next post&lt;/a&gt;, we’ll take a look at effective ways to deal with token collisions for ActiveRecord objects.&lt;/p&gt;
 
 &lt;div class="footnotes"&gt;
   &lt;ol&gt;
@@ -309,40 +435,6 @@ $ bundle install
 &lt;script src="https://gist.github.com/danielfone/c8ab593c326a8052651c.js"&gt;&lt;/script&gt;
 
 &lt;p&gt;The downside to this approach is that the user loses their place in the form, but it is far better than an unhandled exception when submitting. I’ve submitted a &lt;a href="https://github.com/plataformatec/devise/pull/3347"&gt;pull request&lt;/a&gt; to the Devise project, but to be honest this is such an edge case that it may not warrant it. We’ll see what happens.&lt;/p&gt;
-
-</content>
-  </entry>
-  <entry>
-    <title>Upload Progress in Ruby with curb</title>
-    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/05/22/upload-progress-in-ruby-with-curb/"/>
-    <id>http://daniel.fone.net.nz/blog/2014/05/22/upload-progress-in-ruby-with-curb/</id>
-    <published>2014-05-22T00:17:00+12:00</published>
-    <updated>2014-05-22T00:58:45+12:00</updated>
-    <author>
-      <name>Daniel Fone</name>
-    </author>
-    <content type="html">&lt;p&gt;A friend was telling me how difficult it was to get the progress of a file upload in ruby using the standard Net::HTTP library or any of the popular HTTP wrapper gems. He wanted to get simple details similar to curl.&lt;/p&gt;
-
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ curl --progress-bar --form --upload=@1mb.txt http://requestb.in/ztmawczt &amp;gt; /dev/null
-######################################################                    75.5%
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Fortunately, there is the &lt;a href="https://github.com/taf2/curb"&gt;curb&lt;/a&gt; gem which provides ruby bindings around &lt;a href="http://curl.haxx.se/libcurl/"&gt;libcurl&lt;/a&gt;. Using this gem, we can use the &lt;code&gt;on_progress&lt;/code&gt; method to do something like this:&lt;/p&gt;
-
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="n"&gt;curl&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;on_progress&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="n"&gt;download_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;downloaded&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;upload_size&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;uploaded&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;
-  &lt;span class="nb"&gt;print&lt;/span&gt; &lt;span class="s2"&gt;"&lt;/span&gt;&lt;span class="se"&gt;\r&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;uploaded&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/&lt;/span&gt;&lt;span class="si"&gt;#{&lt;/span&gt;&lt;span class="n"&gt;upload_size&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt;
-  &lt;span class="kp"&gt;true&lt;/span&gt;
-&lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;a href="http://rubydoc.info/gems/curb/Curl/Easy#on_progress-instance_method"&gt;documentation&lt;/a&gt; is a little sparse, and there are two major caveats to watch out for:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;You MUST return true from this block if you want the upload to continue&lt;/li&gt;
-  &lt;li&gt;Any exceptions that occur in the block will be swallowed and reraised as an Curl::Err::AbortedByCallbackError. This makes development a little bit painful, but you use your own &lt;code&gt;begin ... rescue ... end&lt;/code&gt; inside the block to help debug if needed.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;I’ve published a full &lt;a href="https://github.com/danielfone/curb-upload-progress"&gt;working example on github&lt;/a&gt;.&lt;/p&gt;
 
 </content>
   </entry>

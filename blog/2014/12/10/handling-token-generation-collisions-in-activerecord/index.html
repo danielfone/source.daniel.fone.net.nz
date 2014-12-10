@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Handling Token Generation Collisions In ActiveRecord - Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
+    <link href="/favicon.png" rel="icon">
+    <!-- Bootstrap -->
+    <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41009873-1', 'fone.net.nz');
+  ga('send', 'pageview');
+
+</script>
+
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class=" blog-nav-item" href="/">Home</a>
+          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
+          <a class=" blog-nav-item" href="/hire/">Hire</a>
+          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+        <header>
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <h1><a href="/">Daniel Fone</a></h1>
+    <p class="lead">Ruby/Rails Engineer</p>
+  </header>
+
+  <div class="row">
+    <div class="col-md-9">
+        <article>
+    <h2>
+      Handling Token Generation Collisions In ActiveRecord
+    </h2>
+    <p>
+      <small class="text-muted">
+        December 2014
+      </small>
+    </p>
+
+      <div class="well">
+        <strong>tl;dr</strong> Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
+      </div>
+
+    <p><code style="float:right; margin: 0.1em; font-size: 20pt; background: #f1f1f1; padding: 0.1em 0.5em">
+  token=DEC0DE
+</code></p>
+
+<p>In my <a href="/blog/2014/12/07/generating-unique-random-tokens/">previous post</a> we looked at generating unique, random tokens to securely identify records with. While UUIDs solve this problem well, they are unweidly. In some cases, it’s handy to have an identifier that’s shorter and hence easier to read out. Naturally, the problem with shorter tokens is collisions. As we reduce our available pool of tokens, the chance that a randomly selected one will be unique goes down quickly.</p>
+
+<p>Whether this trade off makes sense is entirely dependent on the application. Let’s say we’re identifying an order in a particular month. If we need a short, readable token that’s unique <em>only among this month’s orders</em>, we can probably use a short token. This is because the number of orders in a given month is not going to grow linearly — we can expect it to hover around a certain percentage of the total available tokens.</p>
+
+<p>So let’s say we need to keep track of a hundred thousand constantly changing items with a six digit, hexadecimal token. The chance of a random token colliding with an existing one is going to be roughly 0.3%.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> While this isn’t going to happen frequently, we definitely need to handle the case gracefully.</p>
+
+<h3 id="a-first-attempt">A First Attempt</h3>
+
+<p>The trick is to set the token in a separate SQL query. ActiveRecord’s <code>after_create</code> is a good fit for this kind of task. In the event of a collision, ActiveRecord will handily raise an <code>ActiveRecord::RecordNotUnique</code> which we can rescue and retry. If we were setting the token in a <code>before_create</code>, we wouldn’t be able to simply retry the save.</p>
+
+<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+
+  <span class="n">after_create</span> <span class="ss">:generate_token</span>
+
+<span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">generate_token</span>
+    <span class="n">update_column</span> <span class="ss">:token</span><span class="p">,</span> <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+  <span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotUnique</span>
+    <span class="k">retry</span>
+  <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre>
+
+<pre class="highlight plaintext"><code>&gt; Order.create!
+D, [2014-12-10T12:27:16.537985 #19797] DEBUG -- :    (0.1ms)  begin transaction
+D, [2014-12-10T12:27:16.538701 #19797] DEBUG -- :   SQL (0.1ms)  INSERT INTO "orders" DEFAULT VALUES
+D, [2014-12-10T12:27:16.541939 #19797] DEBUG -- :   SQL (2.6ms)  UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
+E, [2014-12-10T12:27:16.542037 #19797] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
+D, [2014-12-10T12:27:16.542747 #19797] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'd776b10' WHERE "orders"."id" = 9
+D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
+=&gt; #&lt;Order id: 9, token: "d776b10"&gt;
+</code></pre>
+
+<p>Not bad for a first try.</p>
+
+<ul>
+  <li><code>SecureRandom.hex(3)</code> produces something like <code>"c41a84"</code> which is what our tokens should look like.</li>
+  <li><code>update_column</code> is the fastest way to update the attribute because it goes straight to the database. It’s been around since Rails 3.1.</li>
+  <li>We’re only rescuing in the event of a token collision (<code>ActiveRecord::RecordNotUnique</code>), so it’s pretty much safe to just retry. But…</li>
+</ul>
+
+<h3 id="limited-retries">Limited Retries</h3>
+
+<p>While this works, it’s a bad idea to blindly retry without some kind of limit on the number of retries. Even if the system is designed so that the chances of multiple consecutive collisions are tiny, you never know when the system will start operating outside of its original design.</p>
+
+<p>Let’s introduce a variable to monitor how many retries we’ve made.</p>
+
+<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">generate_token</span>
+  <span class="n">update_column</span> <span class="ss">:token</span><span class="p">,</span> <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotUnique</span> <span class="o">=&gt;</span> <span class="n">e</span>
+  <span class="vi">@token_attempts</span> <span class="o">||=</span> <span class="mi">0</span>
+  <span class="vi">@token_attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">retry</span> <span class="k">if</span> <span class="vi">@token_attempts</span> <span class="o">&lt;</span> <span class="mi">3</span>
+  <span class="k">raise</span> <span class="n">e</span><span class="p">,</span> <span class="s2">"Retries exhausted"</span>
+<span class="k">end</span>
+</code></pre>
+
+<pre class="highlight plaintext"><code>D, [2014-12-10T12:50:26.996927 #21209] DEBUG -- :    (0.0ms)  begin transaction
+D, [2014-12-10T12:50:26.997180 #21209] DEBUG -- :   SQL (0.0ms)  INSERT INTO "orders" DEFAULT VALUES
+D, [2014-12-10T12:50:26.997671 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
+E, [2014-12-10T12:50:26.997707 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
+D, [2014-12-10T12:50:26.998170 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
+E, [2014-12-10T12:50:26.998220 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
+D, [2014-12-10T12:50:26.998678 #21209] DEBUG -- :   SQL (0.2ms)  UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
+E, [2014-12-10T12:50:26.998713 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
+D, [2014-12-10T12:50:26.998856 #21209] DEBUG -- :    (0.1ms)  rollback transaction
+ActiveRecord::RecordNotUnique: Retries exhausted
+</code></pre>
+
+<p>That’s functional, but it could be improved. Here’s a slightly nicer version.</p>
+
+<pre class="highlight ruby"><code>  <span class="no">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">3</span>
+  <span class="k">def</span> <span class="nf">generate_token</span>
+    <span class="n">update_column</span> <span class="ss">:token</span><span class="p">,</span> <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+  <span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotUnique</span> <span class="o">=&gt;</span> <span class="n">e</span>
+    <span class="vi">@token_attempts</span> <span class="o">=</span> <span class="vi">@token_attempts</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">retry</span> <span class="k">if</span> <span class="vi">@token_attempts</span> <span class="o">&lt;</span> <span class="no">MAX_RETRIES</span>
+    <span class="k">raise</span> <span class="n">e</span><span class="p">,</span> <span class="s2">"Retries exhausted"</span>
+  <span class="k">end</span>
+</code></pre>
+
+<p>A few notes:</p>
+
+<ul>
+  <li><code>@token_attempts.to_i</code> will evaluate to 0 if <code>@token_attempts</code> hasn’t been previously set. This is because unassigned instance variables are <code>nil</code> and <code>nil.to_i =&gt; 0</code></li>
+  <li>It’s also a good habit to name our fixed numbers via constants. In the original version, the number the 3 was a bit of a magic number. <code>MAX_RETRIES</code> communicates exactly what this number represents and makes it clear where to change it.</li>
+  <li>
+    <p>Our <code>raise</code> encapsulates the original exception with a more helpful message. <code>e.cause</code> is set to the rescued exception:</p>
+
+<pre class="highlight plaintext"><code>[1] pry(#&lt;Order&gt;)&gt; e
+=&gt; #&lt;ActiveRecord::RecordNotUnique: Retries exhausted&gt;
+[2] pry(#&lt;Order&gt;)&gt; e.cause
+=&gt; #&lt;ActiveRecord::RecordNotUnique: SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '58' WHERE "orders"."id" = 68&gt;
+[3] pry(#&lt;Order&gt;)&gt; e.cause.cause
+=&gt; #&lt;SQLite3::ConstraintException: UNIQUE constraint failed: orders.token&gt;
+[4] pry(#&lt;Order&gt;)&gt;
+</code></pre>
+  </li>
+</ul>
+
+<p>There we have it. If the use-case is right, this is a safe and simple pattern for generating tokens on an ActiveRecord object where there is a reasonable possibility of collisions.</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Once again using the square approximation of the <a href="http://en.wikipedia.org/wiki/Birthday_problem">Birthday Problem</a>. <a href="http://www.wolframalpha.com/input/?i=100000+%2F+%282+*+%2816%5E6%29%29">WolframAlpha</a>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </article>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+    var disqus_identifier = 'http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+    </div>
+    <div class="col-md-3">
+      <aside>
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <h4>About Me</h4>
+        <p>
+          I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
+          I'm available for freelancing, consulting and remote contracting.
+        </p>
+        <p>
+          Follow me on <a href="https://twitter.com/danielfone">Twitter</a>.
+        </p>
+        <p>
+          <a href="/hire" class="button primary">Hire me</a>
+        </p>
+      </aside>
+
+      <aside>
+        <h4>Featured Posts</h4>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
+          </a>
+          <blockquote>
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
+          </blockquote>
+          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
+            <h5>Efficient Uniqueness Validations</h5>
+          </a>
+          <blockquote>
+            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
+          </blockquote>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          </a>
+          <blockquote>
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
+          </blockquote>
+
+        <small>
+          <p><a href="/blog/archives/">More posts</a></p>
+        </small>
+      </aside>
+    </div>
+  </div>
+
+
+      <div class="blog-footer">
+        <p>
+          &copy; 2014 Daniel Fone
+          -
+          Powered by
+          <a href="http://middlemanapp.com/">Middleman</a>
+          and
+          <a href="http://pages.github.com/">GitHub Pages</a>
+        </p>
+        <p>
+          <a href="#">Back to top</a>
+        </p>
+      </div>
+
+    </div>
+
+  </body>
+</html>
