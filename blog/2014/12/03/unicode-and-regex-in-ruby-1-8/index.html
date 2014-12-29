@@ -154,6 +154,12 @@
 
       <aside>
         <h4>Featured Posts</h4>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          </a>
+          <blockquote>
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
+          </blockquote>
           <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
             <h5>Persist Invalid Records with ActiveRecord</h5>
           </a>
@@ -166,12 +172,6 @@
           <blockquote>
             Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
-          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-            <h5>Why You Should Never Rescue Exception in Ruby</h5>
-          </a>
-          <blockquote>
-            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
-          </blockquote>
 
         <small>
           <p><a href="/blog/archives/">More posts</a></p>
@@ -183,7 +183,9 @@
 
       <div class="blog-footer">
         <p>
-          &copy; 2014 Daniel Fone
+          &copy; 2013 &ndash;
+          <script type="text/javascript">document.write(new Date().getFullYear());</script>
+          Daniel Fone
           -
           Powered by
           <a href="http://middlemanapp.com/">Middleman</a>

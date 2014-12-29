@@ -105,17 +105,17 @@ var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s
 
       <aside>
         <h4>Featured Posts</h4>
+          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
+            <h5>A better way to manage the Rails secret token</h5>
+          </a>
+          <blockquote>
+            Don't hardcode secret tokens, load them from the environment instead.
+          </blockquote>
           <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
             <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
             Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
-          </blockquote>
-          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-            <h5>Persist Invalid Records with ActiveRecord</h5>
-          </a>
-          <blockquote>
-            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
           </blockquote>
           <a href="/blog/2014/12/07/generating-unique-random-tokens/">
             <h5>Generating Unique, Random Tokens</h5>
@@ -134,7 +134,9 @@ var scr = d.getElementsByTagName(t)[0], par = scr.parentNode; par.insertBefore(s
 
       <div class="blog-footer">
         <p>
-          &copy; 2014 Daniel Fone
+          &copy; 2013 &ndash;
+          <script type="text/javascript">document.write(new Date().getFullYear());</script>
+          Daniel Fone
           -
           Powered by
           <a href="http://middlemanapp.com/">Middleman</a>
