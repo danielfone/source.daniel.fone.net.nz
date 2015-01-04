@@ -1,13 +1,13 @@
 ---
 title: "A better way to manage the Rails secret token"
 featured: true
-updated: 2014-11-28
-summary: Don't hardcode secret tokens, load them from the environment instead.
+updated: 2015-01-04
+summary: Don't store secrets in your source control.
 ---
 
 ### Update — Rails 4.1
 
-Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: **don't store real secrets in this file!** Load them from the environment like so:
+Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: **don't store real secrets in this file if you're checking it in to source control!** Load them from the environment like so:[^1]
 
     production:
       secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
@@ -130,3 +130,5 @@ On Heroku, the application's environment variables are managed from the heroku C
     $ heroku config:set SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3ed0fa02ee5e7179420ce5290462018591adaf5f42adcf855da04877827def2
 
 or you could use something like the [HerokuConfigVars engine](/blog/2013/05/19/managing-heroku-config-vars-from-the-web/).
+
+[^1]: Although an order of magnitude better than storing secrets in source control, the environment isn't entirely without its risks either. Michael Reinsch has a [very insightful write up](http://movingfast.io/articles/environment-variables-considered-harmful/).
