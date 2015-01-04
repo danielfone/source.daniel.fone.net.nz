@@ -127,8 +127,8 @@ As the application configuration and infrastructure grows more complex, the gem 
 
 On Heroku, the application's environment variables are managed from the heroku CLI:
 
-    $ heroku config:set SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3ed0fa02ee5e7179420ce5290462018591adaf5f42adcf855da04877827def2
+    $ heroku config:set SECRET_TOKEN=...
 
-or you could use something like the [HerokuConfigVars engine](/blog/2013/05/19/managing-heroku-config-vars-from-the-web/).
+or from the web dashboard at https://dashboard.heroku.com/apps/my-app/settings
 
 [^1]: Although an order of magnitude better than storing secrets in source control, the environment isn't entirely without its risks either. Michael Reinsch has a [very insightful write up](http://movingfast.io/articles/environment-variables-considered-harmful/).
