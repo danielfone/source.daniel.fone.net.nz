@@ -131,4 +131,4 @@ On Heroku, the application's environment variables are managed from the heroku C
 
 or from the web dashboard at https://dashboard.heroku.com/apps/my-app/settings
 
-[^1]: Although an order of magnitude better than storing secrets in source control, the environment isn't entirely without its risks either. Michael Reinsch has a [very insightful write up](http://movingfast.io/articles/environment-variables-considered-harmful/).
+[^1]: Although an order of magnitude better than storing secrets in source control, the environment has its risks too. Michael Reinsch has a [very insightful write up](http://movingfast.io/articles/environment-variables-considered-harmful/) worth reading.
