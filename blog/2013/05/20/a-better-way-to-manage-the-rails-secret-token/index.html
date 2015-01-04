@@ -55,7 +55,7 @@
     </h2>
     <p>
       <small class="text-muted">
-          Updated November 2014
+          Updated January 2015
           —
           Originally written
         May 2013
@@ -63,12 +63,12 @@
     </p>
 
       <div class="well">
-        <strong>tl;dr</strong> Don't hardcode secret tokens, load them from the environment instead.
+        <strong>tl;dr</strong> Don't store secrets in your source control.
       </div>
 
     <h3 id="update--rails-41">Update — Rails 4.1</h3>
 
-<p>Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: <strong>don’t store real secrets in this file!</strong> Load them from the environment like so:</p>
+<p>Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: <strong>don’t store real secrets in this file if you’re checking it in to source control!</strong> Load them from the environment like so:<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup></p>
 
 <pre class="highlight plaintext"><code>production:
   secret_key_base: &lt;%= ENV["SECRET_KEY_BASE"] %&gt;
@@ -191,10 +191,18 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
 
 <p>On Heroku, the application’s environment variables are managed from the heroku CLI:</p>
 
-<pre class="highlight plaintext"><code>$ heroku config:set SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3ed0fa02ee5e7179420ce5290462018591adaf5f42adcf855da04877827def2
+<pre class="highlight plaintext"><code>$ heroku config:set SECRET_TOKEN=...
 </code></pre>
 
-<p>or you could use something like the <a href="/blog/2013/05/19/managing-heroku-config-vars-from-the-web/">HerokuConfigVars engine</a>.</p>
+<p>or from the web dashboard at https://dashboard.heroku.com/apps/my-app/settings</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Although an order of magnitude better than storing secrets in source control, the environment isn’t entirely without its risks either. Michael Reinsch has a <a href="http://movingfast.io/articles/environment-variables-considered-harmful/">very insightful write up</a>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 
   </article>
 
@@ -233,6 +241,12 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
 
       <aside>
         <h4>Featured Posts</h4>
+          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
+            <h5>Efficient Uniqueness Validations</h5>
+          </a>
+          <blockquote>
+            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
+          </blockquote>
           <a href="/blog/2014/12/07/generating-unique-random-tokens/">
             <h5>Generating Unique, Random Tokens</h5>
           </a>
@@ -244,12 +258,6 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
           </a>
           <blockquote>
             We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
-          </blockquote>
-          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
-            <h5>Efficient Uniqueness Validations</h5>
-          </a>
-          <blockquote>
-            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
 
         <small>

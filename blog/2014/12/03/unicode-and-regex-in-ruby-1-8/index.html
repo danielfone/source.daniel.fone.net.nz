@@ -154,23 +154,23 @@
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
-            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
+          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
+            <h5>Persist Invalid Records with ActiveRecord</h5>
           </a>
           <blockquote>
-            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
+            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
           </blockquote>
           <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
             <h5>A better way to manage the Rails secret token</h5>
           </a>
           <blockquote>
-            Don't hardcode secret tokens, load them from the environment instead.
+            Don't store secrets in your source control.
           </blockquote>
-          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
-            <h5>Generating Unique, Random Tokens</h5>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
           </a>
           <blockquote>
-            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
           </blockquote>
 
         <small>
