@@ -19,7 +19,7 @@ Here are the steps we need to take:
 
 2. **Copy it into our application**
 
-    As quoted above, generators will search for templates in `lib/templates`. For this template, we'll need to copy it into `lib/templates/erb/scaffold/_form.erb.html` within our application's root.
+    As quoted above, generators will search for templates in `lib/templates`. For this template, we'll need to copy it into `lib/templates/erb/scaffold/_form.html.erb` within our application's root.
 
 3. **Change the template**
 
