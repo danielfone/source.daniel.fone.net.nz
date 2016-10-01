@@ -77,7 +77,6 @@
   <span class="n">job_failed</span>
 <span class="k">end</span>
 </code></pre>
-
 <p>This is fine, but when developers need to capture the exception details, a terrible, <em>terrible</em> thing happens:</p>
 
 <pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">do_some_job!</span>
@@ -87,7 +86,6 @@
   <span class="n">job_failed</span> <span class="n">e</span>
 <span class="k">end</span>
 </code></pre>
-
 <p>I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.</p>
 
 <p><em>Just to confirm this is a actually bad practice, here’s <a href="https://github.com/search?l=ruby&amp;o=asc&amp;p=1&amp;q=%22rescue+Exception+=%3E+%22&amp;ref=searchresults&amp;type=Code">~200k results</a> for <code>rescue Exception =&gt;</code> on Github</em></p>
@@ -109,7 +107,6 @@
 <span class="no">SystemExit</span>
   <span class="no">Gem</span><span class="o">::</span><span class="no">SystemExitException</span>
 </code></pre>
-
 <p>Do you really want to rescue a <code>NoMemoryError</code> and send an email saying the job failed?!? Good luck with that.</p>
 
 <h3 id="better-rescue-standarderror">Better: Rescue StandardError</h3>
@@ -128,7 +125,6 @@
   <span class="n">flash</span><span class="p">[</span><span class="ss">:error</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"The internet broke"</span>
 <span class="k">end</span>
 </code></pre>
-
 <p>Most of the time, this code will do what we expect. Something out of our control will go wrong, and it’s appropriate to present the user with a friendly message. However, there’s a major gotcha with this code: we’re still rescuing many exceptions we’re not aware of.</p>
 
 <p>Here’s an abridged list of StandardErrors defined in ruby-core 2.0.0 (1.9 is not materially different):</p>
@@ -165,7 +161,6 @@
     <span class="no">Gem</span><span class="o">::</span><span class="no">Requirement</span><span class="o">::</span><span class="no">BadRequirementError</span>
   <span class="no">TypeError</span>
 </code></pre>
-
 <p>In a fresh Rails 3.2.13 application, there are <strong><a href="https://gist.github.com/danielfone/5654600">375 StandardErrors defined</a></strong>.</p>
 
 <p>Now let’s say we’re refactoring the API integration and we make a typo with a method name. What’s going to happen?</p>
@@ -227,12 +222,6 @@
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
-            <h5>A better way to manage the Rails secret token</h5>
-          </a>
-          <blockquote>
-            Don't store secrets in your source control.
-          </blockquote>
           <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
             <h5>Why You Should Never Rescue Exception in Ruby</h5>
           </a>
@@ -244,6 +233,12 @@
           </a>
           <blockquote>
             Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
+          </blockquote>
+          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
+            <h5>A better way to manage the Rails secret token</h5>
+          </a>
+          <blockquote>
+            Don't store secrets in your source control.
           </blockquote>
 
         <small>

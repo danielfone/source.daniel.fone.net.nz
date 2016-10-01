@@ -70,12 +70,10 @@ ActionController::Base
     OrdersController
     ...
 </code></pre>
-
 <p>If you’re using Rails, bear in mind that most of your classes won’t be loaded by default in the development environment. You can get around this by manually requiring the files you’re interested in:</p>
 
 <pre class="highlight plaintext"><code>Dir.glob File.join(Rails.root, 'app/models/**/*.rb'), &amp;method(:require)
 </code></pre>
-
 <p>To use in your code, simply put class_hierarchy.rb somewhere that makes sense (perhaps /lib) and <code>require 'class_hierarchy'</code>.</p>
 
 <script src="https://gist.github.com/danielfone/5654633.js"></script>
@@ -124,17 +122,17 @@ ActionController::Base
           <blockquote>
             If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
-          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
-            <h5>A better way to manage the Rails secret token</h5>
+          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
+            <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
-            Don't store secrets in your source control.
+            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
-          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-            <h5>Persist Invalid Records with ActiveRecord</h5>
+          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
+            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
           </a>
           <blockquote>
-            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
 
         <small>

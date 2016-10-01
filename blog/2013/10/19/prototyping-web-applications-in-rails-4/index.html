@@ -103,14 +103,12 @@ We want to manage expense claims which consist of:</p>
 <pre class="highlight plaintext"><code>$ rails new reimburser-wizard -T -m ~/Development/rails-templates/default-prototype.rb
 $ cd reimburser-wizard
 </code></pre>
-
 <p>The <code>rails new</code> command is pretty self-explanatory. It creates a new Rails application in a directory of the same name.
 The only two options I’m specifying are:</p>
 
 <pre class="highlight plaintext"><code>-T, [--skip-test-unit]         # Skip Test::Unit files
 -m, [--template=TEMPLATE]      # Path to some application template (can be a filesystem path or URL)
 </code></pre>
-
 <p>You can check out my <a href="https://github.com/danielfone/rails-templates/blob/master/default-prototype.rb">prototyping template on Github</a>,
 but here’s the basic rundown:</p>
 
@@ -134,7 +132,6 @@ In this simple prototype, we’ll model our domain with just two resources, a Re
 $ rails generate scaffold Employee name:string
 $ rake db:migrate
 </code></pre>
-
 <p>Our Reimbursement model is very simple: we’ve got three regular attributes (<code>reference</code>, <code>payee</code> and <code>comments</code>),
 and a <code>data</code> field we’ll use as a  meta-attribute for serializing whatever other attributes we need later.
 For the purposes of the demo, our Employee simply has a <code>name</code> attribute.
@@ -147,7 +144,6 @@ As you can see in the <a href="https://github.com/danielfone/reimburser-wizard/c
 $ rails generate bootstrap:themed Reimbursements
 $ rails generate bootstrap:themed Employees
 </code></pre>
-
 <p>That’s it for our scaffolding! The basic foundation of the prototype is in place.</p>
 
 <h3 id="demo">Demo</h3>
@@ -156,7 +152,6 @@ $ rails generate bootstrap:themed Employees
 
 <pre class="highlight plaintext"><code>$ rails server
 </code></pre>
-
 <p>Because we haven’t set up our <a href="http://api.rubyonrails.org/v4.0.0/classes/ActionDispatch/Routing/Mapper/Base.html#method-i-root">root route</a>,
 you’ll need to navigate to http://localhost:3000/reimbursements .</p>
 
@@ -246,23 +241,23 @@ but the rest is fairly straight forward.</p>
 
       <aside>
         <h4>Featured Posts</h4>
+          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
+            <h5>Persist Invalid Records with ActiveRecord</h5>
+          </a>
+          <blockquote>
+            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+          </blockquote>
           <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
             <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
             Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
-          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
-            <h5>A better way to manage the Rails secret token</h5>
+          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
+            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
           </a>
           <blockquote>
-            Don't store secrets in your source control.
-          </blockquote>
-          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-            <h5>Persist Invalid Records with ActiveRecord</h5>
-          </a>
-          <blockquote>
-            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
 
         <small>

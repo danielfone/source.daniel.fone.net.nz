@@ -70,7 +70,6 @@
   <span class="n">validates_uniqueness_of</span> <span class="ss">:name</span>
 <span class="k">end</span>
 </code></pre>
-
 <p>When we try to create this we’ll see two SELECT queries as we’d expect.</p>
 
 <pre class="highlight plaintext"><code> &gt;&gt; SubscriptionPlan.create! name: 'Starter - 100', code: 'starter-100'
@@ -80,7 +79,6 @@
    (0.1ms)  ROLLBACK
 ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Name has already been taken
 </code></pre>
-
 <p>But what about when we update an existing record?</p>
 
 <pre class="highlight plaintext"><code>&gt;&gt; plan.update_attributes! quota: 99
@@ -90,7 +88,6 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
   SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
    (0.3ms)  COMMIT
 </code></pre>
-
 <p>We still get two queries to check if the code and name are unique. These are almost certainly pointless, since neither the name or the code have changed, but they’re being checked anyway. On massive tables, these can be costly queries, even with well designed indexes.</p>
 
 <h3 id="activemodeldirty-to-the-rescue">ActiveModel::Dirty to the Rescue</h3>
@@ -102,7 +99,6 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
   <span class="n">validates_uniqueness_of</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">if: :name_changed?</span>
 <span class="k">end</span>
 </code></pre>
-
 <p>Now, create operations behave the same as before, validating the uniqueness of the fields. Likewise if we update one of those fields, it will query only the fields it needs to check.</p>
 
 <p>On the other hand, an update that doesn’t affect those fields won’t incur the cost of those potentially expensive SELECTS.</p>
@@ -112,7 +108,6 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
   SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
    (0.3ms)  COMMIT
 </code></pre>
-
 <p>This is much better. However, I think we can do better still. In a future post I’ll look at ways we can bypass manual uniqueness validations entirely.</p>
 
 <div class="footnotes">
@@ -160,23 +155,23 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-            <h5>Persist Invalid Records with ActiveRecord</h5>
-          </a>
-          <blockquote>
-            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
-          </blockquote>
-          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
-            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
-          </a>
-          <blockquote>
-            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
-          </blockquote>
           <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
             <h5>A better way to manage the Rails secret token</h5>
           </a>
           <blockquote>
             Don't store secrets in your source control.
+          </blockquote>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
+          </a>
+          <blockquote>
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
+          </blockquote>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          </a>
+          <blockquote>
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
           </blockquote>
 
         <small>

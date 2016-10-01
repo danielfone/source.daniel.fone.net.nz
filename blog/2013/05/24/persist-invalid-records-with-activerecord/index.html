@@ -91,7 +91,6 @@
   <span class="k">end</span>
 <span class="k">end</span>
 </code></pre>
-
 <h3 id="add-an-activerecord-extension-to-handle-persistence">Add an ActiveRecord extension to handle persistence</h3>
 
 <p>This module will catch validation failures and persist the record anyway. It’s completely independent of the domain/business logic of the application so I like to store it in /lib. This is the main logic for achieving our required behaviour.</p>
@@ -128,7 +127,6 @@
 
 <span class="k">end</span>
 </code></pre>
-
 <h3 id="include-our-activerecord-extension-on-our-model">Include our ActiveRecord extension on our model</h3>
 
 <p>All we need to do is include the SaveWithErrors module into our ActiveRecord model. We should also require ‘save_with_errors’ in config/application.rb.</p>
@@ -152,7 +150,6 @@
 
 <span class="k">end</span>
 </code></pre>
-
 <h3 id="the-result">The Result</h3>
 
 <pre class="highlight plaintext"><code>Loading development environment (Rails 3.2.13)
@@ -163,7 +160,6 @@
 ActiveRecord::RecordInvalid: Validation failed: Token is invalid
   [... backtrace ...]
 </code></pre>
-
 <p>Notice that a record has been inserted, but the exception that we’d expect from <code>create!</code> has still been raised. We can verify this by inspecting the last Subscription record:</p>
 
 <pre class="highlight plaintext"><code>&gt; y Subscription.last
@@ -180,7 +176,6 @@ attributes:
   - :token:
     - is invalid
 </code></pre>
-
 <p>Exactly what we want!</p>
 
 
@@ -221,6 +216,12 @@ attributes:
 
       <aside>
         <h4>Featured Posts</h4>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          </a>
+          <blockquote>
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
+          </blockquote>
           <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
             <h5>A better way to manage the Rails secret token</h5>
           </a>
@@ -232,12 +233,6 @@ attributes:
           </a>
           <blockquote>
             Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
-          </blockquote>
-          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
-            <h5>Generating Unique, Random Tokens</h5>
-          </a>
-          <blockquote>
-            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
 
         <small>
