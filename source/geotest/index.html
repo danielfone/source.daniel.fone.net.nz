@@ -103,14 +103,15 @@
       function processLocation(position, startTime) {
         var delay = startTime ? (position.timestamp - startTime) / 1000 : 0;
         console.log(position);
-        $('.js-location-table').prepend(
+        var $row = $('.js-location-table').prepend(
           "<tr>" +
             "<td>" + delay.toFixed(1) + " s</td>"+
-            "<td>" + position.coords.accuracy + " m</td>"+
+            "<td>" + position.coords.accuracy.toFixed(1) + " m</td>"+
             "<td>" + position.coords.latitude.toFixed(2) + "</td>"+
             "<td>" + position.coords.longitude.toFixed(2) + "</td>"+
           "</tr>"
         );
+        $row.data('coords', position.coords);
         mapCoordinates(position.coords);
       }
 
@@ -120,6 +121,7 @@
       }
 
       var mymap;
+      var lastCircle;
 
       function initialiseMap() {
         mymap = L.map('map');
@@ -132,9 +134,10 @@
       }
 
       function mapCoordinates(coords) {
+        if (lastCircle) lastCircle.remove();
         var bounds = L.latLng(coords.latitude, coords.longitude).toBounds(coords.accuracy);
         mymap.fitBounds(bounds, {padding: [10, 10]});
-        L.circle([coords.latitude, coords.longitude], {
+        lastCircle = L.circle([coords.latitude, coords.longitude], {
             color: 'blue',
             fillColor: '#03f',
             fillOpacity: 0.25,
