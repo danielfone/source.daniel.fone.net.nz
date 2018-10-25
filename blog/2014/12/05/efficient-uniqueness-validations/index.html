@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -65,55 +65,55 @@
 
     <p>Although ActiveRecord uniqueness validations aren’t bullet-proof,<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> they’re often helpful. Unfortunately, they can add overhead to save operations, since they require an extra call to the database. Consider the following simple ActiveRecord class:</p>
 
-<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">SubscriptionPlan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">SubscriptionPlan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">validates</span> <span class="ss">:code</span><span class="p">,</span> <span class="ss">uniqueness: </span><span class="kp">true</span>
   <span class="n">validates_uniqueness_of</span> <span class="ss">:name</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>When we try to create this we’ll see two SELECT queries as we’d expect.</p>
 
-<pre class="highlight plaintext"><code> &gt;&gt; SubscriptionPlan.create! name: 'Starter - 100', code: 'starter-100'
+<div class="highlight"><pre class="highlight plaintext"><code> &gt;&gt; SubscriptionPlan.create! name: 'Starter - 100', code: 'starter-100'
    (0.2ms)  BEGIN
   SubscriptionPlan Exists (2.1ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE "subscription_plans"."code" = 'starter-100' LIMIT 1
   SubscriptionPlan Exists (0.2ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE "subscription_plans"."name" = 'Starter - 100' LIMIT 1
    (0.1ms)  ROLLBACK
 ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Name has already been taken
-</code></pre>
+</code></pre></div>
 <p>But what about when we update an existing record?</p>
 
-<pre class="highlight plaintext"><code>&gt;&gt; plan.update_attributes! quota: 99
+<div class="highlight"><pre class="highlight plaintext"><code>&gt;&gt; plan.update_attributes! quota: 99
    (0.2ms)  BEGIN
     SubscriptionPlan Exists (0.4ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE ("subscription_plans"."code" = 'starter-100' AND "subscription_plans"."id" != 1) LIMIT 1
     SubscriptionPlan Exists (0.2ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE ("subscription_plans"."name" = 'Starter - 100' AND "subscription_plans"."id" != 1) LIMIT 1
   SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
    (0.3ms)  COMMIT
-</code></pre>
+</code></pre></div>
 <p>We still get two queries to check if the code and name are unique. These are almost certainly pointless, since neither the name or the code have changed, but they’re being checked anyway. On massive tables, these can be costly queries, even with well designed indexes.</p>
 
 <h3 id="activemodeldirty-to-the-rescue">ActiveModel::Dirty to the Rescue</h3>
 
 <p>Fortunately, it’s quite simple to keep these queries in check. <a href="http://api.rubyonrails.org/classes/ActiveModel/Dirty.html">ActiveModel::Dirty</a> lets us check if any fields were changed since the record was loaded.</p>
 
-<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">SubscriptionPlan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">SubscriptionPlan</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">validates</span> <span class="ss">:code</span><span class="p">,</span> <span class="ss">uniqueness: </span><span class="p">{</span> <span class="ss">if: :code_changed?</span> <span class="p">}</span>
   <span class="n">validates_uniqueness_of</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">if: :name_changed?</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>Now, create operations behave the same as before, validating the uniqueness of the fields. Likewise if we update one of those fields, it will query only the fields it needs to check.</p>
 
 <p>On the other hand, an update that doesn’t affect those fields won’t incur the cost of those potentially expensive SELECTS.</p>
 
-<pre class="highlight plaintext"><code>&gt;&gt; plan.update_attributes! quota: 99
+<div class="highlight"><pre class="highlight plaintext"><code>&gt;&gt; plan.update_attributes! quota: 99
    (0.2ms)  BEGIN
   SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
    (0.3ms)  COMMIT
-</code></pre>
+</code></pre></div>
 <p>This is much better. However, I think we can do better still. In a future post I’ll look at ways we can bypass manual uniqueness validations entirely.</p>
 
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. They should (almost) always be used in conjunction with a unique index at the database level. See the <a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of">validates_uniqueness_of docs</a> for more details. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. They should (almost) always be used in conjunction with a unique index at the database level. See the <a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of">validates_uniqueness_of docs</a> for more details. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -139,7 +139,7 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -161,17 +161,17 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
           <blockquote>
             Don't store secrets in your source control.
           </blockquote>
-          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
-            <h5>Generating Unique, Random Tokens</h5>
+          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
+            <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
-            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
+            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
-          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-            <h5>Persist Invalid Records with ActiveRecord</h5>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
           </a>
           <blockquote>
-            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
           </blockquote>
 
         <small>

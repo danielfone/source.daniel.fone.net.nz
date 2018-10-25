@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -62,18 +62,18 @@
 
     <p>Here’s a way to see what classes descend from a particular superclass in Ruby. You can use it to list all ActiveRecord models defined in your application, every implementation on a particular base class, or whatever else might be of interest.</p>
 
-<pre class="highlight plaintext"><code>&gt; puts ClassHierarchy.new ActionController::Base
+<div class="highlight"><pre class="highlight plaintext"><code>&gt; puts ClassHierarchy.new ActionController::Base
 ActionController::Base
   ApplicationController
     UsersController
     UserSessionsController
     OrdersController
     ...
-</code></pre>
+</code></pre></div>
 <p>If you’re using Rails, bear in mind that most of your classes won’t be loaded by default in the development environment. You can get around this by manually requiring the files you’re interested in:</p>
 
-<pre class="highlight plaintext"><code>Dir.glob File.join(Rails.root, 'app/models/**/*.rb'), &amp;method(:require)
-</code></pre>
+<div class="highlight"><pre class="highlight plaintext"><code>Dir.glob File.join(Rails.root, 'app/models/**/*.rb'), &amp;method(:require)
+</code></pre></div>
 <p>To use in your code, simply put class_hierarchy.rb somewhere that makes sense (perhaps /lib) and <code>require 'class_hierarchy'</code>.</p>
 
 <script src="https://gist.github.com/danielfone/5654633.js"></script>
@@ -100,7 +100,7 @@ ActionController::Base
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -116,11 +116,11 @@ ActionController::Base
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
-            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
+          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
+            <h5>Persist Invalid Records with ActiveRecord</h5>
           </a>
           <blockquote>
-            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
+            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
           </blockquote>
           <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
             <h5>A better way to manage the Rails secret token</h5>
@@ -128,11 +128,11 @@ ActionController::Base
           <blockquote>
             Don't store secrets in your source control.
           </blockquote>
-          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-            <h5>Persist Invalid Records with ActiveRecord</h5>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
           </a>
           <blockquote>
-            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
 
         <small>

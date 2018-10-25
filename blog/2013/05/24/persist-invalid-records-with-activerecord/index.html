@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -84,18 +84,18 @@
 
 <p>We’ll serialize the validation errors and store them in a field called <code>record_errors</code>.</p>
 
-<pre class="highlight ruby"><code><span class="c1"># /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="c1"># /db/migrations/20130524012635_add_record_errors_to_subscriptions.rb</span>
 <span class="k">class</span> <span class="nc">AddRecordErrorsToSubscriptions</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
   <span class="k">def</span> <span class="nf">change</span>
     <span class="n">add_column</span> <span class="ss">:subscriptions</span><span class="p">,</span> <span class="ss">:record_errors</span><span class="p">,</span> <span class="ss">:text</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <h3 id="add-an-activerecord-extension-to-handle-persistence">Add an ActiveRecord extension to handle persistence</h3>
 
 <p>This module will catch validation failures and persist the record anyway. It’s completely independent of the domain/business logic of the application so I like to store it in /lib. This is the main logic for achieving our required behaviour.</p>
 
-<pre class="highlight ruby"><code><span class="c1"># /lib/save_with_errors.rb</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="c1"># /lib/save_with_errors.rb</span>
 <span class="nb">require</span> <span class="s1">'active_record'</span>
 <span class="nb">require</span> <span class="s1">'active_support'</span>
 
@@ -126,12 +126,12 @@
   <span class="k">end</span>
 
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <h3 id="include-our-activerecord-extension-on-our-model">Include our ActiveRecord extension on our model</h3>
 
 <p>All we need to do is include the SaveWithErrors module into our ActiveRecord model. We should also require ‘save_with_errors’ in config/application.rb.</p>
 
-<pre class="highlight ruby"><code><span class="c1"># /app/models/subscription.rb</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="c1"># /app/models/subscription.rb</span>
 <span class="nb">require</span> <span class="s1">'save_with_errors'</span>
 
 <span class="k">class</span> <span class="nc">Subscription</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
@@ -149,20 +149,20 @@
   <span class="k">end</span>
 
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <h3 id="the-result">The Result</h3>
 
-<pre class="highlight plaintext"><code>Loading development environment (Rails 3.2.13)
+<div class="highlight"><pre class="highlight plaintext"><code>Loading development environment (Rails 3.2.13)
 
 &gt; Subscription.create! name: 'My Name', email: 'test@example.com'
   SQL (3.6ms)  INSERT INTO "subscriptions" ("created_at", "email", "name", "record_errors", "token", "updated_at") VALUES (?, ?, ?, ?, ?, ?)  [["created_at", Fri, 24 May 2013 01:55:07 UTC +00:00], ["email", "test@example.com"], ["name", "My Name"], ["record_errors", "--- !omap\n- :token:\n  - is invalid\n"], ["token", nil], ["updated_at", Fri, 24 May 2013 01:55:07 UTC +00:00]]
 
 ActiveRecord::RecordInvalid: Validation failed: Token is invalid
   [... backtrace ...]
-</code></pre>
+</code></pre></div>
 <p>Notice that a record has been inserted, but the exception that we’d expect from <code>create!</code> has still been raised. We can verify this by inspecting the last Subscription record:</p>
 
-<pre class="highlight plaintext"><code>&gt; y Subscription.last
+<div class="highlight"><pre class="highlight plaintext"><code>&gt; y Subscription.last
   Subscription Load (0.3ms)  SELECT "subscriptions".* FROM "subscriptions" ORDER BY "subscriptions"."id" DESC LIMIT 1
 --- !ruby/object:Subscription
 attributes:
@@ -175,7 +175,7 @@ attributes:
   record_errors: !omap
   - :token:
     - is invalid
-</code></pre>
+</code></pre></div>
 <p>Exactly what we want!</p>
 
 
@@ -200,7 +200,7 @@ attributes:
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -216,23 +216,23 @@ attributes:
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
-            <h5>A better way to manage the Rails secret token</h5>
-          </a>
-          <blockquote>
-            Don't store secrets in your source control.
-          </blockquote>
           <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
             <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
             Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
-          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
           </a>
           <blockquote>
-            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
+          </blockquote>
+          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
+            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
+          </a>
+          <blockquote>
+            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
 
         <small>

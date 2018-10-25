@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -77,7 +77,7 @@
 
 <p>The trick is to set the token in a separate SQL query. ActiveRecord’s <code>after_create</code> is a good fit for this kind of task. In the event of a collision, ActiveRecord will handily raise an <code>ActiveRecord::RecordNotUnique</code> which we can rescue and retry. If we were setting the token in a <code>before_create</code>, we wouldn’t be able to simply retry the save.</p>
 
-<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
 
   <span class="n">after_create</span> <span class="ss">:generate_token</span>
 
@@ -90,8 +90,8 @@
   <span class="k">end</span>
 
 <span class="k">end</span>
-</code></pre>
-<pre class="highlight plaintext"><code>&gt; Order.create!
+</code></pre></div>
+<div class="highlight"><pre class="highlight plaintext"><code>&gt; Order.create!
 D, [2014-12-10T12:27:16.537985 #19797] DEBUG -- :    (0.1ms)  begin transaction
 D, [2014-12-10T12:27:16.538701 #19797] DEBUG -- :   SQL (0.1ms)  INSERT INTO "orders" DEFAULT VALUES
 D, [2014-12-10T12:27:16.541939 #19797] DEBUG -- :   SQL (2.6ms)  UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
@@ -99,7 +99,7 @@ E, [2014-12-10T12:27:16.542037 #19797] ERROR -- : SQLite3::ConstraintException: 
 D, [2014-12-10T12:27:16.542747 #19797] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'd776b10' WHERE "orders"."id" = 9
 D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
 =&gt; #&lt;Order id: 9, token: "d776b10"&gt;
-</code></pre>
+</code></pre></div>
 <p>Not bad for a first try.</p>
 
 <ul>
@@ -114,7 +114,7 @@ D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
 
 <p>Let’s introduce a variable to monitor how many retries we’ve made.</p>
 
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">generate_token</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">generate_token</span>
   <span class="n">update_column</span> <span class="ss">:token</span><span class="p">,</span> <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotUnique</span> <span class="o">=&gt;</span> <span class="n">e</span>
   <span class="vi">@token_attempts</span> <span class="o">||=</span> <span class="mi">0</span>
@@ -122,8 +122,8 @@ D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
   <span class="k">retry</span> <span class="k">if</span> <span class="vi">@token_attempts</span> <span class="o">&lt;</span> <span class="mi">3</span>
   <span class="k">raise</span> <span class="n">e</span><span class="p">,</span> <span class="s2">"Retries exhausted"</span>
 <span class="k">end</span>
-</code></pre>
-<pre class="highlight plaintext"><code>D, [2014-12-10T12:50:26.996927 #21209] DEBUG -- :    (0.0ms)  begin transaction
+</code></pre></div>
+<div class="highlight"><pre class="highlight plaintext"><code>D, [2014-12-10T12:50:26.996927 #21209] DEBUG -- :    (0.0ms)  begin transaction
 D, [2014-12-10T12:50:26.997180 #21209] DEBUG -- :   SQL (0.0ms)  INSERT INTO "orders" DEFAULT VALUES
 D, [2014-12-10T12:50:26.997671 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
 E, [2014-12-10T12:50:26.997707 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
@@ -133,10 +133,10 @@ D, [2014-12-10T12:50:26.998678 #21209] DEBUG -- :   SQL (0.2ms)  UPDATE "orders"
 E, [2014-12-10T12:50:26.998713 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
 D, [2014-12-10T12:50:26.998856 #21209] DEBUG -- :    (0.1ms)  rollback transaction
 ActiveRecord::RecordNotUnique: Retries exhausted
-</code></pre>
+</code></pre></div>
 <p>That’s functional, but it could be improved. Here’s a slightly nicer version.</p>
 
-<pre class="highlight ruby"><code>  <span class="no">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">3</span>
+<div class="highlight"><pre class="highlight ruby"><code>  <span class="no">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">3</span>
   <span class="k">def</span> <span class="nf">generate_token</span>
     <span class="n">update_column</span> <span class="ss">:token</span><span class="p">,</span> <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
   <span class="k">rescue</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">RecordNotUnique</span> <span class="o">=&gt;</span> <span class="n">e</span>
@@ -144,7 +144,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <span class="k">retry</span> <span class="k">if</span> <span class="vi">@token_attempts</span> <span class="o">&lt;</span> <span class="no">MAX_RETRIES</span>
     <span class="k">raise</span> <span class="n">e</span><span class="p">,</span> <span class="s2">"Retries exhausted"</span>
   <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>A few notes:</p>
 
 <ul>
@@ -153,14 +153,14 @@ ActiveRecord::RecordNotUnique: Retries exhausted
   <li>
     <p>Our <code>raise</code> encapsulates the original exception with a more helpful message. <code>e.cause</code> is set to the rescued exception:</p>
 
-<pre class="highlight plaintext"><code>[1] pry(#&lt;Order&gt;)&gt; e
+<div class="highlight"><pre class="highlight plaintext"><code>[1] pry(#&lt;Order&gt;)&gt; e
 =&gt; #&lt;ActiveRecord::RecordNotUnique: Retries exhausted&gt;
 [2] pry(#&lt;Order&gt;)&gt; e.cause
 =&gt; #&lt;ActiveRecord::RecordNotUnique: SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '58' WHERE "orders"."id" = 68&gt;
 [3] pry(#&lt;Order&gt;)&gt; e.cause.cause
 =&gt; #&lt;SQLite3::ConstraintException: UNIQUE constraint failed: orders.token&gt;
 [4] pry(#&lt;Order&gt;)&gt;
-</code></pre>  </li>
+</code></pre></div>  </li>
 </ul>
 
 <p>There we have it. If the use-case is right, this is a safe and simple pattern for generating tokens on an ActiveRecord object where there is a reasonable possibility of collisions.</p>
@@ -168,7 +168,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>Once again using the square approximation of the <a href="http://en.wikipedia.org/wiki/Birthday_problem">Birthday Problem</a>. <a href="http://www.wolframalpha.com/input/?i=100000+%2F+%282+*+%2816%5E6%29%29">WolframAlpha</a>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>Once again using the square approximation of the <a href="http://en.wikipedia.org/wiki/Birthday_problem">Birthday Problem</a>. <a href="http://www.wolframalpha.com/input/?i=100000+%2F+%282+*+%2816%5E6%29%29">WolframAlpha</a>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -194,7 +194,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -210,23 +210,23 @@ ActiveRecord::RecordNotUnique: Retries exhausted
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
-            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
           </a>
           <blockquote>
-            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
+          </blockquote>
+          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
+            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          </a>
+          <blockquote>
+            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
           </blockquote>
           <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
             <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
             Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
-          </blockquote>
-          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
-            <h5>Generating Unique, Random Tokens</h5>
-          </a>
-          <blockquote>
-            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
 
         <small>

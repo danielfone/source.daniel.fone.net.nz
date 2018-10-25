@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -65,9 +65,9 @@
 
     <p>Generating some kind of token for records is a common problem in web development. Fortunately, <a href="http://tools.ietf.org/html/rfc4122">UUIDs</a> are designed precisely for generating unique, random IDs or tokens. For most applications, you’ll probably want a fully random <a href="http://tools.ietf.org/html/rfc4122#section-4.4">v4 UUID</a>, which you can easily generate with <a href="http://www.ruby-doc.org/stdlib-2.1.4/libdoc/securerandom/rdoc/SecureRandom.html#method-c-uuid">SecureRandom</a> in Ruby’s standard library.</p>
 
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'securerandom'</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'securerandom'</span>
 <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">uuid</span> <span class="c1"># =&gt; "16fc1d86-7d6e-4011-9b75-d6cd9501fe1e"</span>
-</code></pre>
+</code></pre></div>
 <p>This is a widely implemented<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> and instantly recognisable format that is vanishingly unlikely to have a collision.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup></p>
 
 <p>Now, as an engineer, “unlikely” makes me nervous. I confess I don’t have an intuitive grasp of the statistics involved, and to me the two options are “can’t happen” or “will happen”. Although my rational brain knows better, I still instinctively put “vanishingly unlikely” in the “will happen” category. Sure, a collision might be unlikely if we’re only dealing with a small number of records, but what if we’re dealing with BigData™?</p>
@@ -76,14 +76,14 @@
 
 <p>How would this look in practice then? If I wanted a token for an ActiveRecord object, it’d look something like:</p>
 
-<pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">class</span> <span class="nc">Order</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
   <span class="n">before_create</span> <span class="ss">:generate_token</span><span class="p">,</span> <span class="ss">unless: :token?</span>
 <span class="kp">private</span>
   <span class="k">def</span> <span class="nf">generate_token</span>
     <span class="nb">self</span><span class="p">.</span><span class="nf">token</span> <span class="o">=</span> <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">uuid</span>
   <span class="k">end</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>Now you probably want an index on the <code>token</code> column, so you might as well make it a unique index. However, a collision is so unlikely to occur there’s really no point handling the RecordNotUnique exception that would be raised in that event.</p>
 
 <h3 id="other-formats">Other Formats</h3>
@@ -92,31 +92,31 @@
 
 <p>SecureRandom offers a few other helpful methods for generating token-like strings. My two preferred choices are <code>hex</code> and <code>urlsafe_base64</code>. Here they all are for comparison.</p>
 
-<pre class="highlight ruby"><code><span class="no">SecureRandom</span><span class="p">.</span><span class="nf">uuid</span>           <span class="c1"># =&gt; "8efb5d40-32d8-43c8-a92d-d5f048c8729c"</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="no">SecureRandom</span><span class="p">.</span><span class="nf">uuid</span>           <span class="c1"># =&gt; "8efb5d40-32d8-43c8-a92d-d5f048c8729c"</span>
 <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span>            <span class="c1"># =&gt; "bad6650fc0142451e624bd89b6aa3acf"</span>
 <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">urlsafe_base64</span> <span class="c1"># =&gt; "vp6xjBgi48Jgag6dqH8niw"</span>
-</code></pre>
+</code></pre></div>
 <h3 id="short-memorable-readable-tokens">Short, Memorable, Readable Tokens</h3>
 
 <p>What about if the token needs to be really short? I once worked on a project where certain customer facing records had an easy to read reference made of 6 hexadecimal digits. In that case, we only want 3 bytes, and the <code>hex</code> method conveniently allows us to specify how many bytes we’ll need.</p>
 
-<pre class="highlight ruby"><code><span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; "bff1a1"</span>
-</code></pre>
+<div class="highlight"><pre class="highlight ruby"><code><span class="no">SecureRandom</span><span class="p">.</span><span class="nf">hex</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; "bff1a1"</span>
+</code></pre></div>
 <p>Of course, now we’re only dealing with 16,777,216 possible tokens and collisions are inevitable. In my <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">next post</a>, we’ll take a look at effective ways to deal with token collisions for ActiveRecord objects.</p>
 
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>You can even generate one from the command line of most *nix systems with <code>uuidgen</code>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>You can even generate one from the command line of most *nix systems with <code>uuidgen</code>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:2">
-      <p>This — and the discussion after it — is assuming that the PRNG has sufficient entropy. SecureRandom’s entropy source is system-dependent. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+      <p>This — and the discussion after it — is assuming that the PRNG has sufficient entropy. SecureRandom’s entropy source is system-dependent. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:3">
-      <p>Given that a UUID is 36 bytes, we want to know how many UUIDs (of which there are 2<sup>112</sup> total) will give us a one in a billion (2<sup>-30</sup>) chance of collision. We can plug the square approximation for the <a href="http://en.wikipedia.org/wiki/Birthday_problem">Birthday Problem</a> into WolframAlpha to get <a href="http://www.wolframalpha.com/input/?i=sqrt%282+*+2%5E112+*+2%5E-30%29+*+36+bytes">the result</a>. <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+      <p>Given that a UUID is 36 bytes, we want to know how many UUIDs (of which there are 2<sup>112</sup> total) will give us a one in a billion (2<sup>-30</sup>) chance of collision. We can plug the square approximation for the <a href="http://en.wikipedia.org/wiki/Birthday_problem">Birthday Problem</a> into WolframAlpha to get <a href="http://www.wolframalpha.com/input/?i=sqrt%282+*+2%5E112+*+2%5E-30%29+*+36+bytes">the result</a>. <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:4">
-      <p>It’s actually 122 bits since 6 of 128 bits are fixed as per the <a href="http://tools.ietf.org/html/rfc4122#section-4.4">RFC</a>. <a href="#fnref:4" class="reversefootnote">&#8617;</a></p>
+      <p>It’s actually 122 bits since 6 of 128 bits are fixed as per the <a href="http://tools.ietf.org/html/rfc4122#section-4.4">RFC</a>. <a href="#fnref:4" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -142,7 +142,7 @@
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -158,23 +158,23 @@
 
       <aside>
         <h4>Featured Posts</h4>
+          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
+            <h5>A better way to manage the Rails secret token</h5>
+          </a>
+          <blockquote>
+            Don't store secrets in your source control.
+          </blockquote>
+          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
+            <h5>Persist Invalid Records with ActiveRecord</h5>
+          </a>
+          <blockquote>
+            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+          </blockquote>
           <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
             <h5>Handling Token Generation Collisions In ActiveRecord</h5>
           </a>
           <blockquote>
             Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
-          </blockquote>
-          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
-            <h5>Generating Unique, Random Tokens</h5>
-          </a>
-          <blockquote>
-            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
-          </blockquote>
-          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-            <h5>Why You Should Never Rescue Exception in Ruby</h5>
-          </a>
-          <blockquote>
-            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
           </blockquote>
 
         <small>

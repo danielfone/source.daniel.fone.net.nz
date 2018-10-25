@@ -5,7 +5,7 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2014-12-10T12:28:00+13:00</updated>
+  <updated>2014-12-09T23:28:00Z</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
@@ -13,7 +13,7 @@
     <title>Handling Token Generation Collisions In ActiveRecord</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/</id>
-    <published>2014-12-10T12:28:00+13:00</published>
+    <published>2014-12-09T23:28:00Z</published>
     <updated>2014-12-10T14:32:41+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -32,7 +32,7 @@
 
 &lt;p&gt;The trick is to set the token in a separate SQL query. ActiveRecord’s &lt;code&gt;after_create&lt;/code&gt; is a good fit for this kind of task. In the event of a collision, ActiveRecord will handily raise an &lt;code&gt;ActiveRecord::RecordNotUnique&lt;/code&gt; which we can rescue and retry. If we were setting the token in a &lt;code&gt;before_create&lt;/code&gt;, we wouldn’t be able to simply retry the save.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Order&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Order&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
 
   &lt;span class="n"&gt;after_create&lt;/span&gt; &lt;span class="ss"&gt;:generate_token&lt;/span&gt;
 
@@ -45,8 +45,8 @@
   &lt;span class="k"&gt;end&lt;/span&gt;
 
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt; Order.create!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt; Order.create!
 D, [2014-12-10T12:27:16.537985 #19797] DEBUG -- :    (0.1ms)  begin transaction
 D, [2014-12-10T12:27:16.538701 #19797] DEBUG -- :   SQL (0.1ms)  INSERT INTO "orders" DEFAULT VALUES
 D, [2014-12-10T12:27:16.541939 #19797] DEBUG -- :   SQL (2.6ms)  UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
@@ -54,7 +54,7 @@ E, [2014-12-10T12:27:16.542037 #19797] ERROR -- : SQLite3::ConstraintException: 
 D, [2014-12-10T12:27:16.542747 #19797] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'd776b10' WHERE "orders"."id" = 9
 D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
 =&amp;gt; #&amp;lt;Order id: 9, token: "d776b10"&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Not bad for a first try.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -69,7 +69,7 @@ D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
 
 &lt;p&gt;Let’s introduce a variable to monitor how many retries we’ve made.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
   &lt;span class="n"&gt;update_column&lt;/span&gt; &lt;span class="ss"&gt;:token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;RecordNotUnique&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
   &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;||=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
@@ -77,8 +77,8 @@ D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
   &lt;span class="k"&gt;retry&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
   &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Retries exhausted"&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;D, [2014-12-10T12:50:26.996927 #21209] DEBUG -- :    (0.0ms)  begin transaction
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;D, [2014-12-10T12:50:26.996927 #21209] DEBUG -- :    (0.0ms)  begin transaction
 D, [2014-12-10T12:50:26.997180 #21209] DEBUG -- :   SQL (0.0ms)  INSERT INTO "orders" DEFAULT VALUES
 D, [2014-12-10T12:50:26.997671 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
 E, [2014-12-10T12:50:26.997707 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
@@ -88,10 +88,10 @@ D, [2014-12-10T12:50:26.998678 #21209] DEBUG -- :   SQL (0.2ms)  UPDATE "orders"
 E, [2014-12-10T12:50:26.998713 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
 D, [2014-12-10T12:50:26.998856 #21209] DEBUG -- :    (0.1ms)  rollback transaction
 ActiveRecord::RecordNotUnique: Retries exhausted
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;That’s functional, but it could be improved. Here’s a slightly nicer version.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="no"&gt;MAX_RETRIES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="no"&gt;MAX_RETRIES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
   &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
     &lt;span class="n"&gt;update_column&lt;/span&gt; &lt;span class="ss"&gt;:token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
   &lt;span class="k"&gt;rescue&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;RecordNotUnique&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;
@@ -99,7 +99,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     &lt;span class="k"&gt;retry&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vi"&gt;@token_attempts&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;MAX_RETRIES&lt;/span&gt;
     &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;"Retries exhausted"&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;A few notes:&lt;/p&gt;
 
 &lt;ul&gt;
@@ -108,14 +108,14 @@ ActiveRecord::RecordNotUnique: Retries exhausted
   &lt;li&gt;
     &lt;p&gt;Our &lt;code&gt;raise&lt;/code&gt; encapsulates the original exception with a more helpful message. &lt;code&gt;e.cause&lt;/code&gt; is set to the rescued exception:&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;[1] pry(#&amp;lt;Order&amp;gt;)&amp;gt; e
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;[1] pry(#&amp;lt;Order&amp;gt;)&amp;gt; e
 =&amp;gt; #&amp;lt;ActiveRecord::RecordNotUnique: Retries exhausted&amp;gt;
 [2] pry(#&amp;lt;Order&amp;gt;)&amp;gt; e.cause
 =&amp;gt; #&amp;lt;ActiveRecord::RecordNotUnique: SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '58' WHERE "orders"."id" = 68&amp;gt;
 [3] pry(#&amp;lt;Order&amp;gt;)&amp;gt; e.cause.cause
 =&amp;gt; #&amp;lt;SQLite3::ConstraintException: UNIQUE constraint failed: orders.token&amp;gt;
 [4] pry(#&amp;lt;Order&amp;gt;)&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;  &lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;  &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;There we have it. If the use-case is right, this is a safe and simple pattern for generating tokens on an ActiveRecord object where there is a reasonable possibility of collisions.&lt;/p&gt;
@@ -123,7 +123,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
 &lt;div class="footnotes"&gt;
   &lt;ol&gt;
     &lt;li id="fn:1"&gt;
-      &lt;p&gt;Once again using the square approximation of the &lt;a href="http://en.wikipedia.org/wiki/Birthday_problem"&gt;Birthday Problem&lt;/a&gt;. &lt;a href="http://www.wolframalpha.com/input/?i=100000+%2F+%282+*+%2816%5E6%29%29"&gt;WolframAlpha&lt;/a&gt;. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;Once again using the square approximation of the &lt;a href="http://en.wikipedia.org/wiki/Birthday_problem"&gt;Birthday Problem&lt;/a&gt;. &lt;a href="http://www.wolframalpha.com/input/?i=100000+%2F+%282+*+%2816%5E6%29%29"&gt;WolframAlpha&lt;/a&gt;. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
   &lt;/ol&gt;
 &lt;/div&gt;
@@ -133,16 +133,16 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <title>Generating Unique, Random Tokens</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/</id>
-    <published>2014-12-07T21:10:00+13:00</published>
+    <published>2014-12-07T08:10:00Z</published>
     <updated>2014-12-10T14:30:25+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
     <content type="html">&lt;p&gt;Generating some kind of token for records is a common problem in web development. Fortunately, &lt;a href="http://tools.ietf.org/html/rfc4122"&gt;UUIDs&lt;/a&gt; are designed precisely for generating unique, random IDs or tokens. For most applications, you’ll probably want a fully random &lt;a href="http://tools.ietf.org/html/rfc4122#section-4.4"&gt;v4 UUID&lt;/a&gt;, which you can easily generate with &lt;a href="http://www.ruby-doc.org/stdlib-2.1.4/libdoc/securerandom/rdoc/SecureRandom.html#method-c-uuid"&gt;SecureRandom&lt;/a&gt; in Ruby’s standard library.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'securerandom'&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'securerandom'&lt;/span&gt;
 &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "16fc1d86-7d6e-4011-9b75-d6cd9501fe1e"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This is a widely implemented&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; and instantly recognisable format that is vanishingly unlikely to have a collision.&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 
 &lt;p&gt;Now, as an engineer, “unlikely” makes me nervous. I confess I don’t have an intuitive grasp of the statistics involved, and to me the two options are “can’t happen” or “will happen”. Although my rational brain knows better, I still instinctively put “vanishingly unlikely” in the “will happen” category. Sure, a collision might be unlikely if we’re only dealing with a small number of records, but what if we’re dealing with BigData™?&lt;/p&gt;
@@ -151,14 +151,14 @@ ActiveRecord::RecordNotUnique: Retries exhausted
 
 &lt;p&gt;How would this look in practice then? If I wanted a token for an ActiveRecord object, it’d look something like:&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Order&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Order&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
   &lt;span class="n"&gt;before_create&lt;/span&gt; &lt;span class="ss"&gt;:generate_token&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;unless: :token?&lt;/span&gt;
 &lt;span class="kp"&gt;private&lt;/span&gt;
   &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;generate_token&lt;/span&gt;
     &lt;span class="nb"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;token&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now you probably want an index on the &lt;code&gt;token&lt;/code&gt; column, so you might as well make it a unique index. However, a collision is so unlikely to occur there’s really no point handling the RecordNotUnique exception that would be raised in that event.&lt;/p&gt;
 
 &lt;h3 id="other-formats"&gt;Other Formats&lt;/h3&gt;
@@ -167,31 +167,31 @@ ActiveRecord::RecordNotUnique: Retries exhausted
 
 &lt;p&gt;SecureRandom offers a few other helpful methods for generating token-like strings. My two preferred choices are &lt;code&gt;hex&lt;/code&gt; and &lt;code&gt;urlsafe_base64&lt;/code&gt;. Here they all are for comparison.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt;           &lt;span class="c1"&gt;# =&amp;gt; "8efb5d40-32d8-43c8-a92d-d5f048c8729c"&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt;           &lt;span class="c1"&gt;# =&amp;gt; "8efb5d40-32d8-43c8-a92d-d5f048c8729c"&lt;/span&gt;
 &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;            &lt;span class="c1"&gt;# =&amp;gt; "bad6650fc0142451e624bd89b6aa3acf"&lt;/span&gt;
 &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;urlsafe_base64&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "vp6xjBgi48Jgag6dqH8niw"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id="short-memorable-readable-tokens"&gt;Short, Memorable, Readable Tokens&lt;/h3&gt;
 
 &lt;p&gt;What about if the token needs to be really short? I once worked on a project where certain customer facing records had an easy to read reference made of 6 hexadecimal digits. In that case, we only want 3 bytes, and the &lt;code&gt;hex&lt;/code&gt; method conveniently allows us to specify how many bytes we’ll need.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "bff1a1"&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;hex&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "bff1a1"&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Of course, now we’re only dealing with 16,777,216 possible tokens and collisions are inevitable. In my &lt;a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/"&gt;next post&lt;/a&gt;, we’ll take a look at effective ways to deal with token collisions for ActiveRecord objects.&lt;/p&gt;
 
 &lt;div class="footnotes"&gt;
   &lt;ol&gt;
     &lt;li id="fn:1"&gt;
-      &lt;p&gt;You can even generate one from the command line of most *nix systems with &lt;code&gt;uuidgen&lt;/code&gt;. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;You can even generate one from the command line of most *nix systems with &lt;code&gt;uuidgen&lt;/code&gt;. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
     &lt;li id="fn:2"&gt;
-      &lt;p&gt;This — and the discussion after it — is assuming that the PRNG has sufficient entropy. SecureRandom’s entropy source is system-dependent. &lt;a href="#fnref:2" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;This — and the discussion after it — is assuming that the PRNG has sufficient entropy. SecureRandom’s entropy source is system-dependent. &lt;a href="#fnref:2" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
     &lt;li id="fn:3"&gt;
-      &lt;p&gt;Given that a UUID is 36 bytes, we want to know how many UUIDs (of which there are 2&lt;sup&gt;112&lt;/sup&gt; total) will give us a one in a billion (2&lt;sup&gt;-30&lt;/sup&gt;) chance of collision. We can plug the square approximation for the &lt;a href="http://en.wikipedia.org/wiki/Birthday_problem"&gt;Birthday Problem&lt;/a&gt; into WolframAlpha to get &lt;a href="http://www.wolframalpha.com/input/?i=sqrt%282+*+2%5E112+*+2%5E-30%29+*+36+bytes"&gt;the result&lt;/a&gt;. &lt;a href="#fnref:3" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;Given that a UUID is 36 bytes, we want to know how many UUIDs (of which there are 2&lt;sup&gt;112&lt;/sup&gt; total) will give us a one in a billion (2&lt;sup&gt;-30&lt;/sup&gt;) chance of collision. We can plug the square approximation for the &lt;a href="http://en.wikipedia.org/wiki/Birthday_problem"&gt;Birthday Problem&lt;/a&gt; into WolframAlpha to get &lt;a href="http://www.wolframalpha.com/input/?i=sqrt%282+*+2%5E112+*+2%5E-30%29+*+36+bytes"&gt;the result&lt;/a&gt;. &lt;a href="#fnref:3" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
     &lt;li id="fn:4"&gt;
-      &lt;p&gt;It’s actually 122 bits since 6 of 128 bits are fixed as per the &lt;a href="http://tools.ietf.org/html/rfc4122#section-4.4"&gt;RFC&lt;/a&gt;. &lt;a href="#fnref:4" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;It’s actually 122 bits since 6 of 128 bits are fixed as per the &lt;a href="http://tools.ietf.org/html/rfc4122#section-4.4"&gt;RFC&lt;/a&gt;. &lt;a href="#fnref:4" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
   &lt;/ol&gt;
 &lt;/div&gt;
@@ -201,62 +201,62 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <title>Efficient Uniqueness Validations</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/</id>
-    <published>2014-12-05T13:31:00+13:00</published>
+    <published>2014-12-05T00:31:00Z</published>
     <updated>2014-12-07T21:12:44+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
     <content type="html">&lt;p&gt;Although ActiveRecord uniqueness validations aren’t bullet-proof,&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; they’re often helpful. Unfortunately, they can add overhead to save operations, since they require an extra call to the database. Consider the following simple ActiveRecord class:&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubscriptionPlan&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubscriptionPlan&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
   &lt;span class="n"&gt;validates&lt;/span&gt; &lt;span class="ss"&gt;:code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;uniqueness: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;
   &lt;span class="n"&gt;validates_uniqueness_of&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;When we try to create this we’ll see two SELECT queries as we’d expect.&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt; &amp;gt;&amp;gt; SubscriptionPlan.create! name: 'Starter - 100', code: 'starter-100'
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt; &amp;gt;&amp;gt; SubscriptionPlan.create! name: 'Starter - 100', code: 'starter-100'
    (0.2ms)  BEGIN
   SubscriptionPlan Exists (2.1ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE "subscription_plans"."code" = 'starter-100' LIMIT 1
   SubscriptionPlan Exists (0.2ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE "subscription_plans"."name" = 'Starter - 100' LIMIT 1
    (0.1ms)  ROLLBACK
 ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Name has already been taken
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;But what about when we update an existing record?&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt;&amp;gt; plan.update_attributes! quota: 99
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt;&amp;gt; plan.update_attributes! quota: 99
    (0.2ms)  BEGIN
     SubscriptionPlan Exists (0.4ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE ("subscription_plans"."code" = 'starter-100' AND "subscription_plans"."id" != 1) LIMIT 1
     SubscriptionPlan Exists (0.2ms)  SELECT  1 AS one FROM "subscription_plans"  WHERE ("subscription_plans"."name" = 'Starter - 100' AND "subscription_plans"."id" != 1) LIMIT 1
   SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
    (0.3ms)  COMMIT
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;We still get two queries to check if the code and name are unique. These are almost certainly pointless, since neither the name or the code have changed, but they’re being checked anyway. On massive tables, these can be costly queries, even with well designed indexes.&lt;/p&gt;
 
 &lt;h3 id="activemodeldirty-to-the-rescue"&gt;ActiveModel::Dirty to the Rescue&lt;/h3&gt;
 
 &lt;p&gt;Fortunately, it’s quite simple to keep these queries in check. &lt;a href="http://api.rubyonrails.org/classes/ActiveModel/Dirty.html"&gt;ActiveModel::Dirty&lt;/a&gt; lets us check if any fields were changed since the record was loaded.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubscriptionPlan&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubscriptionPlan&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
   &lt;span class="n"&gt;validates&lt;/span&gt; &lt;span class="ss"&gt;:code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;uniqueness: &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="ss"&gt;if: :code_changed?&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
   &lt;span class="n"&gt;validates_uniqueness_of&lt;/span&gt; &lt;span class="ss"&gt;:name&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;if: :name_changed?&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now, create operations behave the same as before, validating the uniqueness of the fields. Likewise if we update one of those fields, it will query only the fields it needs to check.&lt;/p&gt;
 
 &lt;p&gt;On the other hand, an update that doesn’t affect those fields won’t incur the cost of those potentially expensive SELECTS.&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt;&amp;gt; plan.update_attributes! quota: 99
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;&amp;gt;&amp;gt; plan.update_attributes! quota: 99
    (0.2ms)  BEGIN
   SQL (0.7ms)  UPDATE "subscription_plans" SET "quota" = $1, "updated_at" = $2 WHERE "subscription_plans"."id" = 1  [["quota", 99], ["updated_at", "2014-12-05 00:40:59.969458"]]
    (0.3ms)  COMMIT
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This is much better. However, I think we can do better still. In a future post I’ll look at ways we can bypass manual uniqueness validations entirely.&lt;/p&gt;
 
 &lt;div class="footnotes"&gt;
   &lt;ol&gt;
     &lt;li id="fn:1"&gt;
-      &lt;p&gt;Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. They should (almost) always be used in conjunction with a unique index at the database level. See the &lt;a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of"&gt;validates_uniqueness_of docs&lt;/a&gt; for more details. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;Application level uniqueness checks are subject to race conditions, since they use separate check and set queries. They should (almost) always be used in conjunction with a unique index at the database level. See the &lt;a href="http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html#method-i-validates_uniqueness_of"&gt;validates_uniqueness_of docs&lt;/a&gt; for more details. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
   &lt;/ol&gt;
 &lt;/div&gt;
@@ -266,7 +266,7 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
     <title>Unicode and Regex in Ruby 1.8</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/03/unicode-and-regex-in-ruby-1-8/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/03/unicode-and-regex-in-ruby-1-8/</id>
-    <published>2014-12-03T23:33:00+13:00</published>
+    <published>2014-12-03T10:33:00Z</published>
     <updated>2014-12-04T00:29:53+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -308,18 +308,18 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
 
 &lt;p&gt;As is often the case, having a reproducible fault made the solution easy. Simply normalising unicode before trying to parse the comments for mentions completely eliminated the issue. In this instance, Iconv did the trick, and the whole method ended up something like this:&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;parse_mentions&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;comment&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;parse_mentions&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;comment&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
   &lt;span class="n"&gt;normalized_comment&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;Iconv&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;conv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'ASCII//TRANSLIT//IGNORE'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;'UTF8'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;comment&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
   &lt;span class="n"&gt;names&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;normalized_comment&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;scan&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/(?:^|\W)@(\w+)/&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nf"&gt;flatten&lt;/span&gt;
   &lt;span class="no"&gt;User&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;all&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;:conditions&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="ss"&gt;:username&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;names&lt;/span&gt; &lt;span class="p"&gt;},&lt;/span&gt; &lt;span class="ss"&gt;:select&lt;/span&gt; &lt;span class="o"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="ss"&gt;:email&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nf"&gt;map&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="ss"&gt;:email&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Phew.&lt;/p&gt;
 
 &lt;div class="footnotes"&gt;
   &lt;ol&gt;
     &lt;li id="fn:1"&gt;
-      &lt;p&gt;Thankfully, in modern versions of Ruby, this regex matches unicode exactly as you’d expect it to. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;Thankfully, in modern versions of Ruby, this regex matches unicode exactly as you’d expect it to. &lt;a href="#fnref:1" class="reversefootnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
   &lt;/ol&gt;
 &lt;/div&gt;
@@ -329,7 +329,7 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
     <title>Fixing Connection Errors After Upgrading Postgres</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/</id>
-    <published>2014-12-01T12:43:00+13:00</published>
+    <published>2014-11-30T23:43:00Z</published>
     <updated>2014-12-06T22:43:16+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -338,18 +338,18 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
 
 &lt;p&gt;However, trouble struck once I tried to run any specs that needed to connect to Postgres. Even though Postgres was &lt;em&gt;definitely&lt;/em&gt; running, suddenly I was getting:&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;could not connect to server: No such file or directory (PG::ConnectionBad)
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;could not connect to server: No such file or directory (PG::ConnectionBad)
 Is the server running locally and accepting
 connections on Unix domain socket "/var/pgsql_socket/.s.PGSQL.5432"?
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;The problem was that the new version of Postgres listens on /tmp/.s.PGSQL.5432 instead. I could’ve messed around with the config and made Postgres use the domain socket it was previously, or told Rails explictly how to connect, but both of those approaches seemed like work I shouldn’t have to do. At no point had I told Rails to connect to postgres on that path, Rails had assumed it, and now its assumptions were wrong.&lt;/p&gt;
 
 &lt;p&gt;The fix is simple, if a little suprising. When you install the ‘pg’ gem, it detects which version of Postgres is installed and sets the domain socket path appropriately. The solution is as simple as reinstalling the gem.&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ gem uninstall pg
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ gem uninstall pg
 $ cd my-rails-app/
 $ bundle install
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Hat tip to &lt;a href="http://tammersaleh.com/posts/installing-postgresql-for-rails-3-1-on-lion/"&gt;Tammer Selah&lt;/a&gt; and this &lt;a href="http://stackoverflow.com/questions/6770649/repairing-postgresql-after-upgrading-to-osx-10-7-lion#comment8687127_6772559"&gt;Stack Overflow comment&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
@@ -357,7 +357,7 @@ $ bundle install
     <title>Devise causing a CookieOverflow error</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/"/>
     <id>http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/</id>
-    <published>2014-11-28T10:51:00+13:00</published>
+    <published>2014-11-27T21:51:00Z</published>
     <updated>2014-11-28T22:03:00+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -382,7 +382,7 @@ $ bundle install
 
 &lt;p&gt;Fortunately, it’s very easy to replicate the problem in tests. Anytime an unauthenticated user requests a url approaching ActionDispatch::Cookies::MAX_COOKIE_SIZE, Devise will attempt to store the the url and cause the exception to be raised.&lt;/p&gt;
 
-&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="c1"&gt;# /spec/requests/large_request_spec.rb&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;  &lt;span class="c1"&gt;# /spec/requests/large_request_spec.rb&lt;/span&gt;
   &lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'spec_helper'&lt;/span&gt;
 
   &lt;span class="no"&gt;RSpec&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;describe&lt;/span&gt; &lt;span class="s1"&gt;'A very large request'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;type: :request&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt;
@@ -391,14 +391,14 @@ $ bundle install
       &lt;span class="n"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nf"&gt;to&lt;/span&gt; &lt;span class="n"&gt;redirect_to&lt;/span&gt; &lt;span class="s1"&gt;'/users/sign_in'&lt;/span&gt;
     &lt;span class="k"&gt;end&lt;/span&gt;
   &lt;span class="k"&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This reliably produces&lt;/p&gt;
 
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;1) A very large request should not overflow cookies
+&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;1) A very large request should not overflow cookies
    Failure/Error: get '/', foo: 'bar' * 1000
    ActionDispatch::Cookies::CookieOverflow:
      ActionDispatch::Cookies::CookieOverflow
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id="solutions"&gt;Solutions&lt;/h3&gt;
 
 &lt;p&gt;There were a couple of approaches that I didn’t want to pursue.&lt;/p&gt;

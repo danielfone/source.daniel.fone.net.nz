@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -70,22 +70,22 @@
 
 <p>A common pattern for rescuing exceptions in Ruby is:</p>
 
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">do_some_job!</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">do_some_job!</span>
   <span class="c1"># ... do something ...</span>
   <span class="n">job_succeeded</span>
 <span class="k">rescue</span>
   <span class="n">job_failed</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>This is fine, but when developers need to capture the exception details, a terrible, <em>terrible</em> thing happens:</p>
 
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">do_some_job!</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">do_some_job!</span>
   <span class="c1"># ... do something ...</span>
   <span class="n">job_succeeded</span>
 <span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">e</span>
   <span class="n">job_failed</span> <span class="n">e</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>I have been caught out by that code on at least three separate occasions. Twice when I wrote it. I write this post in the hope that I (and perhaps others) will finally wise up about exception handling and that my fingers will never, ever type that code again.</p>
 
 <p><em>Just to confirm this is a actually bad practice, here’s <a href="https://github.com/search?l=ruby&amp;o=asc&amp;p=1&amp;q=%22rescue+Exception+=%3E+%22&amp;ref=searchresults&amp;type=Code">~200k results</a> for <code>rescue Exception =&gt;</code> on Github</em></p>
@@ -94,7 +94,7 @@
 
 <p><code>Exception</code> is the root of the exception class hierarchy in Ruby. Everything from signal handling to memory errors will raise a subclass of Exception. Here’s the full list of exceptions from ruby-core that we’ll inadvertently rescue when rescuing Exception.</p>
 
-<pre class="highlight ruby"><code><span class="no">SystemStackError</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="no">SystemStackError</span>
 <span class="no">NoMemoryError</span>
 <span class="no">SecurityError</span>
 <span class="no">ScriptError</span>
@@ -106,7 +106,7 @@
   <span class="no">Interrupt</span>
 <span class="no">SystemExit</span>
   <span class="no">Gem</span><span class="o">::</span><span class="no">SystemExitException</span>
-</code></pre>
+</code></pre></div>
 <p>Do you really want to rescue a <code>NoMemoryError</code> and send an email saying the job failed?!? Good luck with that.</p>
 
 <h3 id="better-rescue-standarderror">Better: Rescue StandardError</h3>
@@ -119,17 +119,17 @@
 
 <p>Imagine a scenario where we’re connecting to a 3rd-party API in our application. For example, we want our users to upload their cat photos to twitfaceagram. We definitely want to handle the scenarios where the connection times out, or the DNS fails to resolve, or the API returns bogus data. In these circumstances, we want to present a friendly message to the user that the application couldn’t connect to the remote server.</p>
 
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">upload_to_twitfaceagram</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">upload_to_twitfaceagram</span>
   <span class="c1"># ... do something ...</span>
 <span class="k">rescue</span> <span class="o">=&gt;</span> <span class="n">e</span>
   <span class="n">flash</span><span class="p">[</span><span class="ss">:error</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"The internet broke"</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>Most of the time, this code will do what we expect. Something out of our control will go wrong, and it’s appropriate to present the user with a friendly message. However, there’s a major gotcha with this code: we’re still rescuing many exceptions we’re not aware of.</p>
 
 <p>Here’s an abridged list of StandardErrors defined in ruby-core 2.0.0 (1.9 is not materially different):</p>
 
-<pre class="highlight ruby"><code><span class="no">StandardError</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="no">StandardError</span>
   <span class="no">FiberError</span>
   <span class="no">ThreadError</span>
   <span class="no">IndexError</span>
@@ -160,7 +160,7 @@
   <span class="no">ArgumentError</span>
     <span class="no">Gem</span><span class="o">::</span><span class="no">Requirement</span><span class="o">::</span><span class="no">BadRequirementError</span>
   <span class="no">TypeError</span>
-</code></pre>
+</code></pre></div>
 <p>In a fresh Rails 3.2.13 application, there are <strong><a href="https://gist.github.com/danielfone/5654600">375 StandardErrors defined</a></strong>.</p>
 
 <p>Now let’s say we’re refactoring the API integration and we make a typo with a method name. What’s going to happen?</p>
@@ -206,7 +206,7 @@
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -222,23 +222,23 @@
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
+            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
           </a>
           <blockquote>
-            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
-          </blockquote>
-          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
-            <h5>Generating Unique, Random Tokens</h5>
-          </a>
-          <blockquote>
-            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
+            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
           <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
             <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
             Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
+          </blockquote>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
+          </a>
+          <blockquote>
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
 
         <small>

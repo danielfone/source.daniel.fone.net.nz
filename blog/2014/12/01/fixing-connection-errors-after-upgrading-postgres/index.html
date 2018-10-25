@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -67,18 +67,18 @@
 
 <p>However, trouble struck once I tried to run any specs that needed to connect to Postgres. Even though Postgres was <em>definitely</em> running, suddenly I was getting:</p>
 
-<pre class="highlight plaintext"><code>could not connect to server: No such file or directory (PG::ConnectionBad)
+<div class="highlight"><pre class="highlight plaintext"><code>could not connect to server: No such file or directory (PG::ConnectionBad)
 Is the server running locally and accepting
 connections on Unix domain socket "/var/pgsql_socket/.s.PGSQL.5432"?
-</code></pre>
+</code></pre></div>
 <p>The problem was that the new version of Postgres listens on /tmp/.s.PGSQL.5432 instead. I could’ve messed around with the config and made Postgres use the domain socket it was previously, or told Rails explictly how to connect, but both of those approaches seemed like work I shouldn’t have to do. At no point had I told Rails to connect to postgres on that path, Rails had assumed it, and now its assumptions were wrong.</p>
 
 <p>The fix is simple, if a little suprising. When you install the ‘pg’ gem, it detects which version of Postgres is installed and sets the domain socket path appropriately. The solution is as simple as reinstalling the gem.</p>
 
-<pre class="highlight plaintext"><code>$ gem uninstall pg
+<div class="highlight"><pre class="highlight plaintext"><code>$ gem uninstall pg
 $ cd my-rails-app/
 $ bundle install
-</code></pre>
+</code></pre></div>
 <p>Hat tip to <a href="http://tammersaleh.com/posts/installing-postgresql-for-rails-3-1-on-lion/">Tammer Selah</a> and this <a href="http://stackoverflow.com/questions/6770649/repairing-postgresql-after-upgrading-to-osx-10-7-lion#comment8687127_6772559">Stack Overflow comment</a>.</p>
 
   </article>
@@ -102,7 +102,7 @@ $ bundle install
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -124,17 +124,17 @@ $ bundle install
           <blockquote>
             We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
           </blockquote>
-          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
-            <h5>Generating Unique, Random Tokens</h5>
-          </a>
-          <blockquote>
-            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
-          </blockquote>
           <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
             <h5>Why You Should Never Rescue Exception in Ruby</h5>
           </a>
           <blockquote>
             Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
+          </blockquote>
+          <a href="/blog/2014/12/07/generating-unique-random-tokens/">
+            <h5>Generating Unique, Random Tokens</h5>
+          </a>
+          <blockquote>
+            If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
 
         <small>

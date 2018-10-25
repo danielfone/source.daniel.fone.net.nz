@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -100,18 +100,18 @@
 
 <p>As is often the case, having a reproducible fault made the solution easy. Simply normalising unicode before trying to parse the comments for mentions completely eliminated the issue. In this instance, Iconv did the trick, and the whole method ended up something like this:</p>
 
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">parse_mentions</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">parse_mentions</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
   <span class="n">normalized_comment</span> <span class="o">=</span> <span class="no">Iconv</span><span class="p">.</span><span class="nf">conv</span><span class="p">(</span><span class="s1">'ASCII//TRANSLIT//IGNORE'</span><span class="p">,</span> <span class="s1">'UTF8'</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
   <span class="n">names</span> <span class="o">=</span> <span class="n">normalized_comment</span><span class="p">.</span><span class="nf">scan</span><span class="p">(</span><span class="sr">/(?:^|\W)@(\w+)/</span><span class="p">).</span><span class="nf">flatten</span>
   <span class="no">User</span><span class="p">.</span><span class="nf">all</span><span class="p">(</span><span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:username</span> <span class="o">=&gt;</span> <span class="n">names</span> <span class="p">},</span> <span class="ss">:select</span> <span class="o">=&gt;</span> <span class="ss">:email</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:email</span><span class="p">)</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>Phew.</p>
 
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>Thankfully, in modern versions of Ruby, this regex matches unicode exactly as you’d expect it to. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>Thankfully, in modern versions of Ruby, this regex matches unicode exactly as you’d expect it to. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -137,7 +137,7 @@
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -153,17 +153,17 @@
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
-            <h5>Efficient Uniqueness Validations</h5>
+          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
+            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
           </a>
           <blockquote>
-            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
+            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
-          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
-            <h5>A better way to manage the Rails secret token</h5>
+          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
+            <h5>Persist Invalid Records with ActiveRecord</h5>
           </a>
           <blockquote>
-            Don't store secrets in your source control.
+            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
           </blockquote>
           <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
             <h5>Why You Should Never Rescue Exception in Ruby</h5>

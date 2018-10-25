@@ -32,17 +32,17 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="blog-nav">
-          <a class=" blog-nav-item" href="/">Home</a>
-          <a class=" blog-nav-item" href="/blog/archives/">Articles</a>
-          <a class=" blog-nav-item" href="/hire/">Hire</a>
-          <a class="external blog-nav-item" href="https://github.com/danielfone">Code</a>
+          <a href="/" class=" blog-nav-item">Home</a>
+          <a href="/blog/archives/" class=" blog-nav-item">Articles</a>
+          <a href="/hire/" class=" blog-nav-item">Hire</a>
+          <a href="https://github.com/danielfone" class="external blog-nav-item">Code</a>
         </nav>
       </div>
     </div>
 
     <div class="container">
         <header>
-    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" />
+    <img style="float: left; margin-right: 1em; width: 5em" src="/images/blue-dot.png" alt="Blue dot" />
     <h1><a href="/">Daniel Fone</a></h1>
     <p class="lead">Ruby/Rails Engineer</p>
   </header>
@@ -70,14 +70,14 @@
 
 <p>Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: <strong>don’t store real secrets in this file if you’re checking it in to source control!</strong> Load them from the environment like so:<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup></p>
 
-<pre class="highlight plaintext"><code>production:
+<div class="highlight"><pre class="highlight plaintext"><code>production:
   secret_key_base: &lt;%= ENV["SECRET_KEY_BASE"] %&gt;
-</code></pre>
+</code></pre></div>
 <h3 id="insecure-defaults">Insecure defaults</h3>
 
 <p>Until recently, one of the files created in a new Rails project was config/initializers/secret_token.rb. This file looked something like this:</p>
 
-<pre class="highlight ruby"><code><span class="c1"># config/initializers/secret_token.rb</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="c1"># config/initializers/secret_token.rb</span>
 
 <span class="c1"># Be sure to restart your server when you modify this file.</span>
 
@@ -86,7 +86,7 @@
 <span class="c1"># Make sure the secret is at least 30 characters and all random,</span>
 <span class="c1"># no regular words or you'll be exposed to dictionary attacks.</span>
 <span class="no">MyApp</span><span class="o">::</span><span class="no">Application</span><span class="p">.</span><span class="nf">config</span><span class="p">.</span><span class="nf">secret_token</span> <span class="o">=</span> <span class="s1">'3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3ed0fa02ee5e7179420ce5290462018591adaf5f42adcf855da04877827def2'</span>
-</code></pre>
+</code></pre></div>
 <p>This token is used to sign cookies that the application sets. Without this, it’s impossible to trust cookies that the browser sends, and hence difficult to rely on session based authentication.</p>
 
 <h3 id="why-this-is-bad">Why this is bad</h3>
@@ -126,7 +126,7 @@
 
 <p>In order to set the secret token securely, we want to load it from the application’s environment. The simplest method is to replace the hardcoded token with a reference to Ruby’s <code>ENV</code>:</p>
 
-<pre class="highlight ruby"><code><span class="c1"># config/initializers/secret_token.rb</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="c1"># config/initializers/secret_token.rb</span>
 
 <span class="c1"># Be sure to restart your server when you modify this file.</span>
 
@@ -135,16 +135,16 @@
 <span class="c1"># Make sure the secret is at least 30 characters and all random,</span>
 <span class="c1"># no regular words or you'll be exposed to dictionary attacks.</span>
 <span class="no">MyApp</span><span class="o">::</span><span class="no">Application</span><span class="p">.</span><span class="nf">config</span><span class="p">.</span><span class="nf">secret_token</span> <span class="o">=</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'SECRET_TOKEN'</span><span class="p">]</span>
-</code></pre>
+</code></pre></div>
 <p>While this has the advantage of maintaining <a href="http://www.12factor.net/dev-prod-parity">development/production parity</a>, it can be inconvenient for simple apps. If <code>ENV['SECRET_TOKEN']</code> isn’t set locally — for example in the development or testing workflow — ActionDispatch will raise an exception like:</p>
 
-<pre class="highlight plaintext"><code>ArgumentError (A secret is required to generate an integrity hash for cookie session data. Use config.secret_token = "some secret phrase of at least 30 characters"in config/initializers/secret_token.rb):
-</code></pre>
+<div class="highlight"><pre class="highlight plaintext"><code>ArgumentError (A secret is required to generate an integrity hash for cookie session data. Use config.secret_token = "some secret phrase of at least 30 characters"in config/initializers/secret_token.rb):
+</code></pre></div>
 <p>One solution to this is managing a full set of environment variables within the development and test workflows. See below for more details on this.</p>
 
 <p>Alternatively, a token could be hard-coded for the development and test environments, and loaded from the ENV in production.</p>
 
-<pre class="highlight ruby"><code><span class="c1"># config/initializers/secret_token.rb</span>
+<div class="highlight"><pre class="highlight ruby"><code><span class="c1"># config/initializers/secret_token.rb</span>
 
 <span class="c1"># Be sure to restart your server when you modify this file.</span>
 
@@ -157,40 +157,40 @@
 <span class="k">else</span>
   <span class="no">ENV</span><span class="p">[</span><span class="s1">'SECRET_TOKEN'</span><span class="p">]</span>
 <span class="k">end</span>
-</code></pre>
+</code></pre></div>
 <p>This also removes any pretense that the hard-coded token is secure.</p>
 
 <p>Occasionally, the following solution is used:</p>
 
-<pre class="highlight ruby"><code><span class="no">MyApp</span><span class="o">::</span><span class="no">Application</span><span class="p">.</span><span class="nf">config</span><span class="p">.</span><span class="nf">secret_token</span> <span class="o">=</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'SECRET_TOKEN'</span><span class="p">]</span> <span class="o">||</span> <span class="s1">'3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3ed0fa02ee5e7179420ce5290462018591adaf5f42adcf855da04877827def2'</span>
-</code></pre>
+<div class="highlight"><pre class="highlight ruby"><code><span class="no">MyApp</span><span class="o">::</span><span class="no">Application</span><span class="p">.</span><span class="nf">config</span><span class="p">.</span><span class="nf">secret_token</span> <span class="o">=</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'SECRET_TOKEN'</span><span class="p">]</span> <span class="o">||</span> <span class="s1">'3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3ed0fa02ee5e7179420ce5290462018591adaf5f42adcf855da04877827def2'</span>
+</code></pre></div>
 <p>However, if <code>ENV['SECRET_TOKEN']</code> isn’t set in production, <strong>this will use the insecure token with no warning</strong>.</p>
 
 <h2 id="managing-an-applications-env">Managing an Application’s ENV</h2>
 
 <p><a href="https://github.com/bkeepers/dotenv">Dotenv</a> is an excellent gem for managing an application’s environment. Heroku’s <a href="https://devcenter.heroku.com/articles/procfile#setting-local-environment-variables">foreman</a> uses this behind the scenes. Install it with:</p>
 
-<pre class="highlight plaintext"><code>gem 'dotenv-rails'
-</code></pre>
+<div class="highlight"><pre class="highlight plaintext"><code>gem 'dotenv-rails'
+</code></pre></div>
 <p>By default, it loads environment variables from the .env file. Simply create this file in the RAILS_ROOT on the production web server.</p>
 
-<pre class="highlight plaintext"><code># .env should NOT be checked in to source control
+<div class="highlight"><pre class="highlight plaintext"><code># .env should NOT be checked in to source control
 SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3ed0fa02ee5e7179420ce5290462018591adaf5f42adcf855da04877827def2
-</code></pre>
+</code></pre></div>
 <p>As the application configuration and infrastructure grows more complex, the gem also provides a consistent method to manage configuration across multiple developers, CI, staging and production servers. <a href="https://github.com/bkeepers">Brandon Keepers</a> wrote more on <a href="http://opensoul.org/blog/archives/2012/07/24/dotenv/">the rationale for the gem</a>.</p>
 
 <h3 id="heroku">Heroku</h3>
 
 <p>On Heroku, the application’s environment variables are managed from the heroku CLI:</p>
 
-<pre class="highlight plaintext"><code>$ heroku config:set SECRET_TOKEN=...
-</code></pre>
+<div class="highlight"><pre class="highlight plaintext"><code>$ heroku config:set SECRET_TOKEN=...
+</code></pre></div>
 <p>or from the web dashboard at https://dashboard.heroku.com/apps/my-app/settings</p>
 
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>Although an order of magnitude better than storing secrets in source control, the environment has its risks too. Michael Reinsch has a <a href="http://movingfast.io/articles/environment-variables-considered-harmful/">very insightful write up</a> worth reading. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>Although an order of magnitude better than storing secrets in source control, the environment has its risks too. Michael Reinsch has a <a href="http://movingfast.io/articles/environment-variables-considered-harmful/">very insightful write up</a> worth reading. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -216,7 +216,7 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
     </div>
     <div class="col-md-3">
       <aside>
-        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" />
+        <img width="70" class="img-thumbnail" style="float: right" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
         <h4>About Me</h4>
         <p>
           I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
@@ -232,11 +232,11 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">
-            <h5>Why You Should Never Rescue Exception in Ruby</h5>
+          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
+            <h5>Efficient Uniqueness Validations</h5>
           </a>
           <blockquote>
-            Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.
+            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
           <a href="/blog/2014/12/07/generating-unique-random-tokens/">
             <h5>Generating Unique, Random Tokens</h5>
@@ -244,11 +244,11 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
           <blockquote>
             If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).
           </blockquote>
-          <a href="/blog/2014/12/05/efficient-uniqueness-validations/">
-            <h5>Efficient Uniqueness Validations</h5>
+          <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">
+            <h5>A better way to manage the Rails secret token</h5>
           </a>
           <blockquote>
-            Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
+            Don't store secrets in your source control.
           </blockquote>
 
         <small>
