@@ -118,12 +118,6 @@ $ bundle install
 
       <aside>
         <h4>Featured Posts</h4>
-          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
-            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
-          </a>
-          <blockquote>
-            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
-          </blockquote>
           <a href="/blog/2014/12/07/generating-unique-random-tokens/">
             <h5>Generating Unique, Random Tokens</h5>
           </a>
@@ -135,6 +129,12 @@ $ bundle install
           </a>
           <blockquote>
             Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
+          </blockquote>
+          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
+            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
+          </a>
+          <blockquote>
+            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
 
         <small>
