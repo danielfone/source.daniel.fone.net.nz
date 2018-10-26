@@ -32,22 +32,28 @@
         <i class="fas fa-search-location"></i>
         Track Location
       </button>
+      <button class="js-stop-tracking btn btn-outline-danger" style="display:none" type="button" name="button">
+        <i class="fas fa-stop-circle"></i>
+        Stop Tracking
+      </button>
       <p class="text-muted" id="page-status">
         Initialising…
       </p>
       <div id="map"></div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Delay</th>
-            <th>Accuracy <small class="text-muted">(P=95%)</small></th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-          </tr>
-        </thead>
-        <tbody class="js-location-table">
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Delay</th>
+              <th>Accuracy <small class="text-muted">(P=95%)</small></th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+            </tr>
+          </thead>
+          <tbody class="js-location-table">
+          </tbody>
+        </table>
+      </div>
     </main><!-- /.container -->
 
     <!-- Optional JavaScript -->
@@ -66,6 +72,9 @@
         timeout: 10000,
         maximumAge: 0
       };
+      var mymap;
+      var lastCircle;
+      var watchId;
 
       function log(text) { $('#page-status').text(text); }
 
@@ -86,8 +95,9 @@
 
       function trackLocation() {
         $('.js-get-location').attr('disabled', 'disabled');
-        $('.js-track-location').attr('disabled', 'disabled');
-        navigator.geolocation.watchPosition(
+        $('.js-track-location').hide();
+        $('.js-stop-tracking').show();
+        watchId = navigator.geolocation.watchPosition(
           function(position) {
             processLocation(position, null);
           },
@@ -97,6 +107,16 @@
         log('Watching…');
       }
 
+      function stopTrackingLocation() {
+        $('.js-get-location').removeAttr('disabled');
+        $('.js-track-location').show();
+        $('.js-stop-tracking').hide();
+        if (watchId) {
+          navigator.geolocation.clearWatch(watchId);
+          log('Ready.')
+        }
+      }
+
       function processLocation(position, startTime) {
         var delay = startTime ? (position.timestamp - startTime) / 1000 : 0;
         console.log(position);
@@ -104,13 +124,13 @@
           "<tr style='display:none'>" +
             // "<td><button class='btn btn-outline-primary js-map-coordinates'><i class='fas fa-map-marked-alt'></i></button></td>"+
             "<td>" + delay.toFixed(1) + " s</td>"+
-            "<td>" + position.coords.accuracy.toFixed(1) + " m</td>"+
-            "<td>" + position.coords.latitude.toFixed(2) + "… </td>"+
-            "<td>" + position.coords.longitude.toFixed(2) + "… </td>"+
+            "<td>" + Math.round(position.coords.accuracy) + " m</td>"+
+            "<td>" + position.coords.latitude + "</td>"+
+            "<td>" + position.coords.longitude + "</td>"+
           "</tr>"
         ).prependTo('.js-location-table');
         // $row.data('coords', position.coords);
-        $row.hide().fadeIn()
+        $row.hide().slideDown()
         mapCoordinates(position.coords);
       }
 
@@ -118,9 +138,6 @@
         console.log(error);
         log('Error getting location (' + error.message + ')');
       }
-
-      var mymap;
-      var lastCircle;
 
       function initialiseMap() {
         mymap = L.map('map');
@@ -148,6 +165,7 @@
         initialiseMap();
         $('.js-get-location').click(getLocation);
         $('.js-track-location').click(trackLocation);
+        $('.js-stop-tracking').click(stopTrackingLocation);
         $('.js-map-coordinates').click(function(){
           // mapCoordinates($(this).closest('tr').data('coords'))
         })
