@@ -167,11 +167,11 @@
           <blockquote>
             Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.
           </blockquote>
-          <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">
-            <h5>Persist Invalid Records with ActiveRecord</h5>
+          <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">
+            <h5>Handling Token Generation Collisions In ActiveRecord</h5>
           </a>
           <blockquote>
-            We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.
+            Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.
           </blockquote>
 
         <small>
