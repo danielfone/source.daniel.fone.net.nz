@@ -14,6 +14,7 @@
 
     <style media="screen">
       #map { height: 20em; max-width: 40em; margin: auto; }
+      thead th { vertical-align: top !important; }
     </style>
 
     <title>Geolocation Demo</title>
@@ -39,7 +40,7 @@
         <thead>
           <tr>
             <th>Delay</th>
-            <th>Accuracy</th>
+            <th>Accuracy <small class="text-muted">(P=95%)</small></th>
             <th>Latitude</th>
             <th>Longitude</th>
           </tr>
@@ -51,7 +52,7 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
@@ -60,15 +61,16 @@
 
 
     <script type="text/javascript">
+      var geolocationOpts = {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      };
+
       function log(text) { $('#page-status').text(text); }
 
       function getLocation() {
         $('.js-get-location').attr('disabled', 'disabled');
-        var options = {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        };
         var startTime = new Date()
         navigator.geolocation.getCurrentPosition(
           function(position) {
@@ -77,7 +79,7 @@
             $('.js-get-location').removeAttr('disabled');
           },
           handleLocationError,
-          options
+          geolocationOpts
         );
         log('Locating…');
       }
@@ -85,17 +87,12 @@
       function trackLocation() {
         $('.js-get-location').attr('disabled', 'disabled');
         $('.js-track-location').attr('disabled', 'disabled');
-        var options = {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        };
         navigator.geolocation.watchPosition(
           function(position) {
             processLocation(position, null);
           },
           handleLocationError,
-          options
+          geolocationOpts
         );
         log('Watching…');
       }
@@ -103,15 +100,17 @@
       function processLocation(position, startTime) {
         var delay = startTime ? (position.timestamp - startTime) / 1000 : 0;
         console.log(position);
-        var $row = $('.js-location-table').prepend(
-          "<tr>" +
+        var $row = $(
+          "<tr style='display:none'>" +
+            // "<td><button class='btn btn-outline-primary js-map-coordinates'><i class='fas fa-map-marked-alt'></i></button></td>"+
             "<td>" + delay.toFixed(1) + " s</td>"+
             "<td>" + position.coords.accuracy.toFixed(1) + " m</td>"+
-            "<td>" + position.coords.latitude.toFixed(2) + "</td>"+
-            "<td>" + position.coords.longitude.toFixed(2) + "</td>"+
+            "<td>" + position.coords.latitude.toFixed(2) + "… </td>"+
+            "<td>" + position.coords.longitude.toFixed(2) + "… </td>"+
           "</tr>"
-        );
-        $row.data('coords', position.coords);
+        ).prependTo('.js-location-table');
+        // $row.data('coords', position.coords);
+        $row.hide().fadeIn()
         mapCoordinates(position.coords);
       }
 
@@ -135,7 +134,7 @@
 
       function mapCoordinates(coords) {
         if (lastCircle) lastCircle.remove();
-        var bounds = L.latLng(coords.latitude, coords.longitude).toBounds(coords.accuracy);
+        var bounds = L.latLng(coords.latitude, coords.longitude).toBounds(coords.accuracy * 2);
         mymap.fitBounds(bounds, {padding: [10, 10]});
         lastCircle = L.circle([coords.latitude, coords.longitude], {
             color: 'blue',
@@ -149,6 +148,9 @@
         initialiseMap();
         $('.js-get-location').click(getLocation);
         $('.js-track-location').click(trackLocation);
+        $('.js-map-coordinates').click(function(){
+          // mapCoordinates($(this).closest('tr').data('coords'))
+        })
         log('Ready.')
       })
     </script>
