@@ -1,34 +1,32 @@
+<h2>About</h2>
+
 <p>
-  I&#8217;m a freelance Ruby/Rails engineer,
-  who loves working with <strong>great people</strong>
-  to make <strong>interesting things</strong>.
-  If you’re creating something interesting,
-  get in touch! You can probably
-  <a href="/hire">hire me</a>.
+  <%= avatar_img_tag %>
+  I&#8217;m a freelance Ruby/Rails engineer with over a decade of experience writing Ruby and Rails.
+  I live in Christchurch, New&nbsp;Zealand with my wife and kids, and in recent years I've helped organise the
+  <a href="https://www.meetup.com/Christchurch-Ruby-Group/">Christchurch Ruby</a>
+   meetups and served as secretary on the
+   <a href="https://ruby.nz/">Ruby New Zealand</a>
+    committee.
 </p>
 
-<p>As my son once said, &ldquo;Let&#8217;s go build all the things!&rdquo;</p>
+<p>Much like Ruby, I try to be optimised for happiness — both my own and other people's.</p>
 
+<p>
+  I love working with good people to make useful things.
+  If you're interested, get in touch! You can probably <a href="/hire">hire me</a>.
+</p>
 
-<div class="row">
-  <div class="col-md-12">
-    <h4>Recent Posts</h4>
-    <ul>
-      <% recent_articles.each do |article| %>
-        <li>
-          <a href="<%= article.url %>">
-            <h5><%= article.title %></h5>
-          </a>
-          <blockquote>
-            <%= article.data[:summary] %>
-          </blockquote>
-        </li>
-      <% end %>
+<aside class="recent-posts">
+  <h2>Recent Posts</h2>
+  <% recent_articles.each do |article| %>
+    <h3>
+      <%= link_to article.title, article.url %>
+    </h3>
+    <p><%= article.data[:summary] %></p>
+  <% end %>
 
-    </ul>
-
-    <small>
-      <p><%= link_to 'More posts', '/blog/archives/' %></p>
-    </small>
-  </div>
-</div>
+  <p>
+    <small><%= link_to 'More posts', '/blog/archives/' %></small>
+  </p>
+</aside>

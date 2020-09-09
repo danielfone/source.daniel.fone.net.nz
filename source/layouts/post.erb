@@ -3,25 +3,50 @@
     <h2>
       <%= current_article.title %>
     </h2>
-    <p>
-      <small class="text-muted">
-        <%- if current_article.data[:updated] -%>
-          Updated <%= format_date current_article.data[:updated] %>
-          —
-          Originally written
-        <%- end -%>
-        <%= format_date current_article.date %>
-      </small>
+    <p class="article-metadata">
+      <%- if current_article.data[:updated] -%>
+        Updated <%= format_date current_article.data[:updated] %>
+        &middot;
+        Originally written
+      <%- end -%>
+      <%= format_date current_article.date %>
     </p>
 
     <%- if current_article.data[:summary] -%>
-      <div class="well">
-        <strong>tl;dr</strong> <%= current_article.data[:summary] %>
-      </div>
+      <summary>
+        <p><strong>tl;dr</strong> <%= current_article.data[:summary] %></p>
+      </summary>
     <%- end -%>
 
     <%= yield %>
   </article>
+
+  <aside id="about-me">
+    <h3>About Me</h3>
+    <p>
+      <%= avatar_img_tag %>
+      I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
+      I'm available for freelancing, consulting and remote contracting.
+    </p>
+    <p>
+      You can follow me on <%= link_to 'Twitter', 'https://twitter.com/danielfone' %>
+      or <%= link_to 'GitHub', 'https://github.com/danielfone' %>
+      and <a href="/hire">hire me</a>.
+    </p>
+  </aside>
+
+  <aside id='featured-posts'>
+    <h3>Other Posts</h3>
+    <% featured_articles.shuffle.take(3).each do |article| %>
+      <h4>
+        <%= link_to article.title, article.url %>
+      </h4>
+      <p><%= article.data[:summary] %></p>
+    <% end %>
+    <p>
+      <small><%= link_to 'More posts', '/blog/archives/' %></small>
+    </p>
+  </aside>
 
   <%= partial 'blog/disqus' if comments_enabled? %>
 <% end %>

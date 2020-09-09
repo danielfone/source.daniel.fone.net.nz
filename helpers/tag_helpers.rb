@@ -1,19 +1,11 @@
 module TagHelpers
-  def monthly_header(date)
-    date_string = format_date date
-    return if date_string == @prev_date_string
-    yield date_string
-    @prev_date_string = date_string
-  end
-
   def format_date(date)
     date.strftime('%B %Y')
   end
 
   def nav_link_to(link_text, url, options = {})
-    options[:class] ||= ""
-    options[:class] << ' blog-nav-item'
-    options[:class] << " active" if url == current_page.url
+    options[:class] = Array(options[:class])
+    options[:class] << "active" if url == current_page.url
     link_to link_text, url, options
   end
 
@@ -23,5 +15,11 @@ module TagHelpers
 
   def link_to_self(url)
     link_to url, url
+  end
+
+  def avatar_img_tag(size=70)
+    image_tag "//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=#{size * 2}",
+      width: size,
+      class: 'avatar'
   end
 end

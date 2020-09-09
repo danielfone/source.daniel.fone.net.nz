@@ -1,45 +1,33 @@
 <% wrap_layout :layout do %>
   <header>
-    <%= image_tag 'blue-dot.png', style: 'float: left; margin-right: 1em; width: 5em' %>
-    <h1><a href="/">Daniel Fone</a></h1>
-    <p class="lead">Ruby/Rails Engineer</p>
+    <svg class="logo" version="1.0" xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" viewBox="0 0 100 100">
+      <circle cx="50%" cy="50%" r="50" fill="#67AAF7" />
+    </svg>
+    <h1>Daniel Fone</h1>
+    <p class="description">Ruby/Rails Engineer</p>
   </header>
 
-  <div class="row">
-    <div class="col-md-9">
-      <%= yield %>
+  <nav>
+    <div class="links">
+      <%= nav_link_to 'About Me', '/' %> &middot;
+      <%= nav_link_to 'Articles', '/blog/archives/' %> &middot;
+      <%= nav_link_to 'Contact', '/hire/' %>
     </div>
-    <div class="col-md-3">
-      <aside>
-        <%= image_tag '//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140', width: 70, class: 'img-thumbnail', style: 'float: right' %>
-        <h4>About Me</h4>
-        <p>
-          I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
-          I'm available for freelancing, consulting and remote contracting.
-        </p>
-        <p>
-          Follow me on <%= link_to 'Twitter', 'https://twitter.com/danielfone' %>.
-        </p>
-        <p>
-          <a href="/hire" class="button primary">Hire me</a>
-        </p>
-      </aside>
+  </nav>
 
-      <aside>
-        <h4>Featured Posts</h4>
-        <% featured_articles.each do |article| %>
-          <a href="<%= article.url %>">
-            <h5><%= article.title %></h5>
-          </a>
-          <blockquote>
-            <%= article.data[:summary] %>
-          </blockquote>
-        <% end %>
+  <main><%= yield %></main>
 
-        <small>
-          <p><%= link_to 'More posts', '/blog/archives/' %></p>
-        </small>
-      </aside>
-    </div>
-  </div>
+  <footer>
+    <p>
+      Written 2013&ndash;<%= Date.today.year %> by Daniel Fone
+      &middot;
+      Powered by
+      <%= link_to 'Middleman', 'http://middlemanapp.com/' %>
+      and
+      <%= link_to 'GitHub Pages', 'http://pages.github.com/' %>
+    </p>
+    <p>
+      <a href="#">Back to top</a>
+    </p>
+  </footer>
 <% end %>
