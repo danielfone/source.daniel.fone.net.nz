@@ -7,6 +7,4 @@ gem "middleman-syntax"
 # For feed.xml.builder
 gem "builder", "~> 3.0"
 
-gem 'bootstrap-sass', '~> 3.1', require: false
-
 gem 'pry'
