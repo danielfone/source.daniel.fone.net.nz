@@ -4,8 +4,16 @@ module BlogHelpers
     blog.articles[0...5]
   end
 
+  # Grab the most recent featured article and two other random ones
   def featured_articles
-    blog.articles.select { |a| a.data[:featured] }.sample(3)
+    features =
+      blog
+      .articles
+      .select { |a| a.data[:featured] }
+      .reject { |a| a == current_article }
+      .sort_by { |a| a.date }
+
+    [features.pop, *features.sample(2)]
   end
 
   def reading_time(input)

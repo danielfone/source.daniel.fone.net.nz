@@ -39,7 +39,7 @@
 
   <aside id='featured-posts'>
     <h3>Other Posts</h3>
-    <% featured_articles.shuffle.take(3).each do |article| %>
+    <% featured_articles.each do |article| %>
       <h4>
         <%= link_to article.title, article.url %>
       </h4>
