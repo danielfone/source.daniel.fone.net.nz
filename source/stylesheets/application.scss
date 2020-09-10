@@ -1,2 +1,92 @@
 @import "highlight";
 
+// Typography
+
+body {
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 12pt;
+  margin: 1em 0;
+}
+
+code { font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
+
+main {
+  line-height: 1.5;
+}
+
+a { text-decoration: none; }
+
+header p.description {
+  font-size: larger;
+  font-weight: 300;
+}
+h1, h2, h3, h4 { font-weight: 500; margin-bottom: 0.25em; }
+
+p { margin-top: 0; }
+p.article-metadata { font-size: smaller; }
+
+.footnotes {
+  font-size: small;
+}
+
+// Colours
+
+body { color: #222; }
+header h1 { color: #67AAF7; }
+a { color: #1f44d2; }
+main a:visited { color: #7e3690; }
+nav a { color: white; }
+nav { background: #67AAF7; color: white; }
+p.article-metadata,
+footer { color: #777; }
+aside { background: #f5f5f5; }
+
+
+.footnotes {
+  border-top: 1px solid #eee;
+}
+
+// Layout
+* { box-sizing: border-box; }
+
+header, nav .links, main, footer {
+  margin: 0 auto;
+  max-width: 52em;
+  padding: 0 1em;
+}
+
+header {
+  .logo {
+    float: left;
+    width: 4em;
+    height: 4em;
+    margin-right: 1em;
+  }
+
+  h1, p { margin: 0; }
+}
+
+nav {
+  margin: 1.5em 0;
+  .links { padding: 0.5em 0; }
+  .links a { padding: 0.5em 1em; }
+}
+
+article {
+  margin-bottom: 3em;
+}
+
+img.avatar { float: right; }
+
+pre.highlight {
+  font-size: 85%;
+  overflow-x: scroll;
+  padding: 1em;
+  width: 100%;
+}
+
+aside { font-size: smaller; padding: 1px 1em; margin: 1rem -1rem; }
+
+footer {
+  margin: 2em auto;
+}
