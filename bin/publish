@@ -18,9 +18,11 @@ else
   usage
 fi
 
-
 bin/middleman build
+
 cd build
+mv ../.git.build .git
 git add -A
 git commit -m "Updated `date`" || true
 git push $GIT_DEST
+mv .git ../.git.build
