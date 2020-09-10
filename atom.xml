@@ -5,7 +5,7 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2014-12-09T23:28:00Z</updated>
+  <updated>2014-12-10T12:28:00+13:00</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
@@ -13,7 +13,7 @@
     <title>Handling Token Generation Collisions In ActiveRecord</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/</id>
-    <published>2014-12-09T23:28:00Z</published>
+    <published>2014-12-10T12:28:00+13:00</published>
     <updated>2014-12-10T14:32:41+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -133,7 +133,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <title>Generating Unique, Random Tokens</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/</id>
-    <published>2014-12-07T08:10:00Z</published>
+    <published>2014-12-07T21:10:00+13:00</published>
     <updated>2014-12-10T14:30:25+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -201,7 +201,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <title>Efficient Uniqueness Validations</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/</id>
-    <published>2014-12-05T00:31:00Z</published>
+    <published>2014-12-05T13:31:00+13:00</published>
     <updated>2014-12-07T21:12:44+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -266,7 +266,7 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
     <title>Unicode and Regex in Ruby 1.8</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/03/unicode-and-regex-in-ruby-1-8/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/03/unicode-and-regex-in-ruby-1-8/</id>
-    <published>2014-12-03T10:33:00Z</published>
+    <published>2014-12-03T23:33:00+13:00</published>
     <updated>2014-12-04T00:29:53+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -329,7 +329,7 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
     <title>Fixing Connection Errors After Upgrading Postgres</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/</id>
-    <published>2014-11-30T23:43:00Z</published>
+    <published>2014-12-01T12:43:00+13:00</published>
     <updated>2014-12-06T22:43:16+13:00</updated>
     <author>
       <name>Daniel Fone</name>
@@ -357,7 +357,7 @@ $ bundle install
     <title>Devise causing a CookieOverflow error</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/"/>
     <id>http://daniel.fone.net.nz/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/</id>
-    <published>2014-11-27T21:51:00Z</published>
+    <published>2014-11-28T10:51:00+13:00</published>
     <updated>2014-11-28T22:03:00+13:00</updated>
     <author>
       <name>Daniel Fone</name>
