@@ -10,6 +10,8 @@
         Originally written
       <%- end -%>
       <%= format_date current_article.date %>
+      &middot;
+      <%= reading_time current_article.body %> to read
     </p>
 
     <%- if current_article.data[:summary] -%>
