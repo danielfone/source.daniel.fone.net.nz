@@ -92,9 +92,9 @@ ActionController::Base
       </h4>
       <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
+        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
       </h4>
-      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
+      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
       <h4>
         <a href="/blog/2014/12/07/generating-unique-random-tokens/">Generating Unique, Random Tokens</a>
       </h4>

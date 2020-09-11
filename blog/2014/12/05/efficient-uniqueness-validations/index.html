@@ -135,9 +135,9 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
       </h4>
       <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
       <h4>
-        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
+        <a href="/blog/2014/12/07/generating-unique-random-tokens/">Generating Unique, Random Tokens</a>
       </h4>
-      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
+      <p>If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
