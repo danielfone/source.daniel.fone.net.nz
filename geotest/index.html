@@ -82,119 +82,115 @@
     </div>
   </main>
 
-</body>
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-
-<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
   integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
   crossorigin=""></script>
 
+  <script type="text/javascript">
+    var myMap
+    var lastCircle
+    var watchId
+    var requestedAt
+    var statusSpan = document.getElementById('page-status')
+    var form = document.forms['geolocate']
+    var getLocationBtn = form.getLocation
+    var trackLocationBtn = form.trackLocation
+    var positionTable = document.getElementById('positions')
 
-<script type="text/javascript">
-  var myMap
-  var lastCircle
-  var watchId
-  var requestedAt
-  var statusSpan = document.getElementById('page-status')
-  var form = document.forms['geolocate']
-  var getLocationBtn = form.getLocation
-  var trackLocationBtn = form.trackLocation
-  var positionTable = document.getElementById('positions')
-
-  // Trigger one-off request for device location
-  function getLocation() {
-    requestedAt = new Date()
-    navigator.geolocation.getCurrentPosition(processLocation, handleLocationError, getPositionOptions())
-    setStatus('Locating…')
-  }
-
-  // Toggle a position 'watch'
-  function toggleLocationTracking() {
-    if (watchId) {
-      navigator.geolocation.clearWatch(watchId);
-      trackLocationBtn.innerText = 'Start Tracking Location'
-      setStatus('Ready')
-      watchId = null
-    } else {
-      watchId = navigator.geolocation.watchPosition(processLocation, handleLocationError, getPositionOptions())
-      trackLocationBtn.innerText = 'Stop Tracking Location'
+    // Trigger one-off request for device location
+    function getLocation() {
+      requestedAt = new Date()
+      navigator.geolocation.getCurrentPosition(processLocation, handleLocationError, getPositionOptions())
       setStatus('Locating…')
     }
-  }
 
-  function processLocation(position) {
-    var age = new Date() - position.timestamp
-    var time = requestedAt ? new Date() - requestedAt : null
-    requestedAt = null
+    // Toggle a position 'watch'
+    function toggleLocationTracking() {
+      if (watchId == null) {
+        watchId = navigator.geolocation.watchPosition(processLocation, handleLocationError, getPositionOptions())
+        trackLocationBtn.innerText = 'Stop Tracking Location'
+        setStatus('Locating…')
+      } else {
+        navigator.geolocation.clearWatch(watchId);
+        trackLocationBtn.innerText = 'Start Tracking Location'
+        setStatus('Ready')
+        watchId = null
+      }
+    }
 
-    console.log(position)
-    mapCoordinates(position.coords)
-    positionTable.insertAdjacentHTML('afterbegin', buildLocationRow(position.coords, age, time))
-    setStatus('Located as at ' + new Date(position.timestamp))
-  }
+    function processLocation(position) {
+      var age = new Date() - position.timestamp
+      var time = requestedAt ? new Date() - requestedAt : null
+      requestedAt = null
 
-  function handleLocationError(error) {
-    console.error(error);
-    setStatus('Error getting location (' + error.message + ')');
-  }
+      console.log(position)
+      mapCoordinates(position.coords)
+      positionTable.insertAdjacentHTML('afterbegin', buildLocationRow(position.coords, age, time))
+      setStatus('Located as at ' + new Date(position.timestamp))
+    }
 
-  function buildLocationRow(coords, age, time) {
-    return "<tr>" +
-      "<td>" + (time ? time + '&nbsp;ms' : '-' ) + "</td>" +
-      "<td>" + age + "&nbsp;ms</td>" +
-      "<td>" + Math.round(coords.accuracy) + "&nbsp;m</td>" +
-      "<td>" + coords.latitude + "</td>" +
-      "<td>" + coords.longitude + "</td>" +
-      "<td>" + coords.altitude + "&nbsp;m</td>" +
-      "<td>" + Math.round(coords.altitudeAccuracy) + "&nbsp;m</td>" +
-      "<td>" + coords.heading + "º</td>" +
-      "<td>" + coords.speed + "&nbsp;m/s</td>" +
-      "</tr>"
-  }
+    function handleLocationError(error) {
+      console.error(error);
+      setStatus('Error getting location (' + error.message + ')');
+    }
 
-  function initialiseMap() {
-    myMap = L.map('map');
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      maxZoom: 18,
-      id: 'mapbox.satellite',
-      accessToken: 'pk.eyJ1IjoiZGFuaWVsZm9uZSIsImEiOiJjam5wNG1zMXoxYWtpM3dueHo5bWNpMng1In0.KcFYPss4RkOudvf-fNMs0g'
-    }).addTo(myMap);
-  }
+    function buildLocationRow(coords, age, time) {
+      return "<tr>" +
+        "<td>" + (time ? time + '&nbsp;ms' : '-' ) + "</td>" +
+        "<td>" + age + "&nbsp;ms</td>" +
+        "<td>" + Math.round(coords.accuracy) + "&nbsp;m</td>" +
+        "<td>" + coords.latitude + "</td>" +
+        "<td>" + coords.longitude + "</td>" +
+        "<td>" + coords.altitude + "&nbsp;m</td>" +
+        "<td>" + Math.round(coords.altitudeAccuracy) + "&nbsp;m</td>" +
+        "<td>" + coords.heading + "º</td>" +
+        "<td>" + coords.speed + "&nbsp;m/s</td>" +
+        "</tr>"
+    }
 
-  function mapCoordinates(coords) {
-    if (lastCircle) lastCircle.remove();
-    var bounds = L.latLng(coords.latitude, coords.longitude).toBounds(coords.accuracy * 2);
-    myMap.fitBounds(bounds, { padding: [10, 10] });
-    lastCircle = L.circle([coords.latitude, coords.longitude], {
-      color: 'blue',
-      fillColor: '#03f',
-      fillOpacity: 0.25,
-      radius: coords.accuracy
-    }).addTo(myMap);
-  }
+    function initialiseMap() {
+      myMap = L.map('map');
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.satellite',
+        accessToken: 'pk.eyJ1IjoiZGFuaWVsZm9uZSIsImEiOiJjam5wNG1zMXoxYWtpM3dueHo5bWNpMng1In0.KcFYPss4RkOudvf-fNMs0g'
+      }).addTo(myMap);
+    }
 
-  function setStatus(text) { statusSpan.innerText = text }
+    function mapCoordinates(coords) {
+      if (lastCircle) lastCircle.remove();
+      var bounds = L.latLng(coords.latitude, coords.longitude).toBounds(coords.accuracy * 2);
+      myMap.fitBounds(bounds, { padding: [10, 10] });
+      lastCircle = L.circle([coords.latitude, coords.longitude], {
+        color: 'blue',
+        fillColor: '#03f',
+        fillOpacity: 0.25,
+        radius: coords.accuracy
+      }).addTo(myMap);
+    }
 
-  // Convert form data into a PositionOptions object
-  function getPositionOptions() {
-    var opts = {}
-    opts.enableHighAccuracy = form.enableHighAccuracy.checked
-    if (val = form.timeout.value) opts.timeout = +val
-    if (val = form.maximumAge.value) opts.maximumAge = +val
-    console.log('PositionOptions', opts)
-    return opts
-  }
+    function setStatus(text) { statusSpan.innerText = text }
 
-  if(!navigator.geolocation) {
-    setStatus('Geolocation is not available on this device')
-  } else {
-    initialiseMap()
-    getLocationBtn.addEventListener('click', getLocation)
-    trackLocationBtn.addEventListener('click', toggleLocationTracking)
-    setStatus('Ready')
-  }
-</script>
+    // Convert form data into a PositionOptions object
+    function getPositionOptions() {
+      var opts = {}
+      opts.enableHighAccuracy = form.enableHighAccuracy.checked
+      if (val = form.timeout.value) opts.timeout = +val
+      if (val = form.maximumAge.value) opts.maximumAge = +val
+      console.log('PositionOptions', opts)
+      return opts
+    }
 
+    if(!navigator.geolocation) {
+      setStatus('Geolocation is not available on this device')
+    } else {
+      initialiseMap()
+      getLocationBtn.addEventListener('click', getLocation)
+      trackLocationBtn.addEventListener('click', toggleLocationTracking)
+      setStatus('Ready')
+    }
+  </script>
+
+</body>
 </html>
