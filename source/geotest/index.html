@@ -1,176 +1,196 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
-      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-      crossorigin=""/>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <style media="screen">
-      #map { height: 20em; max-width: 40em; margin: auto; }
-      thead th { vertical-align: top !important; }
-    </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="" />
 
-    <title>Geolocation Demo</title>
-  </head>
-  <body>
-    <main role="main" class="container">
+  <style media="screen">
+    body { font-family: sans-serif; max-width: 52em; margin: 0 auto; padding: 1em; }
+    input, button { font-size: 12pt; margin: 1em auto; }
+    thead th { vertical-align: top; }
+    th, td { padding: 0.25em; text-align: right; }
+    label { display: block; margin: 0.5em; cursor: pointer; }
+    #map { height: 30em; width: 100%; margin: auto; }
+    #position-log { margin-top: 1em; width: 100%; overflow: scroll; }
+    #position-log table { border: 1px #ccc solid; }
+  </style>
 
-      <h1>Geolocation Demo</h1>
+  <title>Geolocation Device Test</title>
+</head>
 
-      <button class="js-get-location btn btn-primary" type="button" name="button">
-        <i class="fas fa-map-marker-alt"></i>
+<body>
+  <main>
+    <h1>Geolocation Device Test</h1>
+    <p>
+      To test the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API/Using_the_Geolocation_API">Geolocation API</a>.
+      This page does not transmit any data.
+    </p>
+    <form id="geolocate">
+      <button type="button" name="getLocation">
         Get Location
       </button>
-      <button class="js-track-location btn btn-primary" type="button" name="button">
-        <i class="fas fa-search-location"></i>
-        Track Location
+      <button type="button" name="trackLocation">
+        Start Tracking Location
       </button>
-      <button class="js-stop-tracking btn btn-outline-danger" style="display:none" type="button" name="button">
-        <i class="fas fa-stop-circle"></i>
-        Stop Tracking
-      </button>
-      <p class="text-muted" id="page-status">
-        Initialising…
-      </p>
-      <div id="map"></div>
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Delay</th>
-              <th>Accuracy <small class="text-muted">(P=95%)</small></th>
-              <th>Latitude</th>
-              <th>Longitude</th>
-            </tr>
-          </thead>
-          <tbody class="js-location-table">
-          </tbody>
-        </table>
-      </div>
-    </main><!-- /.container -->
+      <details>
+        <summary>Options</summary>
+        <fieldset name="options">
+          <label for="enableHighAccuracy">
+            enableHighAccuracy
+            <input type="checkbox" name="enableHighAccuracy" id="enableHighAccuracy">
+          </label>
+          <label for="timeout">
+            timeout (ms)
+            <input type="number" name="timeout" id="timeout" placeholder="Infinity">
+          </label>
+          <label for="maximumAge">
+            maximumAge (ms)
+            <input type="number" name="maximumAge" id="maximumAge" placeholder="0">
+          </label>
+        </fieldset>
+      </details>
+    </form>
+    <p id="page-status">
+      <script>document.write('Initialising…')</script>
+      <noscript>JavaScript required.</noscript>
+    </p>
+    <div id="map"></div>
+    <div id="position-log">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Age</th>
+            <th>Accuracy <small>(P=95%)</small></th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Altitude (m)</th>
+            <th>Altitude Accuracy <small>(P=95%)</small></th>
+            <th>Heading</th>
+            <th>Speed</th>
+          </tr>
+        </thead>
+        <tbody id="positions">
+        </tbody>
+      </table>
+    </div>
+  </main>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
-      integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
-      crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+  integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+  crossorigin=""></script>
 
+  <script type="text/javascript">
+    var myMap
+    var lastCircle
+    var watchId
+    var requestedAt
+    var statusSpan = document.getElementById('page-status')
+    var form = document.forms['geolocate']
+    var getLocationBtn = form.getLocation
+    var trackLocationBtn = form.trackLocation
+    var positionTable = document.getElementById('positions')
 
-    <script type="text/javascript">
-      var geolocationOpts = {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      };
-      var mymap;
-      var lastCircle;
-      var watchId;
+    // Trigger one-off request for device location
+    function getLocation() {
+      requestedAt = new Date()
+      navigator.geolocation.getCurrentPosition(processLocation, handleLocationError, getPositionOptions())
+      setStatus('Locating…')
+    }
 
-      function log(text) { $('#page-status').text(text); }
-
-      function getLocation() {
-        $('.js-get-location').attr('disabled', 'disabled');
-        var startTime = new Date()
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            processLocation(position, startTime);
-            log('Located.');
-            $('.js-get-location').removeAttr('disabled');
-          },
-          handleLocationError,
-          geolocationOpts
-        );
-        log('Locating…');
+    // Toggle a position 'watch'
+    function toggleLocationTracking() {
+      if (watchId == null) {
+        watchId = navigator.geolocation.watchPosition(processLocation, handleLocationError, getPositionOptions())
+        trackLocationBtn.innerText = 'Stop Tracking Location'
+        setStatus('Locating…')
+      } else {
+        navigator.geolocation.clearWatch(watchId);
+        trackLocationBtn.innerText = 'Start Tracking Location'
+        setStatus('Ready')
+        watchId = null
       }
+    }
 
-      function trackLocation() {
-        $('.js-get-location').attr('disabled', 'disabled');
-        $('.js-track-location').hide();
-        $('.js-stop-tracking').show();
-        watchId = navigator.geolocation.watchPosition(
-          function(position) {
-            processLocation(position, null);
-          },
-          handleLocationError,
-          geolocationOpts
-        );
-        log('Watching…');
-      }
+    function processLocation(position) {
+      var age = new Date() - position.timestamp
+      var time = requestedAt ? new Date() - requestedAt : null
+      requestedAt = null
 
-      function stopTrackingLocation() {
-        $('.js-get-location').removeAttr('disabled');
-        $('.js-track-location').show();
-        $('.js-stop-tracking').hide();
-        if (watchId) {
-          navigator.geolocation.clearWatch(watchId);
-          log('Ready.')
-        }
-      }
+      console.log(position)
+      mapCoordinates(position.coords)
+      positionTable.insertAdjacentHTML('afterbegin', buildLocationRow(position.coords, age, time))
+      setStatus('Located as at ' + new Date(position.timestamp))
+    }
 
-      function processLocation(position, startTime) {
-        var delay = startTime ? (position.timestamp - startTime) / 1000 : 0;
-        console.log(position);
-        var $row = $(
-          "<tr style='display:none'>" +
-            // "<td><button class='btn btn-outline-primary js-map-coordinates'><i class='fas fa-map-marked-alt'></i></button></td>"+
-            "<td>" + delay.toFixed(1) + " s</td>"+
-            "<td>" + Math.round(position.coords.accuracy) + " m</td>"+
-            "<td>" + position.coords.latitude + "</td>"+
-            "<td>" + position.coords.longitude + "</td>"+
-          "</tr>"
-        ).prependTo('.js-location-table');
-        // $row.data('coords', position.coords);
-        $row.fadeIn()
-        mapCoordinates(position.coords);
-      }
+    function handleLocationError(error) {
+      console.error(error);
+      setStatus('Error getting location (' + error.message + ')');
+    }
 
-      function handleLocationError(error) {
-        console.log(error);
-        log('Error getting location (' + error.message + ')');
-      }
+    function buildLocationRow(coords, age, time) {
+      return "<tr>" +
+        "<td>" + (time ? time + '&nbsp;ms' : '-' ) + "</td>" +
+        "<td>" + age + "&nbsp;ms</td>" +
+        "<td>" + Math.round(coords.accuracy) + "&nbsp;m</td>" +
+        "<td>" + coords.latitude + "</td>" +
+        "<td>" + coords.longitude + "</td>" +
+        "<td>" + coords.altitude + "&nbsp;m</td>" +
+        "<td>" + Math.round(coords.altitudeAccuracy) + "&nbsp;m</td>" +
+        "<td>" + coords.heading + "º</td>" +
+        "<td>" + coords.speed + "&nbsp;m/s</td>" +
+        "</tr>"
+    }
 
-      function initialiseMap() {
-        mymap = L.map('map');
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox.satellite',
-            accessToken: 'pk.eyJ1IjoiZGFuaWVsZm9uZSIsImEiOiJjam5wNG1zMXoxYWtpM3dueHo5bWNpMng1In0.KcFYPss4RkOudvf-fNMs0g'
-        }).addTo(mymap);
-      }
+    function initialiseMap() {
+      myMap = L.map('map');
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.satellite',
+        accessToken: 'pk.eyJ1IjoiZGFuaWVsZm9uZSIsImEiOiJjam5wNG1zMXoxYWtpM3dueHo5bWNpMng1In0.KcFYPss4RkOudvf-fNMs0g'
+      }).addTo(myMap);
+    }
 
-      function mapCoordinates(coords) {
-        if (lastCircle) lastCircle.remove();
-        var bounds = L.latLng(coords.latitude, coords.longitude).toBounds(coords.accuracy * 2);
-        mymap.fitBounds(bounds, {padding: [10, 10]});
-        lastCircle = L.circle([coords.latitude, coords.longitude], {
-            color: 'blue',
-            fillColor: '#03f',
-            fillOpacity: 0.25,
-            radius: coords.accuracy
-        }).addTo(mymap);
-      }
+    function mapCoordinates(coords) {
+      if (lastCircle) lastCircle.remove();
+      var bounds = L.latLng(coords.latitude, coords.longitude).toBounds(coords.accuracy * 2);
+      myMap.fitBounds(bounds, { padding: [10, 10] });
+      lastCircle = L.circle([coords.latitude, coords.longitude], {
+        color: 'blue',
+        fillColor: '#03f',
+        fillOpacity: 0.25,
+        radius: coords.accuracy
+      }).addTo(myMap);
+    }
 
-      jQuery(function($){
-        initialiseMap();
-        $('.js-get-location').click(getLocation);
-        $('.js-track-location').click(trackLocation);
-        $('.js-stop-tracking').click(stopTrackingLocation);
-        $('.js-map-coordinates').click(function(){
-          // mapCoordinates($(this).closest('tr').data('coords'))
-        })
-        log('Ready.')
-      })
-    </script>
-  </body>
+    function setStatus(text) { statusSpan.innerText = text }
+
+    // Convert form data into a PositionOptions object
+    function getPositionOptions() {
+      var opts = {}
+      opts.enableHighAccuracy = form.enableHighAccuracy.checked
+      if (val = form.timeout.value) opts.timeout = +val
+      if (val = form.maximumAge.value) opts.maximumAge = +val
+      console.log('PositionOptions', opts)
+      return opts
+    }
+
+    if(!navigator.geolocation) {
+      setStatus('Geolocation is not available on this device')
+    } else {
+      initialiseMap()
+      getLocationBtn.addEventListener('click', getLocation)
+      trackLocationBtn.addEventListener('click', toggleLocationTracking)
+      setStatus('Ready')
+    }
+  </script>
+
+</body>
 </html>
