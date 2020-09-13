@@ -2,9 +2,9 @@
 title: "Desire Paths in Web UI"
 ---
 
-_Slides and a rough transcription from my lightning talk at the [@chchruby](https://twitter.com/chchruby) meetup on Thursday, 16th May, 2013._
-
----
+<div class="notice">
+Slides and a rough transcription from my lightning talk at the [@chchruby](https://twitter.com/chchruby) meetup on Thursday, 16th May, 2013.
+</div>
 
 ![slide.001.jpg](2013-05-19-desire-paths-in-web-ui/slide.001.jpg)
 

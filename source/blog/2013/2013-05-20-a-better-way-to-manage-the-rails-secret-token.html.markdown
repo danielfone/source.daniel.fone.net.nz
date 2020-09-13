@@ -5,12 +5,16 @@ updated: 2015-01-04
 summary: Don't store secrets in your source control.
 ---
 
-### Update — Rails 4.1
+<div class="notice">
+
+**Update: Rails 4.1 secrets.yml**
 
 Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: **don't store real secrets in this file if you're checking it in to source control!** Load them from the environment like so:[^1]
 
     production:
       secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
+
+</div>
 
 ### Insecure defaults
 

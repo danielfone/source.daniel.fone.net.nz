@@ -3,12 +3,11 @@ title: "Managing Heroku Config Vars from the Web"
 updated: 2014-11-28
 ---
 
-<div class="alert alert-warning">
-  <p><strong>Deprecation Notice</strong></p>
-  <p>
-    This functionality has now been implemented (in its rightful place) in the Heroku dashboard. The gem no longer maintained.
-    See <%= link_to_self "https://devcenter.heroku.com/changelog-items/455" %>
-  </p>
+<div class="notice">
+  **Deprecation Notice**
+
+  This functionality has now been implemented (in its rightful place) in the Heroku dashboard. The gem no longer maintained.
+  See <https://devcenter.heroku.com/changelog-items/455>
 </div>
 
 ### The Problem

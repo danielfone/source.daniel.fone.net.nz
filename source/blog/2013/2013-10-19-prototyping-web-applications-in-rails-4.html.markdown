@@ -2,9 +2,11 @@
 title: "Prototyping Web Applications in Rails 4"
 ---
 
-_From a presentation I gave at the at the [@chchruby](https://twitter.com/chchruby) meetup on Thursday, 17th Oct, 2013.
+<div class="notice">
+From a presentation I gave at the at the [@chchruby](https://twitter.com/chchruby) meetup on Thursday, 17th Oct, 2013.
 It was aimed at folks who were unfamiliar with Rails and bear in mind, this was a **15 minute** lightning talk.
-I've linked to specific commits below, but you can view the finished repo on [GitHub](https://github.com/danielfone/reimburser-wizard)._
+I've linked to specific commits below, but you can view the finished repo on [GitHub](https://github.com/danielfone/reimburser-wizard).
+</div>
 
 ### Background
 

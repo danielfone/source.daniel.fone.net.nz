@@ -6,10 +6,6 @@ summary: Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry<
 featured: true
 ---
 
-<code style="float:right; margin: 0.1em; font-size: 20pt; background: #f1f1f1; padding: 0.1em 0.5em">
-  token=DEC0DE
-</code>
-
 In my [previous post](/blog/2014/12/07/generating-unique-random-tokens/) we looked at generating unique, random tokens to securely identify records with. While UUIDs solve this problem well, they are unweidly. In some cases, it's handy to have an identifier that's shorter and hence easier to read out. Naturally, the problem with shorter tokens is collisions. As we reduce our available pool of tokens, the chance that a randomly selected one will be unique goes down quickly.
 
 Whether this trade off makes sense is entirely dependent on the application. Let's say we're identifying an order in a particular month. If we need a short, readable token that's unique _only among this month's orders_, we can probably use a short token. This is because the number of orders in a given month is not going to grow linearly — we can expect it to hover around a certain percentage of the total available tokens.
@@ -37,12 +33,12 @@ end
 ~~~
 
     > Order.create!
-    D, [2014-12-10T12:27:16.537985 #19797] DEBUG -- :    (0.1ms)  begin transaction
-    D, [2014-12-10T12:27:16.538701 #19797] DEBUG -- :   SQL (0.1ms)  INSERT INTO "orders" DEFAULT VALUES
-    D, [2014-12-10T12:27:16.541939 #19797] DEBUG -- :   SQL (2.6ms)  UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
-    E, [2014-12-10T12:27:16.542037 #19797] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
-    D, [2014-12-10T12:27:16.542747 #19797] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'd776b10' WHERE "orders"."id" = 9
-    D, [2014-12-10T12:27:16.542956 #19797] DEBUG -- :    (0.1ms)  commit transaction
+      DEBUG -- SQL (0.1ms)  begin transaction
+      DEBUG -- SQL (0.1ms)  INSERT INTO "orders" DEFAULT VALUES
+      DEBUG -- SQL (2.6ms)  UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
+      ERROR -- SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '99a8b4' WHERE "orders"."id" = 9
+      DEBUG -- SQL (0.1ms)  UPDATE "orders" SET "token" = 'd776b10' WHERE "orders"."id" = 9
+      DEBUG -- SQL (0.1ms)  commit transaction
     => #<Order id: 9, token: "d776b10">
 
 Not bad for a first try.
@@ -68,15 +64,15 @@ rescue ActiveRecord::RecordNotUnique => e
 end
 ~~~
 
-    D, [2014-12-10T12:50:26.996927 #21209] DEBUG -- :    (0.0ms)  begin transaction
-    D, [2014-12-10T12:50:26.997180 #21209] DEBUG -- :   SQL (0.0ms)  INSERT INTO "orders" DEFAULT VALUES
-    D, [2014-12-10T12:50:26.997671 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
-    E, [2014-12-10T12:50:26.997707 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
-    D, [2014-12-10T12:50:26.998170 #21209] DEBUG -- :   SQL (0.1ms)  UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
-    E, [2014-12-10T12:50:26.998220 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
-    D, [2014-12-10T12:50:26.998678 #21209] DEBUG -- :   SQL (0.2ms)  UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
-    E, [2014-12-10T12:50:26.998713 #21209] ERROR -- : SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
-    D, [2014-12-10T12:50:26.998856 #21209] DEBUG -- :    (0.1ms)  rollback transaction
+    DEBUG -- SQL (0.0ms)  begin transaction
+    DEBUG -- SQL (0.0ms)  INSERT INTO "orders" DEFAULT VALUES
+    DEBUG -- SQL (0.1ms)  UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
+    ERROR -- SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'c3' WHERE "orders"."id" = 32
+    DEBUG -- SQL (0.1ms)  UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
+    ERROR -- SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = '50' WHERE "orders"."id" = 32
+    DEBUG -- SQL (0.2ms)  UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
+    ERROR -- SQLite3::ConstraintException: UNIQUE constraint failed: orders.token: UPDATE "orders" SET "token" = 'cb' WHERE "orders"."id" = 32
+    DEBUG -- SQL (0.1ms)  rollback transaction
     ActiveRecord::RecordNotUnique: Retries exhausted
 
 That's functional, but it could be improved. Here's a slightly nicer version.
