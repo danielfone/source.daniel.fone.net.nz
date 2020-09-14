@@ -115,13 +115,13 @@ This is the only level I had to write proper code for.</p>
       </h4>
       <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
-      </h4>
-      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
-      <h4>
         <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
       </h4>
       <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
+      <h4>
+        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
+      </h4>
+      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
