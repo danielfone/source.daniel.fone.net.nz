@@ -8,18 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
     <link href="/favicon.png" rel="icon">
-    <link href="/stylesheets/application.css" rel="stylesheet" />
-    <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <!-- TODO: ditch GA one day for less intrusive analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-41009873-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-41009873-1', 'fone.net.nz');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-41009873-1');
 </script>
 
+    <link href="/stylesheets/application.css" rel="stylesheet" />
+    <link href="/stylesheets/highlight.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -53,11 +54,11 @@
         <p><strong>tl;dr</strong> To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       </summary>
 
-    <p>Many applications aim to prevent <a href="https://blog.rapid7.com/2017/06/15/about-user-enumeration/">user enumeration</a> during authentication, particularly if users authenticate themselves with some PII like an email address. Well-designed login forms usually don’t disclose whether the username or password is incorrect, both because the response can be misleading,<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> and because it will disclose the presence of accounts in the database, facilitating spear-phishing, credential stuffing, and other attacks.</p>
+    <p>Many applications aim to prevent <a href="https://blog.rapid7.com/2017/06/15/about-user-enumeration/">user enumeration</a> during authentication, particularly if users authenticate themselves with some PII like an email address. Well-designed login forms usually don’t disclose whether the username or password is incorrect, both because the response can be misleading,<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup> and because it will disclose the presence of accounts in the database, facilitating spear-phishing, credential stuffing, and other attacks.</p>
 
 <p>However, while the response body may not disclose this, often the response time still betrays whether a matching user record exists in the database. Because effective password checking like bcrypt is deliberately so slow, the response is much quicker if there is no digest to compare the submitted plain-text against. This oversight can undermine the ambiguity of the response body and expose users to the attacks mentioned above.</p>
 
-<p>Let’s look at an example authentication query in PostgreSQL.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> First we’ll add a user record.</p>
+<p>Let’s look at an example authentication query in PostgreSQL.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote">2</a></sup> First we’ll add a user record.</p>
 
 <div class="highlight"><pre class="highlight sql"><code><span class="k">insert</span> <span class="k">into</span> <span class="n">users</span> <span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password_digest</span><span class="p">)</span>
 <span class="k">values</span> <span class="p">(</span><span class="s1">'daniel@example.com'</span><span class="p">,</span> <span class="n">crypt</span><span class="p">(</span><span class="s1">'my-password'</span><span class="p">,</span> <span class="n">gen_salt</span><span class="p">(</span><span class="s1">'bf'</span><span class="p">)));</span>
@@ -68,7 +69,7 @@
 <span class="c1">-- ----+--------------------+--------------------------------------------------------------</span>
 <span class="c1">--   1 | daniel@example.com | $2a$06$xMGQrmx5DrVvfiBqdVhZLeQJOWx95H/B..79VElnBAh/xa5bKGkwG</span>
 </code></pre></div>
-<p>The <a href="https://www.postgresql.org/docs/12/pgcrypto.html#id-1.11.7.34.6.7">crypt function</a> is provided by the pgcrypto module. It takes a plain-text password and a salt, and returns a hash. Since crypt-style hashes include their salt (along with the algorthim details), the same function can be used to generate new hashes or verify existing ones.<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> In this case, we use the gen_salt function to generate a bcrypt salt with the default number of iterations (<code>bf</code> is for blowfish which is synonymous with bcrypt here). Note that this only uses the first 72 bytes of the plain-text password, a more secure approach is to digest the entire plain-text first.<sup id="fnref:4"><a href="#fn:4" class="footnote">4</a></sup></p>
+<p>The <a href="https://www.postgresql.org/docs/12/pgcrypto.html#id-1.11.7.34.6.7">crypt function</a> is provided by the pgcrypto module. It takes a plain-text password and a salt, and returns a hash. Since crypt-style hashes include their salt (along with the algorthim details), the same function can be used to generate new hashes or verify existing ones.<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote">3</a></sup> In this case, we use the gen_salt function to generate a bcrypt salt with the default number of iterations (<code>bf</code> is for blowfish which is synonymous with bcrypt here). Note that this only uses the first 72 bytes of the plain-text password, a more secure approach is to digest the entire plain-text first.<sup id="fnref:4" role="doc-noteref"><a href="#fn:4" class="footnote">4</a></sup></p>
 
 <p>Now let’s look at a naive authentication query.</p>
 
@@ -131,19 +132,19 @@
 </code></pre></div>
 <p>Clearly, this query is a lot more complex than our naive approach, however with judicious use of comments and well-factored subqueries, I think the intention remains relatively clear. Perhaps there are simpler ways to factor this query and achieve the same result — I’d love to see some alternatives! No matter how it’s achieved though, the only way to ensure that the response is truly opaque is to do the same work in all cases. One way or another we need to hash the supplied plain-text.</p>
 
-<div class="footnotes">
+<div class="footnotes" role="doc-endnotes">
   <ol>
-    <li id="fn:1">
-      <p>For example, the user may be entering their password, but have the username wrong. See <a href="https://ux.stackexchange.com/questions/13516/how-to-tell-the-user-his-login-credentials-are-incorrect/13523#13523">this discussion</a> on the UX StackExchange. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    <li id="fn:1" role="doc-endnote">
+      <p>For example, the user may be entering their password, but have the username wrong. See <a href="https://ux.stackexchange.com/questions/13516/how-to-tell-the-user-his-login-credentials-are-incorrect/13523#13523">this discussion</a> on the UX StackExchange. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
-    <li id="fn:2">
-      <p>In my experience, most applications perform this authentication check in application code rather than at the database level. The argument for this is that it’s better to discard plain-text password as early in the process as possible. This seems reasonable to me. Perhaps even more reasonable is digesting the plain-text in the browser before it’s transmitted to the app server for authentication. There may be other drawbacks for this though - comment is welcome! <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    <li id="fn:2" role="doc-endnote">
+      <p>In my experience, most applications perform this authentication check in application code rather than at the database level. The argument for this is that it’s better to discard plain-text password as early in the process as possible. This seems reasonable to me. Perhaps even more reasonable is digesting the plain-text in the browser before it’s transmitted to the app server for authentication. There may be other drawbacks for this though - comment is welcome! <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
-    <li id="fn:3">
-      <p>Technically, this hash format is the <a href="https://passlib.readthedocs.io/en/stable/modular_crypt_format.html">Modular Crypt Format</a> or <a href="https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md">PHC string format</a> <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+    <li id="fn:3" role="doc-endnote">
+      <p>Technically, this hash format is the <a href="https://passlib.readthedocs.io/en/stable/modular_crypt_format.html">Modular Crypt Format</a> or <a href="https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md">PHC string format</a> <a href="#fnref:3" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
-    <li id="fn:4">
-      <p>For example, using <code>digest(:password, 'sha1')::text</code> would ensure we include all the entropy from the user-supplied password into the hash. The same digest would need to be applied before verifying a password for authentication. <a href="#fnref:4" class="reversefootnote">&#8617;</a></p>
+    <li id="fn:4" role="doc-endnote">
+      <p>For example, using <code>digest(:password, 'sha1')::text</code> would ensure we include all the entropy from the user-supplied password into the hash. The same digest would need to be applied before verifying a password for authentication. <a href="#fnref:4" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
   </ol>
 </div>
@@ -153,7 +154,7 @@
   <aside id="about-me">
     <h3>About Me</h3>
     <p>
-      <img width="70" class="avatar" src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" alt="5efc2a040a61cb22107bcfcecd58454c" />
+      <img src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" width="70" class="avatar" alt="" />
       I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
       I'm available for freelancing, consulting and remote contracting.
     </p>
@@ -171,13 +172,13 @@
       </h4>
       <p>Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.</p>
       <h4>
-        <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">A better way to manage the Rails secret token</a>
+        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
       </h4>
-      <p>Don't store secrets in your source control.</p>
+      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
       <h4>
-        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
+        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
       </h4>
-      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
+      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
