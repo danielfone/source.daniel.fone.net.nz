@@ -5,10 +5,54 @@
   <id>http://daniel.fone.net.nz/blog</id>
   <link href="http://daniel.fone.net.nz/blog"/>
   <link href="http://daniel.fone.net.nz/atom.xml" rel="self"/>
-  <updated>2020-09-09T18:53:00+12:00</updated>
+  <updated>2020-09-14T20:37:00+12:00</updated>
   <author>
     <name>Daniel Fone</name>
   </author>
+  <entry>
+    <title>Browser Geolocation API Demo</title>
+    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2020/09/14/geolocation-api-demo/"/>
+    <id>http://daniel.fone.net.nz/blog/2020/09/14/geolocation-api-demo/</id>
+    <published>2020-09-14T20:37:00+12:00</published>
+    <updated>2020-09-15T10:49:05+12:00</updated>
+    <author>
+      <name>Daniel Fone</name>
+    </author>
+    <content type="html">&lt;p&gt;I was recently investigating the feasibility and capability of browser-based Geolocation, especially on mobile devices as an alternative to native mobile development. The Geolocation API is a &lt;a href="https://www.w3.org/TR/geolocation-API/"&gt;W3C standard&lt;/a&gt; that defines a high-level JavaScript API for websites to query the physical position of a device. According to the ever-useful &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API"&gt;MDN docs&lt;/a&gt;, the APIs are well-supported.&lt;/p&gt;
+
+&lt;p&gt;There are two ways to retrieve location:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Request the device’s current position (&lt;code&gt;getCurrentPosition&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Track the device’s position over time (&lt;code&gt;watchPosition&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Both methods can be configured with a timeout, a maximum age (for returning cached data), and an accuracy hint. Returned positions have a timestamp and coordinates, which includes latitude/longitude with 95% confidence range, altitude with 95% confidence range if supported, and speed and heading if supported. Any request for location data will prompt the user for permission.&lt;/p&gt;
+
+&lt;p&gt;Testing across a range of desktop and mobile devices, the behaviour varied somewhat. In particular, the interactions of the location cache with the &lt;code&gt;timeout&lt;/code&gt; and &lt;code&gt;maximumAge&lt;/code&gt; options was hard to understand, and &lt;code&gt;maximumAge&lt;/code&gt; wasn’t always strictly followed.&lt;/p&gt;
+
+&lt;p&gt;I’ve put together &lt;a href="https://daniel.fone.net.nz/browser-geolocation-demo/"&gt;single-page HTML demo&lt;/a&gt;, which is &lt;a href="https://github.com/danielfone/browser-geolocation-demo/"&gt;&amp;lt;200 LOC&lt;/a&gt;. I’ve included an iframe version below.&lt;/p&gt;
+
+&lt;h3 id="notes--questions"&gt;Notes &amp;amp; Questions&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;In almost all of my testing, the actual location was within the 95% area returned by &lt;code&gt;getCurrentPosition&lt;/code&gt;, but I think this depends on WiFi SSID mapping. The spec doesn’t care how the device determines it’s position beyond the &lt;code&gt;enableHighAccuracy&lt;/code&gt; option. For example, &lt;a href="https://support.apple.com/en-us/HT207092"&gt;Apple&lt;/a&gt; uses “GPS and Bluetooth (where they’re available), along with crowd-sourced Wi-Fi hotspots and cellular towers to determine the approximate location of your device.”&lt;/li&gt;
+  &lt;li&gt;The &lt;code&gt;enableHighAccuracy&lt;/code&gt; option is indicative only, in mobile Safari this can be disabled.&lt;/li&gt;
+  &lt;li&gt;How do devices determine 95% confidence (&lt;code&gt;accuracy&lt;/code&gt; and &lt;code&gt;altitudeAccuracy&lt;/code&gt;) is this consistent across devices?&lt;/li&gt;
+  &lt;li&gt;According to the spec, the successCallback for &lt;code&gt;watchPosition&lt;/code&gt; “is only invoked when a new position is obtained and this position differs significantly from the previously reported position. The definition of what constitutes a significant difference is left to the implementation.” In my testing, this was called every few seconds on a stationary device.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="further-reading"&gt;Further Reading&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Geolocation API Specification — 2nd Edition 8 November 2016 at time of writing. &lt;a href="https://www.w3.org/TR/geolocation-API/"&gt;https://www.w3.org/TR/geolocation-API/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Current draft of above — &lt;a href="https://w3c.github.io/geolocation-api/"&gt;https://w3c.github.io/geolocation-api/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Geolocation API on the MDN web docs — &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API"&gt;https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;iframe src="https://daniel.fone.net.nz/browser-geolocation-demo/" width="100%" height="700"&gt;&lt;/iframe&gt;
+</content>
+  </entry>
   <entry>
     <title>Timing-Safe bcrypt Authentication in PostgreSQL</title>
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/"/>
@@ -424,34 +468,6 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
     &lt;/li&gt;
   &lt;/ol&gt;
 &lt;/div&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Fixing Connection Errors After Upgrading Postgres</title>
-    <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/"/>
-    <id>http://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/</id>
-    <published>2014-12-01T12:43:00+13:00</published>
-    <updated>2014-12-06T22:43:16+13:00</updated>
-    <author>
-      <name>Daniel Fone</name>
-    </author>
-    <content type="html">&lt;p&gt;I recently upgraded Postgres from 9.2 to 9.3 using &lt;code&gt;brew upgrade postgres&lt;/code&gt;. The process was smooth and &lt;code&gt;pg_upgrade&lt;/code&gt; is a very handy tool.&lt;/p&gt;
-
-&lt;p&gt;However, trouble struck once I tried to run any specs that needed to connect to Postgres. Even though Postgres was &lt;em&gt;definitely&lt;/em&gt; running, suddenly I was getting:&lt;/p&gt;
-
-&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;could not connect to server: No such file or directory (PG::ConnectionBad)
-Is the server running locally and accepting
-connections on Unix domain socket "/var/pgsql_socket/.s.PGSQL.5432"?
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The problem was that the new version of Postgres listens on /tmp/.s.PGSQL.5432 instead. I could’ve messed around with the config and made Postgres use the domain socket it was previously, or told Rails explictly how to connect, but both of those approaches seemed like work I shouldn’t have to do. At no point had I told Rails to connect to postgres on that path, Rails had assumed it, and now its assumptions were wrong.&lt;/p&gt;
-
-&lt;p&gt;The fix is simple, if a little suprising. When you install the ‘pg’ gem, it detects which version of Postgres is installed and sets the domain socket path appropriately. The solution is as simple as reinstalling the gem.&lt;/p&gt;
-
-&lt;div class="highlight"&gt;&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ gem uninstall pg
-$ cd my-rails-app/
-$ bundle install
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Hat tip to &lt;a href="http://tammersaleh.com/posts/installing-postgresql-for-rails-3-1-on-lion/"&gt;Tammer Selah&lt;/a&gt; and this &lt;a href="http://stackoverflow.com/questions/6770649/repairing-postgresql-after-upgrading-to-osx-10-7-lion#comment8687127_6772559"&gt;Stack Overflow comment&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>

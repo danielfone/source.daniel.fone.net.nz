@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Handcrafted HTML for your reading pleasure -->
+
+  <head>
+    <meta charset="utf-8">
+    <title>Browser Geolocation API Demo - Daniel Fone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
+    <link href="/favicon.png" rel="icon">
+    <!-- TODO: ditch GA one day for less intrusive analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-41009873-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-41009873-1');
+</script>
+
+    <link href="/stylesheets/application.css" rel="stylesheet" />
+    <link href="/stylesheets/highlight.css" rel="stylesheet" />
+  </head>
+
+  <body>
+      <header>
+    <svg class="logo" version="1.0" xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" viewBox="0 0 100 100">
+      <circle cx="50%" cy="50%" r="50" fill="#67AAF7" />
+    </svg>
+    <h1>Daniel Fone</h1>
+    <p class="description">Ruby/Rails Engineer</p>
+  </header>
+
+  <nav>
+    <div class="links">
+      <a href="/" class="[]">About Me</a> &middot;
+      <a href="/blog/archives/" class="[]">Articles</a> &middot;
+      <a href="/hire/" class="[]">Contact</a>
+    </div>
+  </nav>
+
+  <main>  <article>
+    <h2>
+      Browser Geolocation API Demo
+    </h2>
+    <p class="article-metadata">
+      September 2020
+      &middot;
+      about 1  minute to read
+    </p>
+
+
+    <p>I was recently investigating the feasibility and capability of browser-based Geolocation, especially on mobile devices as an alternative to native mobile development. The Geolocation API is a <a href="https://www.w3.org/TR/geolocation-API/">W3C standard</a> that defines a high-level JavaScript API for websites to query the physical position of a device. According to the ever-useful <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API">MDN docs</a>, the APIs are well-supported.</p>
+
+<p>There are two ways to retrieve location:</p>
+
+<ul>
+  <li>Request the device’s current position (<code>getCurrentPosition</code>)</li>
+  <li>Track the device’s position over time (<code>watchPosition</code>)</li>
+</ul>
+
+<p>Both methods can be configured with a timeout, a maximum age (for returning cached data), and an accuracy hint. Returned positions have a timestamp and coordinates, which includes latitude/longitude with 95% confidence range, altitude with 95% confidence range if supported, and speed and heading if supported. Any request for location data will prompt the user for permission.</p>
+
+<p>Testing across a range of desktop and mobile devices, the behaviour varied somewhat. In particular, the interactions of the location cache with the <code>timeout</code> and <code>maximumAge</code> options was hard to understand, and <code>maximumAge</code> wasn’t always strictly followed.</p>
+
+<p>I’ve put together <a href="https://daniel.fone.net.nz/browser-geolocation-demo/">single-page HTML demo</a>, which is <a href="https://github.com/danielfone/browser-geolocation-demo/">&lt;200 LOC</a>. I’ve included an iframe version below.</p>
+
+<h3 id="notes--questions">Notes &amp; Questions</h3>
+
+<ul>
+  <li>In almost all of my testing, the actual location was within the 95% area returned by <code>getCurrentPosition</code>, but I think this depends on WiFi SSID mapping. The spec doesn’t care how the device determines it’s position beyond the <code>enableHighAccuracy</code> option. For example, <a href="https://support.apple.com/en-us/HT207092">Apple</a> uses “GPS and Bluetooth (where they’re available), along with crowd-sourced Wi-Fi hotspots and cellular towers to determine the approximate location of your device.”</li>
+  <li>The <code>enableHighAccuracy</code> option is indicative only, in mobile Safari this can be disabled.</li>
+  <li>How do devices determine 95% confidence (<code>accuracy</code> and <code>altitudeAccuracy</code>) is this consistent across devices?</li>
+  <li>According to the spec, the successCallback for <code>watchPosition</code> “is only invoked when a new position is obtained and this position differs significantly from the previously reported position. The definition of what constitutes a significant difference is left to the implementation.” In my testing, this was called every few seconds on a stationary device.</li>
+</ul>
+
+<h3 id="further-reading">Further Reading</h3>
+
+<ul>
+  <li>Geolocation API Specification — 2nd Edition 8 November 2016 at time of writing. <a href="https://www.w3.org/TR/geolocation-API/">https://www.w3.org/TR/geolocation-API/</a></li>
+  <li>Current draft of above — <a href="https://w3c.github.io/geolocation-api/">https://w3c.github.io/geolocation-api/</a></li>
+  <li>Geolocation API on the MDN web docs — <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API">https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API</a></li>
+</ul>
+
+<iframe src="https://daniel.fone.net.nz/browser-geolocation-demo/" width="100%" height="700"></iframe>
+
+  </article>
+
+  <aside id="about-me">
+    <h3>About Me</h3>
+    <p>
+      <img src="//www.gravatar.com/avatar/5efc2a040a61cb22107bcfcecd58454c.jpg?s=140" width="70" class="avatar" alt="" />
+      I'm a Ruby/Rails engineer, based in Christchurch, New&nbsp;Zealand.
+      I'm available for freelancing, consulting and remote contracting.
+    </p>
+    <p>
+      You can follow me on <a href="https://twitter.com/danielfone">Twitter</a>
+      or <a href="https://github.com/danielfone">GitHub</a>
+      and <a href="/hire">hire me</a>.
+    </p>
+  </aside>
+
+  <aside id='featured-posts'>
+    <h3>Other Posts</h3>
+      <h4>
+        <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
+      </h4>
+      <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
+      <h4>
+        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
+      </h4>
+      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
+      <h4>
+        <a href="/blog/2014/12/07/generating-unique-random-tokens/">Generating Unique, Random Tokens</a>
+      </h4>
+      <p>If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).</p>
+    <p>
+      <small><a href="/blog/archives/">More posts</a></small>
+    </p>
+  </aside>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'danielfone';
+    var disqus_identifier = 'http://daniel.fone.net.nz/blog/2020/09/14/geolocation-api-demo/';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</main>
+
+  <footer>
+    <p>
+      Written 2013&ndash;2020 by Daniel Fone
+      &middot;
+      Powered by
+      <a href="http://middlemanapp.com/">Middleman</a>
+      and
+      <a href="http://pages.github.com/">GitHub Pages</a>
+    </p>
+    <p>
+      <a href="#">Back to top</a>
+    </p>
+  </footer>
+
+  </body>
+
+</html>
