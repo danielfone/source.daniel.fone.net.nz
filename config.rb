@@ -64,3 +64,6 @@ configure :build do
 end
 
 activate :syntax
+
+redirect "blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user_return_to/index.html",
+     to: "/blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-user-return-to/"
