@@ -78,14 +78,14 @@ end
 That's functional, but it could be improved. Here's a slightly nicer version.
 
 ~~~ruby
-  MAX_RETRIES = 3
-  def generate_token
-    update_column :token, SecureRandom.hex(3)
-  rescue ActiveRecord::RecordNotUnique => e
-    @token_attempts = @token_attempts.to_i + 1
-    retry if @token_attempts < MAX_RETRIES
-    raise e, "Retries exhausted"
-  end
+MAX_RETRIES = 3
+def generate_token
+  update_column :token, SecureRandom.hex(3)
+rescue ActiveRecord::RecordNotUnique => e
+  @token_attempts = @token_attempts.to_i + 1
+  retry if @token_attempts < MAX_RETRIES
+  raise e, "Retries exhausted"
+end
 ~~~
 
 A few notes:

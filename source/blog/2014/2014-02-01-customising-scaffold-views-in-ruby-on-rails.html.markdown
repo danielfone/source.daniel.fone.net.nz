@@ -27,8 +27,9 @@ Here are the steps we need to take:
 
 By way of illustration, here's one way to use a select box for a belongs_to relationship.
 
-~~~ diff
-# lib/templates/erb/scaffold/_form.html.erb
+~~~diff
+--- lib/templates/erb/scaffold/_form.html.erb
++++ lib/templates/erb/scaffold/_form.html.erb
 @@ -23,7 +23,7 @@
  <% else -%>
    <%- if attribute.reference? -%>
