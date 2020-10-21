@@ -4,6 +4,8 @@
 
   <head>
     <meta charset="utf-8">
+      <meta name="author" content="Daniel Fone">
+      <meta name="description" content="Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.">
     <title>Talking, Typing, Thinking: Software Is Not a Desk Job - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -51,7 +53,7 @@
     </p>
 
       <summary>
-        <p><strong>tl;dr</strong> Developers over-optimise for the egonomics of typing and not enough for the egronomics of thinking.</p>
+        <p><strong>tl;dr</strong> Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
       </summary>
 
     <p>I had a wonderful shower the other day.</p>
@@ -80,7 +82,7 @@
 
 <p>Take your pithy wisdom however you like it.</p>
 
-<p><em>(quicky googles why do we have two ears)</em></p>
+<p><em>(quickly googles why do we have two ears)</em></p>
 
 <h2 id="writing">3. Writing</h2>
 
@@ -95,7 +97,7 @@
   <li><a href="https://alistapart.com/article/writing-is-thinking/">Writing is thinking</a>! Writing forces you to structure your ideas coherently (at least, it seems to for some people). It reveals shortcomings or gaps in your understanding or plan.</li>
 </ul>
 
-<p>Because of this I encourage team comms to be mostly written. Jira, slack, emails, trello, blog posts, whatever. Even a hi-res photo of a wall of post-it notes has been an indispensible architectural road-map at times. However it’s published, detailed, well-thought out writing is 💯.</p>
+<p>Because of this I encourage team comms to be mostly written. Jira, slack, emails, trello, blog posts, whatever. Even a hi-res photo of a wall of post-it notes has been an indispensable architectural road-map at times. However it’s published, detailed, well-thought out writing is 💯.</p>
 
 <p>Perhaps even more important than writing though is…</p>
 
@@ -120,7 +122,7 @@
   <li>the specification, legislation, policy document, NIST guideline, the original paper in the open access journal</li>
 </ul>
 
-<p>… you get the idea, just find the authoritative document and slurp it into your brain. Even if it seems like nothing sticks, a brief encounter with the text will leave an long-lasting impression. It’s like homeopathy but real.</p>
+<p>… you get the idea, just find the authoritative document and slurp it into your brain. Even if it seems like nothing sticks, a brief encounter with the text will leave a long-lasting impression. It’s like homeopathy but real.</p>
 
 <p>So talking/listening… writing/reading… and finally… <em>drumroll noises</em></p>
 
@@ -138,9 +140,9 @@ mentally playing with abstractions.</p>
 <p>Yet the image persists that typing is working and working is typing and a productive day is in your chair at your desk.
 So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim shortcuts, whatever optimises for us tapping away at our computers.</p>
 
-<p>But how much attention do we pay to the <strong>egonomics of thinking</strong>?</p>
+<p>But how much attention do we pay to the <strong>ergonomics of thinking</strong>?</p>
 
-<p>When we elevate ‘thinking’ to core work, we naturally start to optimise for it specifically. In general, we don’t need to be in front of anything to think effectively, and often I find it better not to be. My times of greatest clarity are invariably when I’m moving, often when I’m exercising. Futher, I can read on my phone practically anywhere, and the best conversations are often had while strolling.</p>
+<p>When we elevate ‘thinking’ to core work, we naturally start to optimise for it specifically. In general, we don’t need to be in front of anything to think effectively, and often I find it better not to be. My times of greatest clarity are invariably when I’m moving, often when I’m exercising. Further, I can read on my phone practically anywhere, and the best conversations are often had while strolling.</p>
 
 <p>So while I’m glad for all the ergonomics of my workspace, increasingly I find that writing code is the brief part where I’m simply harvesting all the mental crop that I’ve sown from the talking and listening and reading and thinking.</p>
 
@@ -150,7 +152,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
 
 <p><strong>Talking</strong> and listening; the verbal discussions. Most of the time we need a small but critical amount of high bandwidth synchronous comms.</p>
 
-<p><strong>Typing</strong> code commentary: READMEs, code reviews, PR descriptions; and all asynchorous communication: project updates, technical overviews, emails with next steps; These are all an essential part of the job and not just ancillary or busywork. Also typing actual code at some point. But I find the more time you spend typing the other stuff, the less time you need to spend (re)typing code.</p>
+<p><strong>Typing</strong> code commentary: READMEs, code reviews, PR descriptions; and all asynchronous communication: project updates, technical overviews, emails with next steps; These are all an essential part of the job and not just ancillary or busywork. Also typing actual code at some point. But I find the more time you spend typing the other stuff, the less time you need to spend (re)typing code.</p>
 
 <p><strong>Thinking</strong>: (including, for the purposes of alliteration, reading)</p>
 
@@ -194,13 +196,13 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
       </h4>
       <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
+        <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">A better way to manage the Rails secret token</a>
       </h4>
-      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
+      <p>Don't store secrets in your source control.</p>
       <h4>
-        <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">Handling Token Generation Collisions In ActiveRecord</a>
+        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
       </h4>
-      <p>Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.</p>
+      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>

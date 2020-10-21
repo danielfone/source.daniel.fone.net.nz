@@ -4,6 +4,8 @@
 
   <head>
     <meta charset="utf-8">
+      <meta name="author" content="Daniel Fone">
+      <meta name="description" content="Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.">
     <title>Efficient Uniqueness Validations - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -130,15 +132,15 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
       <h4>
         <a href="/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/">Talking, Typing, Thinking: Software Is Not a Desk Job</a>
       </h4>
-      <p>Developers over-optimise for the egonomics of typing and not enough for the egronomics of thinking.</p>
+      <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
+      <h4>
+        <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
+      </h4>
+      <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
         <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
       </h4>
       <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
-      <h4>
-        <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">A better way to manage the Rails secret token</a>
-      </h4>
-      <p>Don't store secrets in your source control.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>

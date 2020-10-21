@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/"/>
     <id>http://daniel.fone.net.nz/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/</id>
     <published>2020-10-21T20:58:00+13:00</published>
-    <updated>2020-10-22T00:29:24+13:00</updated>
+    <updated>2020-10-22T00:42:17+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -44,7 +44,7 @@
 
 &lt;p&gt;Take your pithy wisdom however you like it.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;(quicky googles why do we have two ears)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;(quickly googles why do we have two ears)&lt;/em&gt;&lt;/p&gt;
 
 &lt;h2 id="writing"&gt;3. Writing&lt;/h2&gt;
 
@@ -59,7 +59,7 @@
   &lt;li&gt;&lt;a href="https://alistapart.com/article/writing-is-thinking/"&gt;Writing is thinking&lt;/a&gt;! Writing forces you to structure your ideas coherently (at least, it seems to for some people). It reveals shortcomings or gaps in your understanding or plan.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Because of this I encourage team comms to be mostly written. Jira, slack, emails, trello, blog posts, whatever. Even a hi-res photo of a wall of post-it notes has been an indispensible architectural road-map at times. However it’s published, detailed, well-thought out writing is 💯.&lt;/p&gt;
+&lt;p&gt;Because of this I encourage team comms to be mostly written. Jira, slack, emails, trello, blog posts, whatever. Even a hi-res photo of a wall of post-it notes has been an indispensable architectural road-map at times. However it’s published, detailed, well-thought out writing is 💯.&lt;/p&gt;
 
 &lt;p&gt;Perhaps even more important than writing though is…&lt;/p&gt;
 
@@ -84,7 +84,7 @@
   &lt;li&gt;the specification, legislation, policy document, NIST guideline, the original paper in the open access journal&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;… you get the idea, just find the authoritative document and slurp it into your brain. Even if it seems like nothing sticks, a brief encounter with the text will leave an long-lasting impression. It’s like homeopathy but real.&lt;/p&gt;
+&lt;p&gt;… you get the idea, just find the authoritative document and slurp it into your brain. Even if it seems like nothing sticks, a brief encounter with the text will leave a long-lasting impression. It’s like homeopathy but real.&lt;/p&gt;
 
 &lt;p&gt;So talking/listening… writing/reading… and finally… &lt;em&gt;drumroll noises&lt;/em&gt;&lt;/p&gt;
 
@@ -102,9 +102,9 @@ mentally playing with abstractions.&lt;/p&gt;
 &lt;p&gt;Yet the image persists that typing is working and working is typing and a productive day is in your chair at your desk.
 So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim shortcuts, whatever optimises for us tapping away at our computers.&lt;/p&gt;
 
-&lt;p&gt;But how much attention do we pay to the &lt;strong&gt;egonomics of thinking&lt;/strong&gt;?&lt;/p&gt;
+&lt;p&gt;But how much attention do we pay to the &lt;strong&gt;ergonomics of thinking&lt;/strong&gt;?&lt;/p&gt;
 
-&lt;p&gt;When we elevate ‘thinking’ to core work, we naturally start to optimise for it specifically. In general, we don’t need to be in front of anything to think effectively, and often I find it better not to be. My times of greatest clarity are invariably when I’m moving, often when I’m exercising. Futher, I can read on my phone practically anywhere, and the best conversations are often had while strolling.&lt;/p&gt;
+&lt;p&gt;When we elevate ‘thinking’ to core work, we naturally start to optimise for it specifically. In general, we don’t need to be in front of anything to think effectively, and often I find it better not to be. My times of greatest clarity are invariably when I’m moving, often when I’m exercising. Further, I can read on my phone practically anywhere, and the best conversations are often had while strolling.&lt;/p&gt;
 
 &lt;p&gt;So while I’m glad for all the ergonomics of my workspace, increasingly I find that writing code is the brief part where I’m simply harvesting all the mental crop that I’ve sown from the talking and listening and reading and thinking.&lt;/p&gt;
 
@@ -114,7 +114,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
 
 &lt;p&gt;&lt;strong&gt;Talking&lt;/strong&gt; and listening; the verbal discussions. Most of the time we need a small but critical amount of high bandwidth synchronous comms.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Typing&lt;/strong&gt; code commentary: READMEs, code reviews, PR descriptions; and all asynchorous communication: project updates, technical overviews, emails with next steps; These are all an essential part of the job and not just ancillary or busywork. Also typing actual code at some point. But I find the more time you spend typing the other stuff, the less time you need to spend (re)typing code.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Typing&lt;/strong&gt; code commentary: READMEs, code reviews, PR descriptions; and all asynchronous communication: project updates, technical overviews, emails with next steps; These are all an essential part of the job and not just ancillary or busywork. Also typing actual code at some point. But I find the more time you spend typing the other stuff, the less time you need to spend (re)typing code.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Thinking&lt;/strong&gt;: (including, for the purposes of alliteration, reading)&lt;/p&gt;
 
