@@ -7,7 +7,11 @@
       <meta name="author" content="Daniel Fone">
       <meta name="description" content="You may need to reinstall the pg gem after upgrading postgres.">
       <meta property=og:description content="You may need to reinstall the pg gem after upgrading postgres." />
-      <meta property=og:title content="Fixing Connection Errors After Upgrading Postgres - Daniel Fone" />
+      <meta property=og:title content="Fixing Connection Errors After Upgrading Postgres" />
+      <meta property=og:url content="https://daniel.fone.net.nz/blog/2014/12/01/fixing-connection-errors-after-upgrading-postgres/" />
+      <meta property=og:type content="article" />
+      <meta property=og:article:author content="Daniel Fone" />
+      <meta property=og:image content="" />
     <title>Fixing Connection Errors After Upgrading Postgres - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -99,13 +103,13 @@ $ bundle install
       </h4>
       <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
       <h4>
-        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
+        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
       </h4>
-      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
+      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
       <h4>
-        <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
+        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
       </h4>
-      <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
+      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>

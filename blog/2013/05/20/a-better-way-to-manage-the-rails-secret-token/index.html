@@ -7,7 +7,11 @@
       <meta name="author" content="Daniel Fone">
       <meta name="description" content="Don't store secrets in your source control.">
       <meta property=og:description content="Don't store secrets in your source control." />
-      <meta property=og:title content="A better way to manage the Rails secret token - Daniel Fone" />
+      <meta property=og:title content="A better way to manage the Rails secret token" />
+      <meta property=og:url content="https://daniel.fone.net.nz/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/" />
+      <meta property=og:type content="article" />
+      <meta property=og:article:author content="Daniel Fone" />
+      <meta property=og:image content="" />
     <title>A better way to manage the Rails secret token - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -221,9 +225,9 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
       </h4>
       <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
       <h4>
-        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
+        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
       </h4>
-      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
+      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
