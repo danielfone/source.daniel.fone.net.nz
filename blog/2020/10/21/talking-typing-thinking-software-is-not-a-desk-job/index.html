@@ -158,8 +158,6 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
 
 <p>Anyway, I gotta go take a shower. 🚿</p>
 
-<hr />
-
 <div class="footnotes" role="doc-endnotes">
   <ol>
     <li id="fn:1" role="doc-endnote">
@@ -196,9 +194,9 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
       </h4>
       <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2014/12/07/generating-unique-random-tokens/">Generating Unique, Random Tokens</a>
+        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
       </h4>
-      <p>If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).</p>
+      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
       <h4>
         <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">Handling Token Generation Collisions In ActiveRecord</a>
       </h4>
