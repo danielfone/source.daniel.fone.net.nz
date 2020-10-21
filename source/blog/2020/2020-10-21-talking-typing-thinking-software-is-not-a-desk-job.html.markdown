@@ -105,8 +105,6 @@ Talking, typing, thinking: this is the work we do. And I for one want to give my
 
 Anyway, I gotta go take a shower. 🚿
 
----
-
 [^1]: per [Steven Johnson in the WSJ](https://www.wsj.com/articles/SB10001424052748703989304575503730101860838)
 
       > The adjacent possible is a kind of shadow future, hovering on the edges of the present state of things, a map of all the ways in which the present can reinvent itself.
