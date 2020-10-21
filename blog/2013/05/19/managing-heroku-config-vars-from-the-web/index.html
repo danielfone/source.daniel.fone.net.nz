@@ -110,9 +110,9 @@ GITHUB_USERNAME: joesmith
       </h4>
       <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
       <h4>
-        <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">Handling Token Generation Collisions In ActiveRecord</a>
+        <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
       </h4>
-      <p>Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.</p>
+      <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
         <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
       </h4>
