@@ -47,6 +47,7 @@ nav { background: #67AAF7; color: white; }
 p.article-metadata,
 footer { color: #777; }
 aside { background: #f5f5f5; }
+mark { background: lightgoldenrodyellow; }
 
 
 .footnotes {
@@ -106,4 +107,8 @@ article .notice {
   color: #222;
   margin: 1em 0;
   padding: 0.5em 1em;
+}
+
+summary {
+  font-style: italic;
 }
