@@ -5,8 +5,8 @@
   <head>
     <meta charset="utf-8">
       <meta name="author" content="Daniel Fone">
-      <meta name="description" content="Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.">
-      <meta property=og:description content="Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save." />
+      <meta name="description" content="Use :if =&gt; :field_changed? on uniqueness validations to skip unnecessary checks on every save.">
+      <meta property=og:description content="Use :if =&gt; :field_changed? on uniqueness validations to skip unnecessary checks on every save." />
       <meta property=og:title content="Efficient Uniqueness Validations" />
       <meta property=og:url content="https://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/" />
       <meta property=og:type content="article" />
@@ -140,13 +140,13 @@ ActiveRecord::RecordInvalid: Validation failed: Code has already been taken, Nam
       </h4>
       <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
       <h4>
-        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
+        <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">A better way to manage the Rails secret token</a>
       </h4>
-      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
+      <p>Don't store secrets in your source control.</p>
       <h4>
-        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
+        <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">Handling Token Generation Collisions In ActiveRecord</a>
       </h4>
-      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
+      <p>Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>

@@ -185,7 +185,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/"/>
     <id>http://daniel.fone.net.nz/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/</id>
     <published>2020-09-09T18:53:00+12:00</published>
-    <updated>2020-09-14T15:07:58+12:00</updated>
+    <updated>2020-10-22T20:50:44+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -290,7 +290,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/</id>
     <published>2014-12-10T12:28:00+13:00</published>
-    <updated>2020-09-14T15:11:57+12:00</updated>
+    <updated>2020-10-22T20:50:39+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -406,7 +406,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/</id>
     <published>2014-12-07T21:10:00+13:00</published>
-    <updated>2020-10-22T00:30:36+13:00</updated>
+    <updated>2020-10-22T20:50:37+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
