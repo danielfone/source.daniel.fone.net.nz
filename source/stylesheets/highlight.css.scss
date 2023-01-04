@@ -9,6 +9,7 @@
 
 pre.highlight {
   background: #f9f7f6;
+  line-height: 1.2;
   margin: .5em 0;
   overflow: auto;
   padding: 1em;
@@ -102,5 +103,17 @@ pre.highlight {
   // Since sql is mostly keywords, tone it down a bit
   &.sql {
     .k { color: #905 }
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  pre.highlight {
+    background: #1e1e1e;
+    color: #d4d4d4;
+  }
+
+  :not(pre) > code {
+    background: #565656;
   }
 }
