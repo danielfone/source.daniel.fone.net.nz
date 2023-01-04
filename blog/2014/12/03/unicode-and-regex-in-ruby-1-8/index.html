@@ -4,14 +4,6 @@
 
   <head>
     <meta charset="utf-8">
-      <meta name="author" content="Daniel Fone">
-      <meta name="description" content="Regex doesn't play nicely with unicode in Ruby 1.8, so watch your input data! Specifically, '\W' (non-word character) only matches ascii characters.">
-      <meta property=og:description content="Regex doesn't play nicely with unicode in Ruby 1.8, so watch your input data! Specifically, '\W' (non-word character) only matches ascii characters." />
-      <meta property=og:title content="Unicode and Regex in Ruby 1.8" />
-      <meta property=og:url content="https://daniel.fone.net.nz/blog/2014/12/03/unicode-and-regex-in-ruby-1-8/" />
-      <meta property=og:type content="article" />
-      <meta property=og:article:author content="Daniel Fone" />
-      <meta property=og:image content="" />
     <title>Unicode and Regex in Ruby 1.8 - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -42,9 +34,9 @@
 
   <nav>
     <div class="links">
-      <a href="/" class="[]">About Me</a> &middot;
-      <a href="/blog/archives/" class="[]">Articles</a> &middot;
-      <a href="/hire/" class="[]">Contact</a>
+      <a href="/" class="">About Me</a> &middot;
+      <a href="/blog/archives/" class="">Articles</a> &middot;
+      <a href="/hire/" class="">Contact</a>
     </div>
   </nav>
 
@@ -93,7 +85,7 @@
 
 <p>After countless hours of debugging, I discovered the gotcha was in step 2. The HTML to text conversion would (among other things) take HTML entities and convert them to their unicode equivalents. This wasn’t a problem <em>unless</em> the entity happened to be an <code>&amp;nbsp;</code> which would sometimes randomly appear in front of @mentions. This would then be converted to a unicode ‘NO-BREAK SPACE’ (U+00A0) which looks <strong>exactly</strong> the same as a space.</p>
 
-<p>When this unicode character occurred before a mention, Ruby 1.8 <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup> would no longer match the <code>\W</code> portion of the regex and the user would never be notified. By the time the comment was in the database, the unicode was gone and the cause was entirely obscured.</p>
+<p>When this unicode character occurred before a mention, Ruby 1.8 <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> would no longer match the <code>\W</code> portion of the regex and the user would never be notified. By the time the comment was in the database, the unicode was gone and the cause was entirely obscured.</p>
 
 <h4 id="solution">Solution</h4>
 
@@ -134,17 +126,17 @@
   <aside id='featured-posts'>
     <h3>Other Posts</h3>
       <h4>
-        <a href="/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/">Talking, Typing, Thinking: Software Is Not a Desk Job</a>
-      </h4>
-      <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
-      <h4>
         <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
       </h4>
       <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">A better way to manage the Rails secret token</a>
+        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
       </h4>
-      <p>Don't store secrets in your source control.</p>
+      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
+      <h4>
+        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
+      </h4>
+      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
@@ -169,7 +161,7 @@
 
   <footer>
     <p>
-      Written 2013&ndash;2020 by Daniel Fone
+      Written 2013&ndash;2023 by Daniel Fone
       &middot;
       Powered by
       <a href="http://middlemanapp.com/">Middleman</a>

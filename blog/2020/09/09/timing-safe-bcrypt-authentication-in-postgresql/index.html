@@ -4,14 +4,6 @@
 
   <head>
     <meta charset="utf-8">
-      <meta name="author" content="Daniel Fone">
-      <meta name="description" content="To avoid disclosing PII and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.">
-      <meta property=og:description content="To avoid disclosing PII and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found." />
-      <meta property=og:title content="Timing-Safe bcrypt Authentication in PostgreSQL" />
-      <meta property=og:url content="https://daniel.fone.net.nz/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/" />
-      <meta property=og:type content="article" />
-      <meta property=og:article:author content="Daniel Fone" />
-      <meta property=og:image content="" />
     <title>Timing-Safe bcrypt Authentication in PostgreSQL - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -42,9 +34,9 @@
 
   <nav>
     <div class="links">
-      <a href="/" class="[]">About Me</a> &middot;
-      <a href="/blog/archives/" class="[]">Articles</a> &middot;
-      <a href="/hire/" class="[]">Contact</a>
+      <a href="/" class="">About Me</a> &middot;
+      <a href="/blog/archives/" class="">Articles</a> &middot;
+      <a href="/hire/" class="">Contact</a>
     </div>
   </nav>
 
@@ -62,11 +54,11 @@
         <p><strong>tl;dr</strong> To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       </summary>
 
-    <p>Many applications aim to prevent <a href="https://blog.rapid7.com/2017/06/15/about-user-enumeration/">user enumeration</a> during authentication, particularly if users authenticate themselves with some PII like an email address. Well-designed login forms usually don’t disclose whether the username or password is incorrect, both because the response can be misleading,<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup> and because it will disclose the presence of accounts in the database, facilitating spear-phishing, credential stuffing, and other attacks.</p>
+    <p>Many applications aim to prevent <a href="https://blog.rapid7.com/2017/06/15/about-user-enumeration/">user enumeration</a> during authentication, particularly if users authenticate themselves with some PII like an email address. Well-designed login forms usually don’t disclose whether the username or password is incorrect, both because the response can be misleading,<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> and because it will disclose the presence of accounts in the database, facilitating spear-phishing, credential stuffing, and other attacks.</p>
 
 <p>However, while the response body may not disclose this, often the response time still betrays whether a matching user record exists in the database. Because effective password checking like bcrypt is deliberately so slow, the response is much quicker if there is no digest to compare the submitted plain-text against. This oversight can undermine the ambiguity of the response body and expose users to the attacks mentioned above.</p>
 
-<p>Let’s look at an example authentication query in PostgreSQL.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote">2</a></sup> First we’ll add a user record.</p>
+<p>Let’s look at an example authentication query in PostgreSQL.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup> First we’ll add a user record.</p>
 
 <div class="highlight"><pre class="highlight sql"><code><span class="k">insert</span> <span class="k">into</span> <span class="n">users</span> <span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password_digest</span><span class="p">)</span>
 <span class="k">values</span> <span class="p">(</span><span class="s1">'daniel@example.com'</span><span class="p">,</span> <span class="n">crypt</span><span class="p">(</span><span class="s1">'my-password'</span><span class="p">,</span> <span class="n">gen_salt</span><span class="p">(</span><span class="s1">'bf'</span><span class="p">)));</span>
@@ -77,7 +69,7 @@
 <span class="c1">-- ----+--------------------+--------------------------------------------------------------</span>
 <span class="c1">--   1 | daniel@example.com | $2a$06$xMGQrmx5DrVvfiBqdVhZLeQJOWx95H/B..79VElnBAh/xa5bKGkwG</span>
 </code></pre></div>
-<p>The <a href="https://www.postgresql.org/docs/12/pgcrypto.html#id-1.11.7.34.6.7">crypt function</a> is provided by the pgcrypto module. It takes a plain-text password and a salt, and returns a hash. Since crypt-style hashes include their salt (along with the algorthim details), the same function can be used to generate new hashes or verify existing ones.<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote">3</a></sup> In this case, we use the gen_salt function to generate a bcrypt salt with the default number of iterations (<code>bf</code> is for blowfish which is synonymous with bcrypt here). Note that this only uses the first 72 bytes of the plain-text password, a more secure approach is to digest the entire plain-text first.<sup id="fnref:4" role="doc-noteref"><a href="#fn:4" class="footnote">4</a></sup></p>
+<p>The <a href="https://www.postgresql.org/docs/12/pgcrypto.html#id-1.11.7.34.6.7">crypt function</a> is provided by the pgcrypto module. It takes a plain-text password and a salt, and returns a hash. Since crypt-style hashes include their salt (along with the algorthim details), the same function can be used to generate new hashes or verify existing ones.<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup> In this case, we use the gen_salt function to generate a bcrypt salt with the default number of iterations (<code>bf</code> is for blowfish which is synonymous with bcrypt here). Note that this only uses the first 72 bytes of the plain-text password, a more secure approach is to digest the entire plain-text first.<sup id="fnref:4" role="doc-noteref"><a href="#fn:4" class="footnote" rel="footnote">4</a></sup></p>
 
 <p>Now let’s look at a naive authentication query.</p>
 
@@ -176,17 +168,17 @@
   <aside id='featured-posts'>
     <h3>Other Posts</h3>
       <h4>
-        <a href="/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/">Talking, Typing, Thinking: Software Is Not a Desk Job</a>
-      </h4>
-      <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
-      <h4>
-        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
-      </h4>
-      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
-      <h4>
         <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">Handling Token Generation Collisions In ActiveRecord</a>
       </h4>
       <p>Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.</p>
+      <h4>
+        <a href="/blog/2014/12/07/generating-unique-random-tokens/">Generating Unique, Random Tokens</a>
+      </h4>
+      <p>If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).</p>
+      <h4>
+        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
+      </h4>
+      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
@@ -211,7 +203,7 @@
 
   <footer>
     <p>
-      Written 2013&ndash;2020 by Daniel Fone
+      Written 2013&ndash;2023 by Daniel Fone
       &middot;
       Powered by
       <a href="http://middlemanapp.com/">Middleman</a>

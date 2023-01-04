@@ -34,9 +34,9 @@
 
   <nav>
     <div class="links">
-      <a href="/" class="[]">About Me</a> &middot;
-      <a href="/blog/archives/" class="[]">Articles</a> &middot;
-      <a href="/hire/" class="[]">Contact</a>
+      <a href="/" class="">About Me</a> &middot;
+      <a href="/blog/archives/" class="">Articles</a> &middot;
+      <a href="/hire/" class="">Contact</a>
     </div>
   </nav>
 
@@ -158,17 +158,17 @@ Success!
   <aside id='featured-posts'>
     <h3>Other Posts</h3>
       <h4>
-        <a href="/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/">Talking, Typing, Thinking: Software Is Not a Desk Job</a>
-      </h4>
-      <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
-      <h4>
         <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
       </h4>
       <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
+        <a href="/blog/2014/12/07/generating-unique-random-tokens/">Generating Unique, Random Tokens</a>
       </h4>
-      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
+      <p>If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).</p>
+      <h4>
+        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
+      </h4>
+      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
@@ -193,7 +193,7 @@ Success!
 
   <footer>
     <p>
-      Written 2013&ndash;2020 by Daniel Fone
+      Written 2013&ndash;2023 by Daniel Fone
       &middot;
       Powered by
       <a href="http://middlemanapp.com/">Middleman</a>

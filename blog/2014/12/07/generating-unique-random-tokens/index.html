@@ -4,14 +4,6 @@
 
   <head>
     <meta charset="utf-8">
-      <meta name="author" content="Daniel Fone">
-      <meta name="description" content="If you need a random, unique token, use SecureRandom.uuid (or SecureRandom.urlsafe_base64 for something shorter).">
-      <meta property=og:description content="If you need a random, unique token, use SecureRandom.uuid (or SecureRandom.urlsafe_base64 for something shorter)." />
-      <meta property=og:title content="Generating Unique, Random Tokens" />
-      <meta property=og:url content="https://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/" />
-      <meta property=og:type content="article" />
-      <meta property=og:article:author content="Daniel Fone" />
-      <meta property=og:image content="" />
     <title>Generating Unique, Random Tokens - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -42,9 +34,9 @@
 
   <nav>
     <div class="links">
-      <a href="/" class="[]">About Me</a> &middot;
-      <a href="/blog/archives/" class="[]">Articles</a> &middot;
-      <a href="/hire/" class="[]">Contact</a>
+      <a href="/" class="">About Me</a> &middot;
+      <a href="/blog/archives/" class="">Articles</a> &middot;
+      <a href="/hire/" class="">Contact</a>
     </div>
   </nav>
 
@@ -67,11 +59,11 @@
 <div class="highlight"><pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'securerandom'</span>
 <span class="no">SecureRandom</span><span class="p">.</span><span class="nf">uuid</span> <span class="c1"># =&gt; "16fc1d86-7d6e-4011-9b75-d6cd9501fe1e"</span>
 </code></pre></div>
-<p>This is a widely implemented<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup> and instantly recognisable format that is vanishingly unlikely to have a collision.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote">2</a></sup></p>
+<p>This is a widely implemented<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> and instantly recognisable format that is vanishingly unlikely to have a collision.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup></p>
 
 <p>Now, as an engineer, “unlikely” makes me nervous. I confess I don’t have an intuitive grasp of the statistics involved, and to me the two options are “can’t happen” or “will happen”. Although my rational brain knows better, I still instinctively put “vanishingly unlikely” in the “will happen” category. Sure, a collision might be unlikely if we’re only dealing with a small number of records, but what if we’re dealing with BigData™?</p>
 
-<p>Well let me put it in perspective for you: you’d have to generate 112 terabytes of UUIDs before you’d even have a <em>one in a billion</em> chance of a collision.<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote">3</a></sup> So unless you’ve got a 112 terabyte database to fill with UUIDs, you’re going to have a lot of other problems first.</p>
+<p>Well let me put it in perspective for you: you’d have to generate 112 terabytes of UUIDs before you’d even have a <em>one in a billion</em> chance of a collision.<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup> So unless you’ve got a 112 terabyte database to fill with UUIDs, you’re going to have a lot of other problems first.</p>
 
 <p>How would this look in practice then? If I wanted a token for an ActiveRecord object, it’d look something like:</p>
 
@@ -87,7 +79,7 @@
 
 <h3 id="other-formats">Other Formats</h3>
 
-<p>The downside of UUID is that it’s rather unwieldy. It uses 36 characters to render 16 bytes of entroy.<sup id="fnref:4" role="doc-noteref"><a href="#fn:4" class="footnote">4</a></sup> Naturally, there are plenty of other ways to render 16 bytes of entropy and still have the same statistical properties outlined above.</p>
+<p>The downside of UUID is that it’s rather unwieldy. It uses 36 characters to render 16 bytes of entroy.<sup id="fnref:4" role="doc-noteref"><a href="#fn:4" class="footnote" rel="footnote">4</a></sup> Naturally, there are plenty of other ways to render 16 bytes of entropy and still have the same statistical properties outlined above.</p>
 
 <p>SecureRandom offers a few other helpful methods for generating token-like strings. My two preferred choices are <code>hex</code> and <code>urlsafe_base64</code>. Here they all are for comparison.</p>
 
@@ -139,17 +131,17 @@
   <aside id='featured-posts'>
     <h3>Other Posts</h3>
       <h4>
-        <a href="/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/">Talking, Typing, Thinking: Software Is Not a Desk Job</a>
+        <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
       </h4>
-      <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
+      <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/">A better way to manage the Rails secret token</a>
+        <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">Handling Token Generation Collisions In ActiveRecord</a>
       </h4>
-      <p>Don't store secrets in your source control.</p>
+      <p>Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.</p>
       <h4>
-        <a href="/blog/2013/05/28/why-you-should-never-rescue-exception-in-ruby/">Why You Should Never Rescue Exception in Ruby</a>
+        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
       </h4>
-      <p>Don't write <code>rescue Exception => e</code>. Write <code>rescue => e</code> or better still, figure out exactly what you're trying to rescue and use <code>rescue OneError, AnotherError => e</code>.</p>
+      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
@@ -174,7 +166,7 @@
 
   <footer>
     <p>
-      Written 2013&ndash;2020 by Daniel Fone
+      Written 2013&ndash;2023 by Daniel Fone
       &middot;
       Powered by
       <a href="http://middlemanapp.com/">Middleman</a>

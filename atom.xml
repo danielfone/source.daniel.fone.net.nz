@@ -14,7 +14,7 @@
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/"/>
     <id>http://daniel.fone.net.nz/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/</id>
     <published>2020-10-21T20:58:00+13:00</published>
-    <updated>2020-10-22T09:55:16+13:00</updated>
+    <updated>2023-01-04T12:49:02+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -44,7 +44,7 @@
 
 &lt;p&gt;Take your pithy wisdom however you like it.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;(quickly googles why do we have two ears)&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;(quicky googles why do we have two ears)&lt;/em&gt;&lt;/p&gt;
 
 &lt;h2 id="writing"&gt;3. Writing&lt;/h2&gt;
 
@@ -59,7 +59,7 @@
   &lt;li&gt;&lt;a href="https://alistapart.com/article/writing-is-thinking/"&gt;Writing is thinking&lt;/a&gt;! Writing forces you to structure your ideas coherently (at least, it seems to for some people). It reveals shortcomings or gaps in your understanding or plan.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Because of this I encourage team comms to be mostly written. Jira, slack, emails, trello, blog posts, whatever. Even a hi-res photo of a wall of post-it notes has been an indispensable architectural road-map at times. However it’s published, detailed, well-thought out writing is 💯.&lt;/p&gt;
+&lt;p&gt;Because of this I encourage team comms to be mostly written. Jira, slack, emails, trello, blog posts, whatever. Even a hi-res photo of a wall of post-it notes has been an indispensible architectural road-map at times. However it’s published, detailed, well-thought out writing is 💯.&lt;/p&gt;
 
 &lt;p&gt;Perhaps even more important than writing though is…&lt;/p&gt;
 
@@ -75,7 +75,7 @@
 
 &lt;p&gt;We have to parse a &lt;a href="https://en.wikipedia.org/wiki/European_Data_Format"&gt;specialised file format&lt;/a&gt;, for which there is &lt;a href="https://github.com/nsrr/edfize"&gt;a gem&lt;/a&gt;. But why leave all that useful context buried inside the gem? The &lt;a href="https://www.edfplus.info/specs/edf.html"&gt;file specification&lt;/a&gt; is not that long, even if it takes many attempts to understand it. Reading the file format spec makes it much easier to understand why the gem needs to &lt;a href="https://github.com/nsrr/edfize/blob/93566cdc82b160ef319c51908c1c4a19666e2625/lib/edfize/edf.rb#L243"&gt;load_digital_signals_by_epoch&lt;/a&gt;, which in turn suggests alternative solutions to the problem you have in hand.&lt;/p&gt;
 
-&lt;p&gt;None of the &lt;em&gt;adjacent possible&lt;/em&gt;&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; is discoverable without the insights gained from reading these sources, so whatever you’re dealing with, go to the source and read read read…&lt;/p&gt;
+&lt;p&gt;None of the &lt;em&gt;adjacent possible&lt;/em&gt;&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; is discoverable without the insights gained from reading these sources, so whatever you’re dealing with, go to the source and read read read…&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;documentation (&lt;em&gt;reading the very well-written &lt;a href="https://www.postgresql.org/docs/current/index.html"&gt;postgres manual&lt;/a&gt; or &lt;a href="https://redis.io/documentation"&gt;redis docs&lt;/a&gt; is the closet experience I’ve had to Neo downloading kung-fu into his brain&lt;/em&gt;)&lt;/li&gt;
@@ -84,7 +84,7 @@
   &lt;li&gt;the specification, legislation, policy document, NIST guideline, the original paper in the open access journal&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;… you get the idea, just find the authoritative document and slurp it into your brain. Even if it seems like nothing sticks, a brief encounter with the text will leave a long-lasting impression. It’s like homeopathy but real.&lt;/p&gt;
+&lt;p&gt;… you get the idea, just find the authoritative document and slurp it into your brain. Even if it seems like nothing sticks, a brief encounter with the text will leave an long-lasting impression. It’s like homeopathy but real.&lt;/p&gt;
 
 &lt;p&gt;So talking/listening… writing/reading… and finally… &lt;em&gt;drumroll noises&lt;/em&gt;&lt;/p&gt;
 
@@ -97,14 +97,14 @@ Modelling the domain,
 thinking through the edge cases,
 mentally playing with abstractions.&lt;/p&gt;
 
-&lt;p&gt;And it’s obvious when you think about what makes good developers. The people I value working with most aren’t accurate typists, they’re &lt;em&gt;clear thinkists&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;And it’s obvious when you think about what makes good developers. The people I value working with most are aren’t accurate typists, they’re &lt;em&gt;clear thinkists&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;Yet the image persists that typing is working and working is typing and a productive day is in your chair at your desk.
 So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim shortcuts, whatever optimises for us tapping away at our computers.&lt;/p&gt;
 
-&lt;p&gt;But how much attention do we pay to the &lt;strong&gt;ergonomics of thinking&lt;/strong&gt;?&lt;/p&gt;
+&lt;p&gt;But how much attention do we pay to the &lt;strong&gt;egonomics of thinking&lt;/strong&gt;?&lt;/p&gt;
 
-&lt;p&gt;When we elevate ‘thinking’ to core work, we naturally start to optimise for it specifically. In general, we don’t need to be in front of anything to think effectively, and often I find it better not to be. My times of greatest clarity are invariably when I’m moving, often when I’m exercising. Further, I can read on my phone practically anywhere, and the best conversations are often had while strolling.&lt;/p&gt;
+&lt;p&gt;When we elevate ‘thinking’ to core work, we naturally start to optimise for it specifically. In general, we don’t need to be in front of anything to think effectively, and often I find it better not to be. My times of greatest clarity are invariably when I’m moving, often when I’m exercising. Futher, I can read on my phone practically anywhere, and the best conversations are often had while strolling.&lt;/p&gt;
 
 &lt;p&gt;So while I’m glad for all the ergonomics of my workspace, increasingly I find that writing code is the brief part where I’m simply harvesting all the mental crop that I’ve sown from the talking and listening and reading and thinking.&lt;/p&gt;
 
@@ -114,7 +114,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
 
 &lt;p&gt;&lt;strong&gt;Talking&lt;/strong&gt; and listening; the verbal discussions. Most of the time we need a small but critical amount of high bandwidth synchronous comms.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Typing&lt;/strong&gt; code commentary: READMEs, code reviews, PR descriptions; and all asynchronous communication: project updates, technical overviews, emails with next steps; These are all an essential part of the job and not just ancillary or busywork. Also typing actual code at some point. But I find the more time you spend typing the other stuff, the less time you need to spend (re)typing code.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Typing&lt;/strong&gt; code commentary: READMEs, code reviews, PR descriptions; and all asynchorous communication: project updates, technical overviews, emails with next steps; These are all an essential part of the job and not just ancillary or busywork. Also typing actual code at some point. But I find the more time you spend typing the other stuff, the less time you need to spend (re)typing code.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Thinking&lt;/strong&gt;: (including, for the purposes of alliteration, reading)&lt;/p&gt;
 
@@ -141,7 +141,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2020/09/14/geolocation-api-demo/"/>
     <id>http://daniel.fone.net.nz/blog/2020/09/14/geolocation-api-demo/</id>
     <published>2020-09-14T20:37:00+12:00</published>
-    <updated>2020-09-15T10:49:05+12:00</updated>
+    <updated>2023-01-04T12:49:02+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -185,15 +185,15 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/"/>
     <id>http://daniel.fone.net.nz/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/</id>
     <published>2020-09-09T18:53:00+12:00</published>
-    <updated>2020-10-22T20:50:44+13:00</updated>
+    <updated>2023-01-04T12:49:02+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
-    <content type="html">&lt;p&gt;Many applications aim to prevent &lt;a href="https://blog.rapid7.com/2017/06/15/about-user-enumeration/"&gt;user enumeration&lt;/a&gt; during authentication, particularly if users authenticate themselves with some PII like an email address. Well-designed login forms usually don’t disclose whether the username or password is incorrect, both because the response can be misleading,&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; and because it will disclose the presence of accounts in the database, facilitating spear-phishing, credential stuffing, and other attacks.&lt;/p&gt;
+    <content type="html">&lt;p&gt;Many applications aim to prevent &lt;a href="https://blog.rapid7.com/2017/06/15/about-user-enumeration/"&gt;user enumeration&lt;/a&gt; during authentication, particularly if users authenticate themselves with some PII like an email address. Well-designed login forms usually don’t disclose whether the username or password is incorrect, both because the response can be misleading,&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; and because it will disclose the presence of accounts in the database, facilitating spear-phishing, credential stuffing, and other attacks.&lt;/p&gt;
 
 &lt;p&gt;However, while the response body may not disclose this, often the response time still betrays whether a matching user record exists in the database. Because effective password checking like bcrypt is deliberately so slow, the response is much quicker if there is no digest to compare the submitted plain-text against. This oversight can undermine the ambiguity of the response body and expose users to the attacks mentioned above.&lt;/p&gt;
 
-&lt;p&gt;Let’s look at an example authentication query in PostgreSQL.&lt;sup id="fnref:2" role="doc-noteref"&gt;&lt;a href="#fn:2" class="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; First we’ll add a user record.&lt;/p&gt;
+&lt;p&gt;Let’s look at an example authentication query in PostgreSQL.&lt;sup id="fnref:2" role="doc-noteref"&gt;&lt;a href="#fn:2" class="footnote" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; First we’ll add a user record.&lt;/p&gt;
 
 &lt;div class="highlight"&gt;&lt;pre class="highlight sql"&gt;&lt;code&gt;&lt;span class="k"&gt;insert&lt;/span&gt; &lt;span class="k"&gt;into&lt;/span&gt; &lt;span class="n"&gt;users&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;email&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;password_digest&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;values&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'daniel@example.com'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;crypt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'my-password'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gen_salt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;'bf'&lt;/span&gt;&lt;span class="p"&gt;)));&lt;/span&gt;
@@ -204,7 +204,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
 &lt;span class="c1"&gt;-- ----+--------------------+--------------------------------------------------------------&lt;/span&gt;
 &lt;span class="c1"&gt;--   1 | daniel@example.com | $2a$06$xMGQrmx5DrVvfiBqdVhZLeQJOWx95H/B..79VElnBAh/xa5bKGkwG&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The &lt;a href="https://www.postgresql.org/docs/12/pgcrypto.html#id-1.11.7.34.6.7"&gt;crypt function&lt;/a&gt; is provided by the pgcrypto module. It takes a plain-text password and a salt, and returns a hash. Since crypt-style hashes include their salt (along with the algorthim details), the same function can be used to generate new hashes or verify existing ones.&lt;sup id="fnref:3" role="doc-noteref"&gt;&lt;a href="#fn:3" class="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; In this case, we use the gen_salt function to generate a bcrypt salt with the default number of iterations (&lt;code&gt;bf&lt;/code&gt; is for blowfish which is synonymous with bcrypt here). Note that this only uses the first 72 bytes of the plain-text password, a more secure approach is to digest the entire plain-text first.&lt;sup id="fnref:4" role="doc-noteref"&gt;&lt;a href="#fn:4" class="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;a href="https://www.postgresql.org/docs/12/pgcrypto.html#id-1.11.7.34.6.7"&gt;crypt function&lt;/a&gt; is provided by the pgcrypto module. It takes a plain-text password and a salt, and returns a hash. Since crypt-style hashes include their salt (along with the algorthim details), the same function can be used to generate new hashes or verify existing ones.&lt;sup id="fnref:3" role="doc-noteref"&gt;&lt;a href="#fn:3" class="footnote" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; In this case, we use the gen_salt function to generate a bcrypt salt with the default number of iterations (&lt;code&gt;bf&lt;/code&gt; is for blowfish which is synonymous with bcrypt here). Note that this only uses the first 72 bytes of the plain-text password, a more secure approach is to digest the entire plain-text first.&lt;sup id="fnref:4" role="doc-noteref"&gt;&lt;a href="#fn:4" class="footnote" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 
 &lt;p&gt;Now let’s look at a naive authentication query.&lt;/p&gt;
 
@@ -290,7 +290,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/</id>
     <published>2014-12-10T12:28:00+13:00</published>
-    <updated>2020-10-22T20:50:39+13:00</updated>
+    <updated>2023-01-04T12:49:02+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -298,7 +298,7 @@ So we have dual 4k monitors, mechanical keyboards, aeron chairs, touchbar, vim s
 
 &lt;p&gt;Whether this trade off makes sense is entirely dependent on the application. Let’s say we’re identifying an order in a particular month. If we need a short, readable token that’s unique &lt;em&gt;only among this month’s orders&lt;/em&gt;, we can probably use a short token. This is because the number of orders in a given month is not going to grow linearly — we can expect it to hover around a certain percentage of the total available tokens.&lt;/p&gt;
 
-&lt;p&gt;So let’s say we need to keep track of a hundred thousand constantly changing items with a six digit, hexadecimal token. The chance of a random token colliding with an existing one is going to be roughly 0.3%.&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; While this isn’t going to happen frequently, we definitely need to handle the case gracefully.&lt;/p&gt;
+&lt;p&gt;So let’s say we need to keep track of a hundred thousand constantly changing items with a six digit, hexadecimal token. The chance of a random token colliding with an existing one is going to be roughly 0.3%.&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; While this isn’t going to happen frequently, we definitely need to handle the case gracefully.&lt;/p&gt;
 
 &lt;h3 id="a-first-attempt"&gt;A First Attempt&lt;/h3&gt;
 
@@ -406,7 +406,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/07/generating-unique-random-tokens/</id>
     <published>2014-12-07T21:10:00+13:00</published>
-    <updated>2020-10-22T20:50:37+13:00</updated>
+    <updated>2023-01-04T12:49:02+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
@@ -415,11 +415,11 @@ ActiveRecord::RecordNotUnique: Retries exhausted
 &lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="nb"&gt;require&lt;/span&gt; &lt;span class="s1"&gt;'securerandom'&lt;/span&gt;
 &lt;span class="no"&gt;SecureRandom&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;uuid&lt;/span&gt; &lt;span class="c1"&gt;# =&amp;gt; "16fc1d86-7d6e-4011-9b75-d6cd9501fe1e"&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This is a widely implemented&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; and instantly recognisable format that is vanishingly unlikely to have a collision.&lt;sup id="fnref:2" role="doc-noteref"&gt;&lt;a href="#fn:2" class="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;This is a widely implemented&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; and instantly recognisable format that is vanishingly unlikely to have a collision.&lt;sup id="fnref:2" role="doc-noteref"&gt;&lt;a href="#fn:2" class="footnote" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 
 &lt;p&gt;Now, as an engineer, “unlikely” makes me nervous. I confess I don’t have an intuitive grasp of the statistics involved, and to me the two options are “can’t happen” or “will happen”. Although my rational brain knows better, I still instinctively put “vanishingly unlikely” in the “will happen” category. Sure, a collision might be unlikely if we’re only dealing with a small number of records, but what if we’re dealing with BigData™?&lt;/p&gt;
 
-&lt;p&gt;Well let me put it in perspective for you: you’d have to generate 112 terabytes of UUIDs before you’d even have a &lt;em&gt;one in a billion&lt;/em&gt; chance of a collision.&lt;sup id="fnref:3" role="doc-noteref"&gt;&lt;a href="#fn:3" class="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; So unless you’ve got a 112 terabyte database to fill with UUIDs, you’re going to have a lot of other problems first.&lt;/p&gt;
+&lt;p&gt;Well let me put it in perspective for you: you’d have to generate 112 terabytes of UUIDs before you’d even have a &lt;em&gt;one in a billion&lt;/em&gt; chance of a collision.&lt;sup id="fnref:3" role="doc-noteref"&gt;&lt;a href="#fn:3" class="footnote" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; So unless you’ve got a 112 terabyte database to fill with UUIDs, you’re going to have a lot of other problems first.&lt;/p&gt;
 
 &lt;p&gt;How would this look in practice then? If I wanted a token for an ActiveRecord object, it’d look something like:&lt;/p&gt;
 
@@ -435,7 +435,7 @@ ActiveRecord::RecordNotUnique: Retries exhausted
 
 &lt;h3 id="other-formats"&gt;Other Formats&lt;/h3&gt;
 
-&lt;p&gt;The downside of UUID is that it’s rather unwieldy. It uses 36 characters to render 16 bytes of entroy.&lt;sup id="fnref:4" role="doc-noteref"&gt;&lt;a href="#fn:4" class="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt; Naturally, there are plenty of other ways to render 16 bytes of entropy and still have the same statistical properties outlined above.&lt;/p&gt;
+&lt;p&gt;The downside of UUID is that it’s rather unwieldy. It uses 36 characters to render 16 bytes of entroy.&lt;sup id="fnref:4" role="doc-noteref"&gt;&lt;a href="#fn:4" class="footnote" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt; Naturally, there are plenty of other ways to render 16 bytes of entropy and still have the same statistical properties outlined above.&lt;/p&gt;
 
 &lt;p&gt;SecureRandom offers a few other helpful methods for generating token-like strings. My two preferred choices are &lt;code&gt;hex&lt;/code&gt; and &lt;code&gt;urlsafe_base64&lt;/code&gt;. Here they all are for comparison.&lt;/p&gt;
 
@@ -474,11 +474,11 @@ ActiveRecord::RecordNotUnique: Retries exhausted
     <link rel="alternate" href="http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/"/>
     <id>http://daniel.fone.net.nz/blog/2014/12/05/efficient-uniqueness-validations/</id>
     <published>2014-12-05T13:31:00+13:00</published>
-    <updated>2014-12-07T21:12:44+13:00</updated>
+    <updated>2023-01-04T12:49:02+13:00</updated>
     <author>
       <name>Daniel Fone</name>
     </author>
-    <content type="html">&lt;p&gt;Although ActiveRecord uniqueness validations aren’t bullet-proof,&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; they’re often helpful. Unfortunately, they can add overhead to save operations, since they require an extra call to the database. Consider the following simple ActiveRecord class:&lt;/p&gt;
+    <content type="html">&lt;p&gt;Although ActiveRecord uniqueness validations aren’t bullet-proof,&lt;sup id="fnref:1" role="doc-noteref"&gt;&lt;a href="#fn:1" class="footnote" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; they’re often helpful. Unfortunately, they can add overhead to save operations, since they require an extra call to the database. Consider the following simple ActiveRecord class:&lt;/p&gt;
 
 &lt;div class="highlight"&gt;&lt;pre class="highlight ruby"&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;SubscriptionPlan&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="no"&gt;ActiveRecord&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="no"&gt;Base&lt;/span&gt;
   &lt;span class="n"&gt;validates&lt;/span&gt; &lt;span class="ss"&gt;:code&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ss"&gt;uniqueness: &lt;/span&gt;&lt;span class="kp"&gt;true&lt;/span&gt;

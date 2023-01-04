@@ -4,14 +4,6 @@
 
   <head>
     <meta charset="utf-8">
-      <meta name="author" content="Daniel Fone">
-      <meta name="description" content="Don't store secrets in your source control.">
-      <meta property=og:description content="Don't store secrets in your source control." />
-      <meta property=og:title content="A better way to manage the Rails secret token" />
-      <meta property=og:url content="https://daniel.fone.net.nz/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/" />
-      <meta property=og:type content="article" />
-      <meta property=og:article:author content="Daniel Fone" />
-      <meta property=og:image content="" />
     <title>A better way to manage the Rails secret token - Daniel Fone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/atom.xml" rel="alternate" title="Daniel Fone" type="application/atom+xml">
@@ -42,9 +34,9 @@
 
   <nav>
     <div class="links">
-      <a href="/" class="[]">About Me</a> &middot;
-      <a href="/blog/archives/" class="[]">Articles</a> &middot;
-      <a href="/hire/" class="[]">Contact</a>
+      <a href="/" class="">About Me</a> &middot;
+      <a href="/blog/archives/" class="">Articles</a> &middot;
+      <a href="/hire/" class="">Contact</a>
     </div>
   </nav>
 
@@ -69,7 +61,7 @@
 
   <p><strong>Update: Rails 4.1 secrets.yml</strong></p>
 
-  <p>Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: <strong>don’t store real secrets in this file if you’re checking it in to source control!</strong> Load them from the environment like so:<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup></p>
+  <p>Rails 4.1 introduces the config/secrets.yml file. It provides a standard, environment-aware place to load and define secret keys and tokens. Although some of the details below may be slightly out of date, the same principal applies: <strong>don’t store real secrets in this file if you’re checking it in to source control!</strong> Load them from the environment like so:<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup></p>
 
 <div class="highlight"><pre class="highlight plaintext"><code>production:
   secret_key_base: &lt;%= ENV["SECRET_KEY_BASE"] %&gt;
@@ -217,17 +209,17 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
   <aside id='featured-posts'>
     <h3>Other Posts</h3>
       <h4>
-        <a href="/blog/2020/10/21/talking-typing-thinking-software-is-not-a-desk-job/">Talking, Typing, Thinking: Software Is Not a Desk Job</a>
+        <a href="/blog/2020/09/09/timing-safe-bcrypt-authentication-in-postgresql/">Timing-Safe bcrypt Authentication in PostgreSQL</a>
       </h4>
-      <p>Developers over-optimise for the ergonomics of typing and not enough for the ergonomics of thinking.</p>
+      <p>To avoid disclosing <abbr title="Personally Identifying Information">PII</abbr> and to prevent user enumeration during authentication, ensure you always perform a hash comparison, even if no user record is found.</p>
       <h4>
-        <a href="/blog/2014/12/10/handling-token-generation-collisions-in-activerecord/">Handling Token Generation Collisions In ActiveRecord</a>
+        <a href="/blog/2014/12/07/generating-unique-random-tokens/">Generating Unique, Random Tokens</a>
       </h4>
-      <p>Use <code>rescue ActiveRecord::RecordNotUnique</code> with <code>retry</code> to handle collisions when applicable.</p>
+      <p>If you need a random, unique token, use <code>SecureRandom.uuid</code> (or <code>SecureRandom.urlsafe_base64</code> for something shorter).</p>
       <h4>
-        <a href="/blog/2014/12/05/efficient-uniqueness-validations/">Efficient Uniqueness Validations</a>
+        <a href="/blog/2013/05/24/persist-invalid-records-with-activerecord/">Persist Invalid Records with ActiveRecord</a>
       </h4>
-      <p>Use <code>:if => :field_changed?</code> on uniqueness validations to skip unnecessary checks on every save.</p>
+      <p>We can override ActiveRecord#save to keep invalid records in the database along with their validation errors.</p>
     <p>
       <small><a href="/blog/archives/">More posts</a></small>
     </p>
@@ -252,7 +244,7 @@ SECRET_TOKEN=3eb6db5a9026c547c72708438d496d942e976b252138db7e4e0ee5edd7539457d3e
 
   <footer>
     <p>
-      Written 2013&ndash;2020 by Daniel Fone
+      Written 2013&ndash;2023 by Daniel Fone
       &middot;
       Powered by
       <a href="http://middlemanapp.com/">Middleman</a>
