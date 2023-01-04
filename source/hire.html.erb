@@ -4,9 +4,100 @@ title: Hire Me
 <h2>Hire Me</h2>
 
 <p>
-  Whether refining backlogs, mentoring teams, auditing codebases, or implementing bespoke information systems,
-  I believe in continuous delivery of value. For smaller engagements, I typically work on a <strong>per day rate</strong>.
-  Larger projects can be negotiated to suit.
+  Whether refining backlogs, mentoring teams, auditing codebases, or
+  implementing bespoke information systems, I believe in continuous delivery of
+  value.
+</p>
+<p>
+  I've worked remotely with clients in New Zealand, Australia, and the United
+  States. Rates can be negotiated based on the scope and duration of the project
+  and can be paid in NZD, AUD, or USD.
 </p>
 
-<%= partial 'contact_me' %>
+<style>
+  #contact-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #contact-form label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  #contact-form label input,
+  #contact-form label textarea {
+    font: inherit;
+    font-size: inherit;
+    margin-top: 0.5rem;
+    padding: 0.25rem;
+  }
+
+  #contact-form button {
+    margin-top: 1rem;
+    font-size: inherit;
+  }
+
+  #contact-form-status {
+    margin-top: 1rem;
+  }
+
+</style>
+
+<form id="contact-form" action="https://formspree.io/f/xjvdvyab" method="POST">
+  <label>
+    Your Name:
+    <input type="name" name="name" required>
+  </label>
+  <label>
+    Your email:
+    <input type="email" name="email" required>
+  </label>
+  <label>
+    Your message:
+    <textarea name="message" rows=5 required></textarea>
+  </label>
+  <button id="contact-form-submit" type="submit">Send</button>
+  <p id="contact-form-status"></p>
+</form>
+
+
+<script>
+  const form = document.getElementById("contact-form");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const button = document.getElementById("contact-form-submit");
+    const status = document.getElementById("contact-form-status");
+    const data = new FormData(event.target);
+
+    button.disabled = true;
+    try {
+      const response = await fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      if (response.ok) {
+        status.innerHTML = "Thanks for your submission!";
+        form.reset()
+      } else {
+        const data = await response.json()
+        if (Object.hasOwn(data, 'errors')) {
+          status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+        } else {
+          status.innerHTML = "Oops! There was a problem submitting your form"
+        }
+      }
+    } catch (error) {
+      status.innerHTML = "Oops! There was a problem submitting your form"
+    } finally {
+      button.disabled = false
+    }
+  }
+  form.addEventListener("submit", handleSubmit)
+</script>
