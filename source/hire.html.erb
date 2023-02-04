@@ -59,11 +59,12 @@ title: Hire Me
     Your message:
     <textarea name="message" rows=5 required></textarea>
   </label>
+  <div class="g-recaptcha" data-sitekey="6Ld4WVAkAAAAAJCDvg-L5VWKBtZDoTXhej6J6vzo"></div> <!-- replace with your recaptcha SITE key not secret key -->
   <button id="contact-form-submit" type="submit">Send</button>
   <p id="contact-form-status"></p>
 </form>
 
-
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
   const form = document.getElementById("contact-form");
 
