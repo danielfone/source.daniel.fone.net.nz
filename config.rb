@@ -70,3 +70,6 @@ redirect "blog/2014/11/28/actiondispatch-cookies-cookieoverflow-via-devise-s-use
 
 redirect "geotest/index.html",
      to: "https://daniel.fone.net.nz/browser-geolocation-demo/"
+
+redirect "gemstone/index.html",
+      to: "https://gemstone-of-the-skies-65624cba5b40.herokuapp.com/"
