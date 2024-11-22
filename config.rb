@@ -72,4 +72,4 @@ redirect "geotest/index.html",
      to: "https://daniel.fone.net.nz/browser-geolocation-demo/"
 
 redirect "gemstone/index.html",
-      to: "https://gemstone-of-the-skies-65624cba5b40.herokuapp.com/"
+      to: "https://gemstone.fone.net.nz"
